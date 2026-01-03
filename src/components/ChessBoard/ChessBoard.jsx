@@ -1,19 +1,55 @@
 // import './chess-board.css';
 import styled from 'styled-components';
 import Figure from '../Figure/Figure';
+import { useEffect, useRef, useState } from 'react';
 
-const Board = styled.div`
+
+const BoardWrapper = styled.div`
+  position: relative;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 500px;
   height: 500px;
+`;
+
+const Board = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   border: 2px solid #333;
+  margin: 0;
+  padding: 0;
 `;
+// const Board = styled.div`
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   display: flex;
+//   flex-direction: column;
+//   width: 100%;
+//   height: 100%;
+//   border: 2px solid #333;
+//   margin: 0;
+//   padding: 0;
+// `;
+
+const Figures = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+`;
+
 const Row = styled.div`
-  display: flex;
-  flex: 1 1 0;
+  
 `;
+
 const Square = styled.div`
+  position: absolute;
   flex: 1 1 0;
   display: flex;
   justify-content: center;
@@ -23,6 +59,10 @@ const Square = styled.div`
       props.color === 'dark' ? '#b58863' :
         'transparent'
   };
+  width: ${props => props.width}px;
+  height: ${props => props.height}px;
+  top: ${props => props.top}px;
+  left: ${props => props.left}px;
 `;
 
 
@@ -61,25 +101,64 @@ const board = [
 
 
 const ChessBoard = () => {
-  return (
-    <Board>
-      {ranks.map((rank, y) => (
-        <Row key={rank}>
-          {files.map((file, x) => {
-            const isLight = (rank + file.charCodeAt(0)) % 2 === 0;
+  const [rect, setRect] = useState({ y: 0, x: 0, w: 0, h: 0 })
+  const boardRef = useRef(null)
 
+
+  useEffect(() => {
+    console.log(boardRef)
+    const rect = boardRef.current.getBoundingClientRect();
+    console.log(rect)
+
+    setRect({
+      y: rect.y,
+      x: rect.x,
+      w: rect.width,
+      h: rect.height
+    })
+  }, [])
+
+  return (
+    <BoardWrapper>
+      <Board>
+        {ranks.map((rank, y) => (
+          <Row key={rank}>
+            {files.map((file, x) => {
+              const isLight = (rank + file.charCodeAt(0)) % 2 === 0;
+
+              return (
+                <Square
+                  key={file}
+                  color={isLight ? 'light' : 'dark'}
+                  width={rect.w / 8}
+                  height={rect.h / 8}
+                  top={(rect.w / 8) * y}
+                  left={(rect.w / 8) * x}
+                >
+                  {/* <Figure src={figure[board[y][x]]} /> */}
+                </Square>
+              );
+            })}
+          </Row>
+        ))}
+      </Board>
+      <Figures ref={boardRef}>
+        {ranks.map((rank, y) => {
+          return files.map((file, x) => {
             return (
-              <Square
-                key={file}
-                color={isLight ? 'light' : 'dark'}
-              >
-                <Figure src={figure[board[y][x]]} />
-              </Square>
+              <Figure
+                key={`${file}` + '1'}
+                src={figure[board[y][x]]}
+                top={(rect.w / 8) * y}
+                left={(rect.w / 8) * x}
+                startX={rect.x}
+                startY={rect.y}
+              />
             );
-          })}
-        </Row>
-      ))}
-    </Board>
+          })
+        })}
+      </Figures>
+    </BoardWrapper>
   );
 }
 
