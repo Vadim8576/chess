@@ -23,7 +23,7 @@ const BoardBorderCanvas = ({ width, borderSize }) => {
         const cellSize = width / 8
         ctx.font = '14px Arial';
         ctx.textAlign = 'center';
-        ctx.fillStyle = '#000';
+        ctx.fillStyle = '#b58863';
         for (let col = 0; col < 8; col++) {
             const letter = String.fromCharCode(97 + col); // a, b, ..., h
             ctx.fillText(
@@ -50,7 +50,7 @@ const BoardBorderCanvas = ({ width, borderSize }) => {
             ref={canvasRef}
             width={(width + borderSize)}
             height={(width + borderSize)}
-            $top={`${(-borderSize / 2)}`}
+            $top={-borderSize / 2}
             $left={-borderSize / 2}
         />
     );

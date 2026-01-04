@@ -3,7 +3,7 @@ import ChessBoard from './components/ChessBoard/ChessBoard';
 
 function App() {
   return (
-    <div className="game">
+    <div id="game">
       <ChessBoard />
     </div>
   )

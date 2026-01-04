@@ -4,6 +4,7 @@ import Figure from '../Figure/Figure';
 import BoardCanvas from './BoardCanvas';
 import { ranks, files, figure, board } from './const';
 import BoardBorderCanvas from './BoardBorderCanvas';
+import HighlightedCell from './HighlightedCell';
 
 
 const BoardWrapper = styled.div`
@@ -26,7 +27,8 @@ const Figures = styled.div`
 const ChessBoard = () => {
   const boardRef = useRef(null)
   const [boardRect, setBoardRect] = useState({ y: 0, x: 0, w: 0, h: 0 })
-
+  const [cellSize, setCellSize] = useState(0)
+  const [highlightedCell, setHighlightedCell] = useState({ col: 0, row: 0, visible: false })
 
   useEffect(() => {
     const boardRect = boardRef.current.getBoundingClientRect();
@@ -38,6 +40,8 @@ const ChessBoard = () => {
       w: boardRect.width,
       h: boardRect.height
     })
+
+    setCellSize(boardRect.width / 8)
   }, [])
 
 
@@ -48,8 +52,12 @@ const ChessBoard = () => {
   return (
     <BoardWrapper ref={boardRef}>
       <BoardBorderCanvas width={boardRect.w} borderSize={60} />
-      <BoardCanvas
-        cellSize={boardRect.w / 8}
+      <BoardCanvas cellSize={cellSize}>
+      </BoardCanvas>
+
+      <HighlightedCell
+        cellSize={cellSize}
+        highlightedCell={highlightedCell}
       />
 
       <Figures>
@@ -59,10 +67,12 @@ const ChessBoard = () => {
               <Figure
                 key={file}
                 src={figure[board[y][x]]}
-                top={(boardRect.w / 8) * y}
-                left={(boardRect.w / 8) * x}
+                top={cellSize * y}
+                left={cellSize * x}
                 startX={boardRect.x}
                 startY={boardRect.y}
+                cellSize={cellSize}
+                setHighlightedCell={setHighlightedCell}
               />
             );
           })

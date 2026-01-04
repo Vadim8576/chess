@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import useLoadImage from "../../hooks/useLoadImage"
 import styled from 'styled-components';
+import useHighlightedCell from "../../hooks/useHighlightedCell";
 
 
 const ImgWrapper = styled.div`
@@ -10,25 +11,26 @@ const ImgWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 62.5px;
-    height: 62.5px;
+    width: ${props => props.$width}px;
+    height: ${props => props.$height}px;
+    cursor: ${props => props.$cursor};
     user-select: none;
     touch-action: none;
-    cursor: ${props => props.cursor};
     z-index: 100;
 `;
-
 
 const Img = styled.img`
     width: 80%;
     height: 80%;
-    events-pointer: none;
+    pointer-events: none;
 `;
 
-const Figure = ({ src, top, left, startX, startY }) => {
+const Figure = ({ src, top, left, startX, startY, cellSize, setHighlightedCell }) => {
     const { isLoading, isError, image } = useLoadImage(src)
+    // const [highlightedCell, updateHighlightedCell] = useHighlightedCell()
 
     const [position, setPosition] = useState({ x: left, y: top });
+    const [grabCell, setGrabCell] = useState({ col: 0, row: 0 });
     const [isDragging, setIsDragging] = useState(false);
     const imageRef = useRef(null);
 
@@ -39,7 +41,19 @@ const Figure = ({ src, top, left, startX, startY }) => {
         e.preventDefault();
 
         imageRef.current.style.zIndex = '101'
+        imageRef.current.style.transition = 'none'
+
+        const rect = imageRef.current.getBoundingClientRect();
+
+        const x = e.clientX - startX
+        const y = e.clientY - startY
+        const col = Math.floor(x / cellSize)
+        const row = Math.floor(y / cellSize)
+
+        setGrabCell({ col, row });
     };
+
+
 
     const handleMouseMove = (e) => {
         if (!isDragging) return;
@@ -47,22 +61,77 @@ const Figure = ({ src, top, left, startX, startY }) => {
         // Получаем позицию относительно контейнера
         const rect = imageRef.current.getBoundingClientRect();
 
-        const x = e.clientX - rect.width / 2 - startX
-        const y = e.clientY - rect.height / 2 - startY
+        const x = e.clientX - startX
+        const y = e.clientY - startY
 
-        setPosition({ x, y });
+        const xc = x - rect.width / 2
+        const yc = y - rect.height / 2
+
+        setPosition({ x: xc, y: yc });
+
+
+        const col = Math.floor(x / cellSize)
+        const row = Math.floor(y / cellSize)
+
+
+        // updateHighlightedCell(col, row);
+        setHighlightedCell({
+            col,
+            row,
+            visible: true
+        })
+
+
+        if (col < 0 || col > 7 || row < 0 || row > 7) {
+            setHighlightedCell({
+                col: grabCell.col,
+                row: grabCell.row,
+                visible: true
+            })
+            return
+        }
     };
 
 
 
-    const handleMouseUp = () => {
+    const handleMouseUp = (e) => {
         setIsDragging(false);
         imageRef.current.style.zIndex = '100'
+        imageRef.current.style.transition = '.3s'
+
+        const x = e.clientX - startX
+        const y = e.clientY - startY
+        const col = Math.floor(x / cellSize)
+        const row = Math.floor(y / cellSize)
+
+        if (col < 0 || col > 7 || row < 0 || row > 7) {
+            console.log('Фигура вне доски');
+            setPosition({
+                x: grabCell.col * cellSize,
+                y: grabCell.row * cellSize
+            })
+            setHighlightedCell((prev) => ({
+                ...prev,
+                visible: false
+            }))
+            return
+        }
+
+        const newX = cellSize * col
+        const newY = cellSize * row
+        setPosition({ x: newX, y: newY })
+        setHighlightedCell((prev) => ({
+            ...prev,
+            visible: false
+        }))
     };
+
+
 
     useEffect(() => {
         setPosition({ x: left, y: top })
     }, [left, top])
+
 
     useEffect(() => {
         if (isDragging) {
@@ -92,16 +161,15 @@ const Figure = ({ src, top, left, startX, startY }) => {
             ref={imageRef}
             onMouseDown={handleMouseDown}
             draggable={false}
-            cursor={isDragging ? 'grabbing' : 'grab'}
+            $cursor={isDragging ? 'grabbing' : 'grab'}
+            $width={cellSize}
+            $height={cellSize}
             style={{
                 top: position.y,
                 left: position.x
             }}
         >
-            <Img
-                src={image.src}
-                alt="F"
-            />
+            <Img src={image.src} />
         </ImgWrapper>
     )
 }
