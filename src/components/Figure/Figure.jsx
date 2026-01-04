@@ -12,11 +12,12 @@ const ImgWrapper = styled.div`
     align-items: center;
     width: 62.5px;
     height: 62.5px;
-    user-select: none; // Запрещаем выделение
-    touch-action: none; // Для мобильных устройств
-    top: ${props => props.top}px;
-    left: ${props => props.left}px;
+    user-select: none;
+    touch-action: none;
+    cursor: ${props => props.cursor};
+    z-index: 100;
 `;
+
 
 const Img = styled.img`
     width: 80%;
@@ -28,7 +29,6 @@ const Figure = ({ src, top, left, startX, startY }) => {
     const { isLoading, isError, image } = useLoadImage(src)
 
     const [position, setPosition] = useState({ x: left, y: top });
-    const [startPos, setStartPos] = useState({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState(false);
     const imageRef = useRef(null);
 
@@ -37,10 +37,8 @@ const Figure = ({ src, top, left, startX, startY }) => {
         if (e.button !== 0) return; // Только левая кнопка мыши
         setIsDragging(true);
         e.preventDefault();
-        setStartPos({
-            x: e.clientX,
-            y: e.clientY
-        });
+
+        imageRef.current.style.zIndex = '101'
     };
 
     const handleMouseMove = (e) => {
@@ -48,14 +46,18 @@ const Figure = ({ src, top, left, startX, startY }) => {
 
         // Получаем позицию относительно контейнера
         const rect = imageRef.current.getBoundingClientRect();
-        setPosition({
-            x: e.clientX - rect.width / 2 - startX,
-            y: e.clientY - rect.height / 2 - startY
-        });
+
+        const x = e.clientX - rect.width / 2 - startX
+        const y = e.clientY - rect.height / 2 - startY
+
+        setPosition({ x, y });
     };
+
+
 
     const handleMouseUp = () => {
         setIsDragging(false);
+        imageRef.current.style.zIndex = '100'
     };
 
     useEffect(() => {
@@ -90,19 +92,17 @@ const Figure = ({ src, top, left, startX, startY }) => {
             ref={imageRef}
             onMouseDown={handleMouseDown}
             draggable={false}
+            cursor={isDragging ? 'grabbing' : 'grab'}
             style={{
-                left: `${position.x}px`,
-                top: `${position.y}px`,
-                cursor: isDragging ? 'grabbing' : 'grab',
+                top: position.y,
+                left: position.x
             }}
         >
             <Img
                 src={image.src}
                 alt="F"
-
             />
         </ImgWrapper>
-
     )
 }
 
