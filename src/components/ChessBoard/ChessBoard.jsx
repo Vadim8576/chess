@@ -45,9 +45,6 @@ const ChessBoard = () => {
   }, [])
 
 
-  const handleMouseEnter = useCallback((e) => {
-    console.log(e.target);
-  }, []);
 
   return (
     <BoardWrapper ref={boardRef}>
@@ -65,7 +62,7 @@ const ChessBoard = () => {
           return files.map((file, x) => {
             return (
               <Figure
-                key={file}
+                key={file+rank}
                 src={figure[board[y][x]]}
                 top={cellSize * y}
                 left={cellSize * x}
