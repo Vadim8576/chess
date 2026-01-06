@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import useLoadImage from "../../hooks/useLoadImage"
 import styled from 'styled-components';
-import useHighlightedCell from "../../hooks/useHighlightedCell";
-
 
 const ImgWrapper = styled.div`
     position: absolute;
@@ -27,10 +25,9 @@ const Img = styled.img`
 
 const Figure = ({ src, top, left, startX, startY, cellSize, setHighlightedCell }) => {
     const { isLoading, isError, image } = useLoadImage(src)
-    // const [highlightedCell, updateHighlightedCell] = useHighlightedCell()
-
     const [position, setPosition] = useState({ x: left, y: top });
     const [grabCell, setGrabCell] = useState({ col: 0, row: 0 });
+    // const [grabCell, setGrabCell] = useState({ col: 0, row: 0 });
     const [isDragging, setIsDragging] = useState(false);
     const imageRef = useRef(null);
 
@@ -74,12 +71,13 @@ const Figure = ({ src, top, left, startX, startY, cellSize, setHighlightedCell }
         const row = Math.floor(y / cellSize)
 
 
-        // updateHighlightedCell(col, row);
         setHighlightedCell({
             col,
             row,
             visible: true
         })
+
+
 
 
         if (col < 0 || col > 7 || row < 0 || row > 7) {

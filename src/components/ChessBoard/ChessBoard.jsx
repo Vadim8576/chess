@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import Figure from '../Figure/Figure';
 import BoardCanvas from './BoardCanvas';
 import { ranks, files, figure, board } from './const';
 import BoardBorderCanvas from './BoardBorderCanvas';
 import HighlightedCell from './HighlightedCell';
+import useWindowResizeThrottle from '../../hooks/useWindowResizeThrottle';
 
 
 const BoardWrapper = styled.div`
@@ -30,6 +31,9 @@ const ChessBoard = () => {
   const [cellSize, setCellSize] = useState(0)
   const [highlightedCell, setHighlightedCell] = useState({ col: 0, row: 0, visible: false })
 
+  const { width, height } = useWindowResizeThrottle(500);
+
+
   useEffect(() => {
     const boardRect = boardRef.current.getBoundingClientRect();
     console.log(boardRect)
@@ -42,7 +46,8 @@ const ChessBoard = () => {
     })
 
     setCellSize(boardRect.width / 8)
-  }, [])
+
+  }, [width, height])
 
 
 
@@ -62,7 +67,7 @@ const ChessBoard = () => {
           return files.map((file, x) => {
             return (
               <Figure
-                key={file+rank}
+                key={file + rank}
                 src={figure[board[y][x]]}
                 top={cellSize * y}
                 left={cellSize * x}

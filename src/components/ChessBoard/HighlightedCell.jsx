@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import styled from "styled-components";
 
 const Cell = styled.div`
@@ -14,6 +15,11 @@ const HighlightedCell = ({ cellSize, highlightedCell }) => {
 
     const col = highlightedCell.col
     const row = highlightedCell.row
+
+    console.log('HighlightedCell')
+    useEffect(() => {
+        
+    }, [])
 
     if(!highlightedCell.visible) return
     // if (col < 0 || col > 7 || row < 0 || row > 7) return
