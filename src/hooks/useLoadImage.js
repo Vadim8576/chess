@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 
 function useLoadImage(url) {
-    const [isLoading, setIsLoading] = useState(!!url); // true, если url задан
-    const [isError, setIsError] = useState(false);
-    const [image, setImage] = useState(null);
+    const [isLoading, setIsLoading] = useState(!!url) // true, если url задан
+    const [isError, setIsError] = useState(false)
+    const [image, setImage] = useState(null)
 
     useEffect(() => {
 
@@ -14,17 +14,17 @@ function useLoadImage(url) {
 
         if (!url) return;
 
-        const img = new Image();
+        const img = new Image()
         img.src = url;
 
         img.onload = () => {
-            setImage(img);
-            setIsLoading(false);
+            setImage(img)
+            setIsLoading(false)
         };
 
         img.onerror = (e) => {
-            setIsError(true);
-            setIsLoading(false);
+            setIsError(true)
+            setIsLoading(false)
 
             console.log(e)
         };
@@ -32,12 +32,12 @@ function useLoadImage(url) {
 
 
         return () => {
-            img.onload = null;
-            img.onerror = null;
+            img.onload = null
+            img.onerror = null
         };
     }, [url])
 
-    return { isLoading, isError, image };
+    return { isLoading, isError, image }
 }
 
-export default useLoadImage;
+export default useLoadImage

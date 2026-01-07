@@ -7,11 +7,11 @@ function useWindowResizeThrottle(throttleMs = 300) {
   });
 
   useEffect(() => {
-    let lastCall = 0;
-    let timeoutId = null;
+    let lastCall = 0
+    let timeoutId = null
 
     const handleResize = () => {
-      const now = Date.now();
+      const now = Date.now()
 
       // Если прошло достаточно времени — обновляем состояние
       if (now - lastCall >= throttleMs) {
@@ -19,31 +19,31 @@ function useWindowResizeThrottle(throttleMs = 300) {
           width: window.innerWidth,
           height: window.innerHeight,
         });
-        lastCall = now;
+        lastCall = now
       } else {
         // Иначе планируем обновление после истечения интервала
-        clearTimeout(timeoutId);
+        clearTimeout(timeoutId)
         timeoutId = setTimeout(() => {
           setWindowSize({
             width: window.innerWidth,
             height: window.innerHeight,
           });
-          lastCall = now;
-        }, throttleMs - (now - lastCall));
+          lastCall = now
+        }, throttleMs - (now - lastCall))
       }
     };
 
     // Подписываемся на событие resize
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', handleResize)
 
     // Очищаем слушатель при удалении компонента
     return () => {
-      window.removeEventListener('resize', handleResize);
-      clearTimeout(timeoutId);
+      window.removeEventListener('resize', handleResize)
+      clearTimeout(timeoutId)
     };
-  }, [throttleMs]);
+  }, [throttleMs])
 
-  return windowSize;
+  return windowSize
 }
 
-export default useWindowResizeThrottle;
+export default useWindowResizeThrottle

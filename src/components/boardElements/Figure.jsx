@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react"
 import useLoadImage from "../../hooks/useLoadImage"
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 const ImgWrapper = styled.div`
     position: absolute;
@@ -25,59 +25,60 @@ const Img = styled.img`
 
 const Figure = ({ src, top, left, startX, startY, cellSize, setHighlightedCell }) => {
     const { isLoading, isError, image } = useLoadImage(src)
-    const [position, setPosition] = useState({ x: left, y: top });
-    const [grabCell, setGrabCell] = useState({ col: 0, row: 0 });
-    // const [grabCell, setGrabCell] = useState({ col: 0, row: 0 });
-    const [isDragging, setIsDragging] = useState(false);
-    const imageRef = useRef(null);
+    const [position, setPosition] = useState({ x: left, y: top })
+    const [grabCell, setGrabCell] = useState({ col: 0, row: 0 })
+    // const [grabCell, setGrabCell] = useState({ col: 0, row: 0 })
+    const [isDragging, setIsDragging] = useState(false)
+    const imageRef = useRef(null)
 
 
     const handleMouseDown = (e) => {
-        if (e.button !== 0) return; // Только левая кнопка мыши
-        setIsDragging(true);
-        e.preventDefault();
+        if (e.button !== 0) return // Только левая кнопка мыши
+        setIsDragging(true)
+        e.preventDefault()
 
         imageRef.current.style.zIndex = '101'
         imageRef.current.style.transition = 'none'
 
-        const rect = imageRef.current.getBoundingClientRect();
+        const rect = imageRef.current.getBoundingClientRect()
 
         const x = e.clientX - startX
         const y = e.clientY - startY
         const col = Math.floor(x / cellSize)
         const row = Math.floor(y / cellSize)
 
-        setGrabCell({ col, row });
+        setGrabCell({ col, row })
+        setHighlightedCell({
+            col,
+            row,
+            visible: true
+        })
     };
 
 
 
     const handleMouseMove = (e) => {
-        if (!isDragging) return;
+        if (!isDragging) return
 
         // Получаем позицию относительно контейнера
-        const rect = imageRef.current.getBoundingClientRect();
+        const rect = imageRef.current.getBoundingClientRect()
 
         const x = e.clientX - startX
         const y = e.clientY - startY
 
         const xc = x - rect.width / 2
         const yc = y - rect.height / 2
-
-        setPosition({ x: xc, y: yc });
-
-
+     
         const col = Math.floor(x / cellSize)
         const row = Math.floor(y / cellSize)
+        
+        setPosition({ x: xc, y: yc })
 
-
-        setHighlightedCell({
+        setHighlightedCell(prev => ({
             col,
             row,
             visible: true
-        })
-
-
+        }))
 
 
         if (col < 0 || col > 7 || row < 0 || row > 7) {
@@ -88,12 +89,12 @@ const Figure = ({ src, top, left, startX, startY, cellSize, setHighlightedCell }
             })
             return
         }
-    };
+    }
 
 
 
     const handleMouseUp = (e) => {
-        setIsDragging(false);
+        setIsDragging(false)
         imageRef.current.style.zIndex = '100'
         imageRef.current.style.transition = '.3s'
 
@@ -103,12 +104,12 @@ const Figure = ({ src, top, left, startX, startY, cellSize, setHighlightedCell }
         const row = Math.floor(y / cellSize)
 
         if (col < 0 || col > 7 || row < 0 || row > 7) {
-            console.log('Фигура вне доски');
+            console.log('Фигура вне доски')
             setPosition({
                 x: grabCell.col * cellSize,
                 y: grabCell.row * cellSize
             })
-            setHighlightedCell((prev) => ({
+            setHighlightedCell(prev => ({
                 ...prev,
                 visible: false
             }))
@@ -122,7 +123,7 @@ const Figure = ({ src, top, left, startX, startY, cellSize, setHighlightedCell }
             ...prev,
             visible: false
         }))
-    };
+    }
 
 
 
@@ -133,23 +134,23 @@ const Figure = ({ src, top, left, startX, startY, cellSize, setHighlightedCell }
 
     useEffect(() => {
         if (isDragging) {
-            document.addEventListener('mousemove', handleMouseMove);
-            document.addEventListener('mouseup', handleMouseUp);
+            document.addEventListener('mousemove', handleMouseMove)
+            document.addEventListener('mouseup', handleMouseUp)
         }
 
         return () => {
-            document.removeEventListener('mousemove', handleMouseMove);
-            document.removeEventListener('mouseup', handleMouseUp);
-        };
-    }, [isDragging]);
+            document.removeEventListener('mousemove', handleMouseMove)
+            document.removeEventListener('mouseup', handleMouseUp)
+        }
+    }, [isDragging])
 
 
     if (isLoading) {
-        return <div>.</div>;
+        return <div>.</div>
     }
 
     if (isError) {
-        return <div>!</div>;
+        return <div>!</div>
     }
 
     if (!src) return

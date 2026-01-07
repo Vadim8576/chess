@@ -10,6 +10,8 @@ const Canvas = styled.canvas`
 const BoardCanvas = ({ cellSize }) => {
   const canvasRef = useRef(null);
 
+  console.log('BoardCanvas Render')
+
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');

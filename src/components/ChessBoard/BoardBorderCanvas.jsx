@@ -12,6 +12,8 @@ const Canvas = styled.canvas`
 const BoardBorderCanvas = ({ width, borderSize }) => {
     const canvasRef = useRef(null);
 
+    console.log('BoardBorderCanvas Render')
+
     useEffect(() => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');

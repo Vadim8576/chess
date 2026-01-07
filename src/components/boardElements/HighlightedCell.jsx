@@ -1,9 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const Cell = styled.div`
 position: absolute;
-background: red;
+background: green;
 opacity: .5;
 z-index: 99;
 width: ${props => props.$cellSize}px;
@@ -13,16 +13,12 @@ height: ${props => props.$cellSize}px;
 
 const HighlightedCell = ({ cellSize, highlightedCell }) => {
 
+    console.log('HighlightedCell')
+
     const col = highlightedCell.col
     const row = highlightedCell.row
 
-    console.log('HighlightedCell')
-    useEffect(() => {
-        
-    }, [])
-
-    if(!highlightedCell.visible) return
-    // if (col < 0 || col > 7 || row < 0 || row > 7) return
+    if (!highlightedCell.visible) return
 
     return (
         <Cell
@@ -30,7 +26,6 @@ const HighlightedCell = ({ cellSize, highlightedCell }) => {
                 top: row * cellSize,
                 left: col * cellSize
             }}
-
             $cellSize={cellSize}
         />
     );
