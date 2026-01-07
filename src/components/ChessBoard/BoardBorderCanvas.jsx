@@ -9,7 +9,7 @@ const Canvas = styled.canvas`
   left: ${props => props.$left}px;
 `;
 
-const BoardBorderCanvas = ({ width, borderSize }) => {
+const BoardBorderCanvas = ({ width, borderSize, currentPlayer='white' }) => {
     const canvasRef = useRef(null);
 
     console.log('BoardBorderCanvas Render')
@@ -27,7 +27,8 @@ const BoardBorderCanvas = ({ width, borderSize }) => {
         ctx.textAlign = 'center';
         ctx.fillStyle = '#b58863';
         for (let col = 0; col < 8; col++) {
-            const letter = String.fromCharCode(97 + col); // a, b, ..., h
+            const value = currentPlayer === 'white' ? (97 + col) : (104 - col)
+            const letter = String.fromCharCode(value); // a, b, ..., h
             ctx.fillText(
                 letter,
                 col * cellSize + borderSize,
@@ -38,8 +39,9 @@ const BoardBorderCanvas = ({ width, borderSize }) => {
         // Подписи: цифры (1–8) справа
         ctx.textAlign = 'center';
         for (let row = 0; row < 8; row++) {
+            const value = currentPlayer === 'white' ? (8 - row) : (row + 1)
             ctx.fillText(
-                8 - row,
+                value,
                 borderSize / 4,
                 row * cellSize + borderSize
             );

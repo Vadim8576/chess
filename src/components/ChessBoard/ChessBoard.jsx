@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import BoardCanvas from './BoardCanvas';
 import BoardBorderCanvas from './BoardBorderCanvas';
+import BoardCanvas from './BoardCanvas';
 import useWindowResizeThrottle from '../../hooks/useWindowResizeThrottle';
 import BoardElements from '../boardElements/BoardElements';
+
 
 
 const BoardWrapper = styled.div`
@@ -21,6 +22,8 @@ const ChessBoard = () => {
   const boardRef = useRef(null)
   const [boardRect, setBoardRect] = useState({ y: 0, x: 0, w: 0, h: 0 })
   const [cellSize, setCellSize] = useState(0)
+  const [currentPlayer, setCurrentPlayer] = useState('white') // black or white
+
 
 
   const { width, height } = useWindowResizeThrottle(500)
@@ -45,12 +48,13 @@ const ChessBoard = () => {
 
   return (
     <BoardWrapper ref={boardRef}>
-      <BoardBorderCanvas width={boardRect.w} borderSize={60} />
+      <BoardBorderCanvas width={boardRect.w} borderSize={60} currentPlayer={currentPlayer} />
       <BoardCanvas cellSize={cellSize} />
       <BoardElements
         cellSize={cellSize}
         startX={boardRect.x}
         startY={boardRect.y}
+        currentPlayer={currentPlayer}
       />
     </BoardWrapper>
   )

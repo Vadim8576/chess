@@ -21,7 +21,7 @@ const BoardCanvas = ({ cellSize }) => {
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
         const isBlack = (row + col) % 2 === 0;
-        ctx.fillStyle = isBlack ? '#b58863' : '#f0d9b5';
+        ctx.fillStyle = !isBlack ? '#b58863' : '#f0d9b5';
 
         ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
 
@@ -30,7 +30,6 @@ const BoardCanvas = ({ cellSize }) => {
         ctx.strokeRect(col * cellSize, row * cellSize, cellSize, cellSize);
       }
     }
-
 
   }, [cellSize])
 

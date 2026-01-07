@@ -13,7 +13,7 @@ height: ${props => props.$cellSize}px;
 
 const HighlightedCell = ({ cellSize, highlightedCell }) => {
 
-    console.log('HighlightedCell')
+    // console.log('HighlightedCell')
 
     const col = highlightedCell.col
     const row = highlightedCell.row

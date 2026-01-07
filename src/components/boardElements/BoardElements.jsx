@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { files, ranks, figure, board } from "../../constants/boardInitial";
+import { files, ranks } from "../../constants/boardInitial";
 import styled from "styled-components"
 import Figure from "./Figure"
 import HighlightedCell from "./HighlightedCell"
+import { getSrc } from "../../utils/getSrc";
+
 
 
 const Figures = styled.div`
@@ -14,7 +16,7 @@ const Figures = styled.div`
 `;
 
 
-const BoardElements = ({ cellSize, startX, startY }) => {
+const BoardElements = ({ cellSize, startX, startY, currentPlayer = 'white' }) => {
 
   const [highlightedCell, setHighlightedCell] = useState({ col: 0, row: 0, visible: false })
 
@@ -32,13 +34,14 @@ const BoardElements = ({ cellSize, startX, startY }) => {
             return (
               <Figure
                 key={file + rank}
-                src={figure[board[y][x]]}
+                src={getSrc(currentPlayer, x, y)}
                 top={cellSize * y}
                 left={cellSize * x}
                 startX={startX}
                 startY={startY}
                 cellSize={cellSize}
                 setHighlightedCell={setHighlightedCell}
+                currentPlayer={currentPlayer}
               />
             )
           })
