@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import appStore from "../../store/appStore";
+import { observer } from "mobx-react-lite";
 
 const Cell = styled.div`
 position: absolute;
@@ -11,14 +13,14 @@ height: ${props => props.$cellSize}px;
 `;
 
 
-const HighlightedCell = ({ cellSize, highlightedCell, currentPlayer }) => {
+const HighlightedCell = observer(({ cellSize, highlightedCell }) => {
 
     // console.log('HighlightedCell')
 
     const colTemp = highlightedCell.col
     const rowTemp = highlightedCell.row
-    const col = currentPlayer === 'white' ? colTemp : (7 - colTemp)
-    const row = currentPlayer === 'white' ? rowTemp : (7 - rowTemp)
+    const col = appStore.currentPlayer === 'white' ? colTemp : (7 - colTemp)
+    const row = appStore.currentPlayer === 'white' ? rowTemp : (7 - rowTemp)
 
     if (!highlightedCell.visible) return
 
@@ -30,7 +32,7 @@ const HighlightedCell = ({ cellSize, highlightedCell, currentPlayer }) => {
             }}
             $cellSize={cellSize}
         />
-    );
-};
+    )
+})
 
 export default HighlightedCell

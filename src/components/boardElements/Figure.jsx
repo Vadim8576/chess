@@ -28,7 +28,7 @@ const Img = styled.img`
     pointer-events: none;
 `;
 
-const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighlightedCell, currentPlayer }) => {
+const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighlightedCell }) => {
     const { isLoading, isError, image } = useLoadImage(src)
     const [position, setPosition] = useState({ x: left, y: top })
     const [grabCell, setGrabCell] = useState({ col: 0, row: 0 })
@@ -48,7 +48,7 @@ const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighligh
         const x = e.clientX - startX
         const y = e.clientY - startY
 
-        const [col, row] = getCellPosition(x, y, cellSize, currentPlayer)
+        const [col, row] = getCellPosition(x, y, cellSize, appStore.currentPlayer)
 
 
         setCurrentFigure(appStore.board[row][col])
@@ -74,7 +74,7 @@ const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighligh
 
         const xc = x - rect.width / 2
         const yc = y - rect.height / 2
-        const [col, row] = getCellPosition(x, y, cellSize, currentPlayer)
+        const [col, row] = getCellPosition(x, y, cellSize, appStore.currentPlayer)
 
         setPosition({ x: xc, y: yc })
 
@@ -103,7 +103,7 @@ const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighligh
 
         const x = e.clientX - startX
         const y = e.clientY - startY
-        const [col, row] = getCellPosition(x, y, cellSize, currentPlayer)
+        const [col, row] = getCellPosition(x, y, cellSize, appStore.currentPlayer)
 
         console.log(row, col)
 
@@ -112,8 +112,8 @@ const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighligh
             console.log('Фигура вне доски')
             const colTemp = grabCell.col
             const rowTemp = grabCell.row
-            const col = currentPlayer === 'white' ? colTemp : (7 - colTemp)
-            const row = currentPlayer === 'white' ? rowTemp : (7 - rowTemp)
+            const col = appStore.currentPlayer === 'white' ? colTemp : (7 - colTemp)
+            const row = appStore.currentPlayer === 'white' ? rowTemp : (7 - rowTemp)
 
             setPosition({
                 x: col * cellSize,

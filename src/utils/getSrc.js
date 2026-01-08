@@ -1,5 +1,4 @@
-import { boardMap, figure } from "../constants/boardInitial";
-import appStore from "../store/appStore";
+import { figure } from "../constants/boardInitial";
 
 
-export const getSrc = (currentPlayer, x, y) => figure[boardMap[currentPlayer === 'white' ? y : (7 - y)][currentPlayer === 'white' ? x : (7 - x)]]
+export const getSrc = (currentPlayer, board, x, y) => figure[board[currentPlayer === 'white' ? y : (7 - y)][currentPlayer === 'white' ? x : (7 - x)]]

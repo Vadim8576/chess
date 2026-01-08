@@ -4,6 +4,8 @@ import BoardBorderCanvas from './BoardBorderCanvas';
 import BoardCanvas from './BoardCanvas';
 import useWindowResizeThrottle from '../../hooks/useWindowResizeThrottle';
 import BoardElements from '../boardElements/BoardElements';
+import appStore from '../../store/appStore';
+import { observer } from 'mobx-react-lite';
 
 
 
@@ -18,11 +20,12 @@ const BoardWrapper = styled.div`
 
 
 
-const ChessBoard = () => {
+const ChessBoard = observer(() => {
   const boardRef = useRef(null)
   const [boardRect, setBoardRect] = useState({ y: 0, x: 0, w: 0, h: 0 })
   const [cellSize, setCellSize] = useState(0)
-  const [currentPlayer, setCurrentPlayer] = useState('white') // black or white
+  const [checked, setChecked] = useState(true)
+  // const [currentPlayer, setCurrentPlayer] = useState('white') // black or white
 
 
 
@@ -47,17 +50,29 @@ const ChessBoard = () => {
 
 
   return (
-    <BoardWrapper ref={boardRef}>
-      <BoardBorderCanvas width={boardRect.w} borderSize={60} currentPlayer={currentPlayer} />
-      <BoardCanvas cellSize={cellSize} />
-      <BoardElements
-        cellSize={cellSize}
-        startX={boardRect.x}
-        startY={boardRect.y}
-        currentPlayer={currentPlayer}
-      />
-    </BoardWrapper>
+    <>
+      <div>
+        <div style={{
+          float: 'left',
+          height: '100px',
+          fontSize: '14px'
+        }}>
+          Играть белыми
+        </div>
+        <input type="checkbox" checked={appStore.checked} onChange={appStore.setChecked} />
+      </div>
+      <BoardWrapper ref={boardRef}>
+        <BoardBorderCanvas width={boardRect.w} borderSize={60} />
+        <BoardCanvas cellSize={cellSize} />
+        <BoardElements
+          cellSize={cellSize}
+          startX={boardRect.x}
+          startY={boardRect.y}
+        />
+      </BoardWrapper>
+    </>
+
   )
-}
+})
 
 export default ChessBoard

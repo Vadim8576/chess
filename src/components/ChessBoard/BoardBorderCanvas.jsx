@@ -1,5 +1,7 @@
+import { observer } from 'mobx-react-lite';
 import { useRef, useEffect } from 'react';
 import styled from 'styled-components';
+import appStore from '../../store/appStore';
 
 const Canvas = styled.canvas`
   border: 2px solid #b58863;
@@ -9,17 +11,18 @@ const Canvas = styled.canvas`
   left: ${props => props.$left}px;
 `;
 
-const BoardBorderCanvas = ({ width, borderSize, currentPlayer='white' }) => {
-    const canvasRef = useRef(null);
+const BoardBorderCanvas = observer(({ width, borderSize }) => {
+    const canvasRef = useRef(null)
+    
 
-    console.log('BoardBorderCanvas Render')
+    console.log('BoardBorderCanvas Render', appStore.currentPlayer)
 
     useEffect(() => {
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#f0d9b5';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        const canvas = canvasRef.current
+        const ctx = canvas.getContext('2d')
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.fillStyle = '#f0d9b5'
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
 
         // Подписи: буквы (a–h) внизу
         const cellSize = width / 8
@@ -27,27 +30,27 @@ const BoardBorderCanvas = ({ width, borderSize, currentPlayer='white' }) => {
         ctx.textAlign = 'center';
         ctx.fillStyle = '#b58863';
         for (let col = 0; col < 8; col++) {
-            const value = currentPlayer === 'white' ? (97 + col) : (104 - col)
+            const value = appStore.currentPlayer === 'white' ? (97 + col) : (104 - col)
             const letter = String.fromCharCode(value); // a, b, ..., h
             ctx.fillText(
                 letter,
                 col * cellSize + borderSize,
                 canvas.height - 10
-            );
+            )
         }
 
         // Подписи: цифры (1–8) справа
         ctx.textAlign = 'center';
         for (let row = 0; row < 8; row++) {
-            const value = currentPlayer === 'white' ? (8 - row) : (row + 1)
+            const value = appStore.currentPlayer === 'white' ? (8 - row) : (row + 1)
             ctx.fillText(
                 value,
                 borderSize / 4,
                 row * cellSize + borderSize
-            );
+            )
         }
 
-    }, [width])
+    }, [appStore.currentPlayer, width])
 
     return (
         <Canvas
@@ -57,7 +60,7 @@ const BoardBorderCanvas = ({ width, borderSize, currentPlayer='white' }) => {
             $top={-borderSize / 2}
             $left={-borderSize / 2}
         />
-    );
-};
+    )
+})
 
 export default BoardBorderCanvas
