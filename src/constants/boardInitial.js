@@ -16,7 +16,7 @@ export const figure = {
   'rw': '/figures/rook-white.svg',
 }
 
-export const board = [
+export const boardMap = [
   ['rb', 'nb', 'bb', 'qb', 'kb', 'bb', 'nb', 'rb'],
   ['pb', 'pb', 'pb', 'pb', 'pb', 'pb', 'pb', 'pb'],
   ['  ', '  ', '  ', '  ', '  ', '  ', '  ', '  '],
@@ -39,3 +39,10 @@ export const board2 = [
 ]
 
 
+/*
+const b = {
+  '8': {'a': 'rb', 'b': 'nb'}
+}
+
+console.log(b['8']['b'])
+*/

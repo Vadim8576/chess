@@ -26,6 +26,7 @@ const BoardElements = ({ cellSize, startX, startY, currentPlayer = 'white' }) =>
       <HighlightedCell
         cellSize={cellSize}
         highlightedCell={highlightedCell}
+        currentPlayer={currentPlayer}
       />
 
       <Figures>

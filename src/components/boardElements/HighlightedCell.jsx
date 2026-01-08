@@ -11,12 +11,14 @@ height: ${props => props.$cellSize}px;
 `;
 
 
-const HighlightedCell = ({ cellSize, highlightedCell }) => {
+const HighlightedCell = ({ cellSize, highlightedCell, currentPlayer }) => {
 
     // console.log('HighlightedCell')
 
-    const col = highlightedCell.col
-    const row = highlightedCell.row
+    const colTemp = highlightedCell.col
+    const rowTemp = highlightedCell.row
+    const col = currentPlayer === 'white' ? colTemp : (7 - colTemp)
+    const row = currentPlayer === 'white' ? rowTemp : (7 - rowTemp)
 
     if (!highlightedCell.visible) return
 

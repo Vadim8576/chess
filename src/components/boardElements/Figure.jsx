@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from "react"
 import useLoadImage from "../../hooks/useLoadImage"
 import styled from 'styled-components'
-import { board, files, ranks } from "../../constants/boardInitial";
+import getCellPosition from "../../utils/getCellPosition";
+import { observer } from "mobx-react-lite";
+import { toJS } from 'mobx';
+import appStore from "../../store/appStore";
+
 
 const ImgWrapper = styled.div`
     position: absolute;
@@ -24,12 +28,12 @@ const Img = styled.img`
     pointer-events: none;
 `;
 
-const Figure = ({ src, top, left, startX, startY, cellSize, setHighlightedCell, currentPlayer }) => {
+const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighlightedCell, currentPlayer }) => {
     const { isLoading, isError, image } = useLoadImage(src)
     const [position, setPosition] = useState({ x: left, y: top })
     const [grabCell, setGrabCell] = useState({ col: 0, row: 0 })
-    // const [grabCell, setGrabCell] = useState({ col: 0, row: 0 })
     const [isDragging, setIsDragging] = useState(false)
+    const [currentFigure, setCurrentFigure] = useState(null)
     const imageRef = useRef(null)
 
 
@@ -41,18 +45,13 @@ const Figure = ({ src, top, left, startX, startY, cellSize, setHighlightedCell, 
         imageRef.current.style.zIndex = '101'
         imageRef.current.style.transition = 'none'
 
-        const rect = imageRef.current.getBoundingClientRect()
-
         const x = e.clientX - startX
         const y = e.clientY - startY
 
-        const colTemp = Math.floor(x / cellSize)
-        const rowTemp = Math.floor(y / cellSize)
+        const [col, row] = getCellPosition(x, y, cellSize, currentPlayer)
 
-        const col = currentPlayer === 'white' ? colTemp : (7 - colTemp)
-        const row = currentPlayer === 'white' ? rowTemp : (7 - rowTemp)
 
-        console.log(col, row)
+        setCurrentFigure(appStore.board[row][col])
 
         setGrabCell({ col, row })
         setHighlightedCell({
@@ -75,12 +74,7 @@ const Figure = ({ src, top, left, startX, startY, cellSize, setHighlightedCell, 
 
         const xc = x - rect.width / 2
         const yc = y - rect.height / 2
-
-        const colTemp = Math.floor(x / cellSize)
-        const rowTemp = Math.floor(y / cellSize)
-
-        const col = currentPlayer === 'white' ? colTemp : (7 - colTemp)
-        const row = currentPlayer === 'white' ? rowTemp : (7 - rowTemp)
+        const [col, row] = getCellPosition(x, y, cellSize, currentPlayer)
 
         setPosition({ x: xc, y: yc })
 
@@ -97,7 +91,6 @@ const Figure = ({ src, top, left, startX, startY, cellSize, setHighlightedCell, 
                 row: grabCell.row,
                 visible: true
             })
-            return
         }
     }
 
@@ -110,18 +103,21 @@ const Figure = ({ src, top, left, startX, startY, cellSize, setHighlightedCell, 
 
         const x = e.clientX - startX
         const y = e.clientY - startY
-        const colTemp = Math.floor(x / cellSize)
-        const rowTemp = Math.floor(y / cellSize)
+        const [col, row] = getCellPosition(x, y, cellSize, currentPlayer)
 
-        const col = currentPlayer === 'white' ? colTemp : (7 - colTemp)
-        const row = currentPlayer === 'white' ? rowTemp : (7 - rowTemp)
+        console.log(row, col)
 
 
         if (col < 0 || col > 7 || row < 0 || row > 7) {
             console.log('Фигура вне доски')
+            const colTemp = grabCell.col
+            const rowTemp = grabCell.row
+            const col = currentPlayer === 'white' ? colTemp : (7 - colTemp)
+            const row = currentPlayer === 'white' ? rowTemp : (7 - rowTemp)
+
             setPosition({
-                x: grabCell.col * cellSize,
-                y: grabCell.row * cellSize
+                x: col * cellSize,
+                y: row * cellSize
             })
             setHighlightedCell(prev => ({
                 ...prev,
@@ -130,8 +126,10 @@ const Figure = ({ src, top, left, startX, startY, cellSize, setHighlightedCell, 
             return
         }
 
-        const newX = cellSize * col
-        const newY = cellSize * row
+        const colTemp = Math.floor(x / cellSize)
+        const rowTemp = Math.floor(y / cellSize)
+        const newX = cellSize * colTemp
+        const newY = cellSize * rowTemp
         setPosition({ x: newX, y: newY })
         setHighlightedCell((prev) => ({
             ...prev,
@@ -139,62 +137,56 @@ const Figure = ({ src, top, left, startX, startY, cellSize, setHighlightedCell, 
         }))
 
         
-        const newBoard = ranks.map((rank, y) => {
-            return files.map((file, x) => {
-                return (y === newY && x === newX) ? '!!' : board[y][x]
-            })
-        })
-        
-        console.table(newBoard)
+      appStore.boardUpdate(currentFigure, grabCell, row, col)
+
+
     }
 
 
+    useEffect(() => {
+        setPosition({ x: left, y: top })
+    }, [left, top])
 
 
-useEffect(() => {
-    setPosition({ x: left, y: top })
-}, [left, top])
+    useEffect(() => {
+        if (isDragging) {
+            document.addEventListener('mousemove', handleMouseMove)
+            document.addEventListener('mouseup', handleMouseUp)
+        }
+
+        return () => {
+            document.removeEventListener('mousemove', handleMouseMove)
+            document.removeEventListener('mouseup', handleMouseUp)
+        }
+    }, [isDragging])
 
 
-useEffect(() => {
-    if (isDragging) {
-        document.addEventListener('mousemove', handleMouseMove)
-        document.addEventListener('mouseup', handleMouseUp)
+    if (isLoading) {
+        return <div>.</div>
     }
 
-    return () => {
-        document.removeEventListener('mousemove', handleMouseMove)
-        document.removeEventListener('mouseup', handleMouseUp)
+    if (isError) {
+        return <div>!</div>
     }
-}, [isDragging])
 
+    if (!src) return
 
-if (isLoading) {
-    return <div>.</div>
-}
-
-if (isError) {
-    return <div>!</div>
-}
-
-if (!src) return
-
-return (
-    <ImgWrapper
-        ref={imageRef}
-        onMouseDown={handleMouseDown}
-        draggable={false}
-        $cursor={isDragging ? 'grabbing' : 'grab'}
-        $width={cellSize}
-        $height={cellSize}
-        style={{
-            top: position.y,
-            left: position.x
-        }}
-    >
-        <Img src={image.src} />
-    </ImgWrapper>
-)
-}
+    return (
+        <ImgWrapper
+            ref={imageRef}
+            onMouseDown={handleMouseDown}
+            draggable={false}
+            $cursor={isDragging ? 'grabbing' : 'grab'}
+            $width={cellSize}
+            $height={cellSize}
+            style={{
+                top: position.y,
+                left: position.x
+            }}
+        >
+            <Img src={image.src} />
+        </ImgWrapper>
+    )
+})
 
 export default Figure
