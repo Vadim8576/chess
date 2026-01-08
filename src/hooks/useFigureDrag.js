@@ -19,7 +19,6 @@ export function useFigureDrag(appStore, cellSize, startX, startY, setHighlighted
 
     const x = e.clientX - startX
     const y = e.clientY - startY
-
     const [col, row] = getCellPosition(x, y, cellSize, appStore.currentPlayer)
 
     setCurrentFigure(appStore.board[row][col])
@@ -37,10 +36,8 @@ export function useFigureDrag(appStore, cellSize, startX, startY, setHighlighted
     const rect = imageRef.current.getBoundingClientRect()
     const x = e.clientX - startX
     const y = e.clientY - startY
-
     const xc = x - rect.width / 2
     const yc = y - rect.height / 2
-
     const [col, row] = getCellPosition(x, y, cellSize, appStore.currentPlayer)
 
     setPosition({ x: xc, y: yc })
@@ -72,10 +69,8 @@ export function useFigureDrag(appStore, cellSize, startX, startY, setHighlighted
 
     console.log('Отпустили на:', row, col)
 
-    // Проверка: вышли за пределы доски?
     if (col < 0 || col > 7 || row < 0 || row > 7) {
       console.log('Фигура вне доски')
-
       // Возвращаем фигуру на исходную клетку
       const colTemp = grabCell.col;
       const rowTemp = grabCell.row;
@@ -106,7 +101,6 @@ export function useFigureDrag(appStore, cellSize, startX, startY, setHighlighted
       visible: false
     }))
 
-    // Обновляем доску в хранилище
     appStore.boardUpdate(currentFigure, grabCell, row, col);
   }
 
