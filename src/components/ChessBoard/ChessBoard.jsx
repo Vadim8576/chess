@@ -24,11 +24,6 @@ const ChessBoard = observer(() => {
   const boardRef = useRef(null)
   const [boardRect, setBoardRect] = useState({ y: 0, x: 0, w: 0, h: 0 })
   const [cellSize, setCellSize] = useState(0)
-  const [checked, setChecked] = useState(true)
-  // const [currentPlayer, setCurrentPlayer] = useState('white') // black or white
-
-
-
   const { width, height } = useWindowResizeThrottle(500)
 
   console.log('ChessBoard Render')
@@ -46,7 +41,20 @@ const ChessBoard = observer(() => {
 
     setCellSize(boardRect.width / 8)
 
+
+/*
+    while (!appStore.chess.isGameOver()) {
+      const moves = appStore.chess.moves()
+      const move = moves[Math.floor(Math.random() * moves.length)]
+      appStore.chess.move(move)
+    }
+    console.log(chess.pgn())
+*/
+    // chess.move('e2e4')
+    console.table(appStore.chess.board())
+
   }, [width, height])
+
 
 
   return (
@@ -54,7 +62,7 @@ const ChessBoard = observer(() => {
       <div>
         <div style={{
           float: 'left',
-          height: '100px',
+          height: '55px',
           fontSize: '14px'
         }}>
           Играть белыми

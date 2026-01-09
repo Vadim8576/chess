@@ -33,7 +33,7 @@ const BoardElements = observer(({ cellSize, startX, startY }) => {
       <Figures>
         {ranks.map((rank, y) => {
           return files.map((file, x) => {
-            const src = getSrc(appStore.currentPlayer, appStore.board, x, y)
+            const src = getSrc(appStore.currentPlayer, appStore.chess.board(), x, y)
             return (
               <div key={file + rank}>
                 {src && <Figure           

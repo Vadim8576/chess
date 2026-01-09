@@ -2,17 +2,24 @@ import { makeAutoObservable } from "mobx"
 import { toJS } from 'mobx';
 import { boardMap, files, ranks } from "../constants/boardInitial";
 import { getSrc } from "../utils/getSrc";
+import { Chess } from "chess.js";
 
 
 
 class appStore {
-
-  board = [...boardMap]
-  currentPlayer = 'white' // black or white
+  // board = [...boardMap]
+  currentPlayer = 'white' // Ориентация доски для black or white
   checked = true
+
+  chess = new Chess()
 
   constructor() {
     makeAutoObservable(this);
+
+  }
+
+
+  setChess = (chess) => {
 
   }
 
@@ -20,7 +27,7 @@ class appStore {
     this.currentPlayer = color
   }
 
-
+/*
   boardUpdate = (currentFigure, grabCell, row, col) => {
     this.board = ranks.map((_, y) => {
       return files.map((_, x) => {     
@@ -30,10 +37,10 @@ class appStore {
       })
     })
 
-    console.table(toJS(this.board))
+    // console.table(toJS(this.board))
 
   }
-
+*/
   setChecked = () => {
     this.checked = !this.checked
     this.currentPlayer = this.checked === true ? 'white' : 'black'

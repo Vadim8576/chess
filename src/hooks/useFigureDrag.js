@@ -1,27 +1,34 @@
 import { useState, useRef } from 'react'
 import getCellPosition from '../utils/getCellPosition'
+import { isPawnMoveValid } from '../utils/checkingMoves/isPawnMoveValid'
+import { Chess } from 'chess.js'
 
 export function useFigureDrag(appStore, cellSize, startX, startY, setHighlightedCell) {
   const [isDragging, setIsDragging] = useState(false)
   const [currentFigure, setCurrentFigure] = useState(null)
   const [grabCell, setGrabCell] = useState({ col: 0, row: 0 })
   const [position, setPosition] = useState({ x: 0, y: 0 })
+  const [movies, setMovies] = useState([])
   const imageRef = useRef(null)
 
 
   const handleMouseDown = (e) => {
-    if (e.button !== 0) return // Только левая кнопка мыши
-    setIsDragging(true)
     e.preventDefault();
-
-    imageRef.current.style.zIndex = '101'
-    imageRef.current.style.transition = 'none'
+    if (e.button !== 0) return // Только левая кнопка мыши
 
     const x = e.clientX - startX
     const y = e.clientY - startY
     const [col, row] = getCellPosition(x, y, cellSize, appStore.currentPlayer)
 
-    setCurrentFigure(appStore.board[row][col])
+    const grabFigure = appStore.chess.board()[row][col]
+    const moves = appStore.chess.moves({ square: grabFigure.square })
+    setMovies(moves)
+
+    setIsDragging(true)
+
+    imageRef.current.style.zIndex = '101'
+    imageRef.current.style.transition = 'none'
+
     setGrabCell({ col, row })
     setHighlightedCell({
       col,
@@ -41,22 +48,22 @@ export function useFigureDrag(appStore, cellSize, startX, startY, setHighlighted
     const [col, row] = getCellPosition(x, y, cellSize, appStore.currentPlayer)
 
     setPosition({ x: xc, y: yc })
-
-    if (col >= 0 && col <= 7 && row >= 0 && row <= 7) {
+    // const isValid = isPawnMoveValid(appStore.board, grabCell.row, grabCell.col, row, col, { enPassant: null, promotion: false })
+    const isValid = true
+    if ((col >= 0 && col <= 7 && row >= 0 && row <= 7) && isValid) {
       setHighlightedCell({
         col,
         row,
         visible: true
-      });
+      })
     } else {
-      // Если вышли за пределы доски, сохраняем подсветку исходной клетки
       setHighlightedCell({
         col: grabCell.col,
         row: grabCell.row,
         visible: true
-      });
+      })
     }
-  };
+  }
 
   const handleMouseUp = (e) => {
     setIsDragging(false)
@@ -68,6 +75,8 @@ export function useFigureDrag(appStore, cellSize, startX, startY, setHighlighted
     const [col, row] = getCellPosition(x, y, cellSize, appStore.currentPlayer)
 
     console.log('Отпустили на:', row, col)
+
+
 
     if (col < 0 || col > 7 || row < 0 || row > 7) {
       console.log('Фигура вне доски')
@@ -89,6 +98,30 @@ export function useFigureDrag(appStore, cellSize, startX, startY, setHighlighted
       return
     }
 
+ 
+    const file = String.fromCharCode(appStore.currentPlayer === 'white' ? (97 + col) : (104 - col))
+    const rank = appStore.currentPlayer === 'white' ? (8 - row) : (row + 1)
+    const square = file + rank
+
+    if(!movies.includes(square)) {
+      console.log('Недопустимый ход!')
+      const colTemp = grabCell.col;
+      const rowTemp = grabCell.row;
+      const finalCol = appStore.currentPlayer === 'white' ? colTemp : (7 - colTemp)
+      const finalRow = appStore.currentPlayer === 'white' ? rowTemp : (7 - rowTemp)
+
+      setPosition({
+        x: finalCol * cellSize,
+        y: finalRow * cellSize
+      })
+
+      setHighlightedCell((prev) => ({
+        ...prev,
+        visible: false
+      }))
+      return
+    }
+    
     // Ставим фигуру на новую клетку
     const colTemp = Math.floor(x / cellSize)
     const rowTemp = Math.floor(y / cellSize)
@@ -101,7 +134,6 @@ export function useFigureDrag(appStore, cellSize, startX, startY, setHighlighted
       visible: false
     }))
 
-    appStore.boardUpdate(currentFigure, grabCell, row, col);
   }
 
   return {
