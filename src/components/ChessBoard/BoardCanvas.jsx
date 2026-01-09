@@ -25,9 +25,9 @@ const BoardCanvas = ({ cellSize }) => {
 
         ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
 
-        ctx.strokeStyle = '#ccc';
-        ctx.lineWidth = 1;
-        ctx.strokeRect(col * cellSize, row * cellSize, cellSize, cellSize);
+        // ctx.strokeStyle = '#ccc';
+        // ctx.lineWidth = 1;
+        // ctx.strokeRect(col * cellSize, row * cellSize, cellSize, cellSize);
       }
     }
 

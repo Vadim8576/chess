@@ -5,18 +5,18 @@ import { observer } from "mobx-react-lite";
 
 const Cell = styled.div`
 position: absolute;
-background: green;
+background-color: ${props => props.color};
 opacity: .5;
 z-index: 99;
 width: ${props => props.$cellSize}px;
 height: ${props => props.$cellSize}px;
+border: none;
 `;
 
 
 const HighlightedCell = observer(({ cellSize, highlightedCell }) => {
 
-    // console.log('HighlightedCell')
-
+    const color = highlightedCell.color ? highlightedCell.color : '#999'
     const colTemp = highlightedCell.col
     const rowTemp = highlightedCell.row
     const col = appStore.currentPlayer === 'white' ? colTemp : (7 - colTemp)
@@ -31,6 +31,7 @@ const HighlightedCell = observer(({ cellSize, highlightedCell }) => {
                 left: col * cellSize
             }}
             $cellSize={cellSize}
+            color={color}
         />
     )
 })

@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import useLoadImage from "../../hooks/useLoadImage"
 import styled from 'styled-components'
 import { observer } from "mobx-react-lite";
@@ -19,7 +19,8 @@ const ImgWrapper = styled.div`
     cursor: ${props => props.$cursor};
     user-select: none;
     touch-action: none;
-    z-index: 100;
+    z-index: ${props => props.$zIndex};
+    transition: ${props => props.$transition};
 `;
 
 const Img = styled.img`
@@ -28,7 +29,8 @@ const Img = styled.img`
     pointer-events: none;
 `;
 
-const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighlightedCell }) => {
+const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighlightedCell, setPossibleMoves }) => {
+    const [imgStyle, setImgStyle] = useState({zIndex: 100, transition: 'none'})
     const { isLoading, isError, image } = useLoadImage(src)
 
     const {
@@ -39,7 +41,7 @@ const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighligh
         handleMouseDown,
         handleMouseMove,
         handleMouseUp
-      } = useFigureDrag(appStore, cellSize, startX, startY, setHighlightedCell)
+      } = useFigureDrag(appStore, cellSize, startX, startY, setHighlightedCell, setPossibleMoves, setImgStyle)
 
 
     useEffect(() => {
@@ -78,6 +80,8 @@ const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighligh
             $cursor={isDragging ? 'grabbing' : 'grab'}
             $width={cellSize}
             $height={cellSize}
+            $zIndex={imgStyle.zIndex}
+            $transition={imgStyle.transition}
             style={{
                 top: position.y,
                 left: position.x

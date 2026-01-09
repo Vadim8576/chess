@@ -51,7 +51,7 @@ const ChessBoard = observer(() => {
     console.log(chess.pgn())
 */
     // chess.move('e2e4')
-    console.table(appStore.chess.board())
+    // console.table(appStore.chess.board())
 
   }, [width, height])
 

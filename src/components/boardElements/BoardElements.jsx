@@ -20,32 +20,54 @@ const Figures = styled.div`
 
 const BoardElements = observer(({ cellSize, startX, startY }) => {
 
-  const [highlightedCell, setHighlightedCell] = useState({ col: 0, row: 0, visible: false })
+  const [highlightedCell, setHighlightedCell] = useState({
+    col: 0, row: 0, color: 'green', visible: false
+  })
+  const [possibleMoves, setPossibleMoves] = useState({
+    moves: [{ col: 0, row: 0 }], color: 'green', visible: false
+  })
+
+
+
 
 
   return (
     <>
-      <HighlightedCell
-        cellSize={cellSize}
-        highlightedCell={highlightedCell}
-      />
+      {possibleMoves.moves && possibleMoves.moves.map((move, i) => {
+        return (
+          <HighlightedCell
+            key={move.col + '' + move.row + ''}
+            cellSize={cellSize}
+            highlightedCell={{ ...move, color: possibleMoves.color, visible: possibleMoves.visible }}
+          />
+        )
+      }
+      )}
+      
+      {highlightedCell.visible && (
+        <HighlightedCell
+          cellSize={cellSize}
+          highlightedCell={highlightedCell}
+        />
+      )}
+
 
       <Figures>
         {ranks.map((rank, y) => {
           return files.map((file, x) => {
             const src = getSrc(appStore.currentPlayer, appStore.chess.board(), x, y)
-            return (
-              <div key={file + rank}>
-                {src && <Figure           
-                  src={src}
-                  top={cellSize * y}
-                  left={cellSize * x}
-                  startX={startX}
-                  startY={startY}
-                  cellSize={cellSize}
-                  setHighlightedCell={setHighlightedCell}
-                />}
-              </div>
+            if (src) return (
+              <Figure
+                key={file + rank}
+                src={src}
+                top={cellSize * y}
+                left={cellSize * x}
+                startX={startX}
+                startY={startY}
+                cellSize={cellSize}
+                setHighlightedCell={setHighlightedCell}
+                setPossibleMoves={setPossibleMoves}
+              />
             )
           })
         })}
