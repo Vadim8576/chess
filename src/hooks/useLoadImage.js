@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-function useLoadImage(url) {
+export const useLoadImage = (url) => {
     const [isLoading, setIsLoading] = useState(!!url) // true, если url задан
     const [isError, setIsError] = useState(false)
     const [image, setImage] = useState(null)
@@ -40,4 +40,3 @@ function useLoadImage(url) {
     return { isLoading, isError, image }
 }
 
-export default useLoadImage

@@ -6,16 +6,20 @@ import appStore from '../../store/appStore';
 const Canvas = styled.canvas`
   border: 2px solid #b58863;
   display: block;
-  position: absolute;
-  top: ${props => props.$top}px;
-  left: ${props => props.$left}px;
 `;
+// const Canvas = styled.canvas`
+//   border: 2px solid #b58863;
+//   display: block;
+//   position: relative;
+//   top: ${props => props.$top}px;
+//   left: ${props => props.$left}px;
+// `;
 
-const BoardBorderCanvas = observer(({ width, borderSize }) => {
+const BoardBorderCanvas = observer(({ width, cellSize }) => {
     const canvasRef = useRef(null)
-    
+    // console.log('w = ', width)
 
-    console.log('BoardBorderCanvas Render', appStore.currentPlayer)
+    // console.log('BoardBorderCanvas Render', 'белые внизу? ', appStore.whiteBottom)
 
     useEffect(() => {
         const canvas = canvasRef.current
@@ -25,16 +29,16 @@ const BoardBorderCanvas = observer(({ width, borderSize }) => {
         ctx.fillRect(0, 0, canvas.width, canvas.height)
 
         // Подписи: буквы (a–h) внизу
-        const cellSize = width / 8
+        // const cellSize = width / 8
         ctx.font = '14px Arial';
         ctx.textAlign = 'center';
         ctx.fillStyle = '#b58863';
         for (let col = 0; col < 8; col++) {
-            const value = appStore.currentPlayer === 'white' ? (97 + col) : (104 - col)
+            const value = appStore.whiteBottom === true ? (97 + col) : (104 - col)
             const letter = String.fromCharCode(value); // a, b, ..., h
             ctx.fillText(
                 letter,
-                col * cellSize + borderSize,
+                col * cellSize + cellSize,
                 canvas.height - 10
             )
         }
@@ -42,23 +46,43 @@ const BoardBorderCanvas = observer(({ width, borderSize }) => {
         // Подписи: цифры (1–8) справа
         ctx.textAlign = 'center';
         for (let row = 0; row < 8; row++) {
-            const value = appStore.currentPlayer === 'white' ? (8 - row) : (row + 1)
+            const value = appStore.whiteBottom === true ? (8 - row) : (row + 1)
             ctx.fillText(
                 value,
-                borderSize / 4,
-                row * cellSize + borderSize
+                cellSize / 4,
+                row * cellSize + cellSize
             )
         }
 
-    }, [appStore.currentPlayer, width])
+
+
+
+
+        // Доска
+        for (let row = 0; row < 8; row++) {
+            for (let col = 0; col < 8; col++) {
+                const isBlack = (row + col) % 2 === 0;
+                ctx.fillStyle = !isBlack ? '#b58863' : '#f0d9b5';
+
+                ctx.fillRect(cellSize / 2 + col * cellSize, cellSize / 2 + row * cellSize, cellSize, cellSize);
+
+                // ctx.strokeStyle = '#ccc';
+                // ctx.lineWidth = 1;
+                // ctx.strokeRect(col * cellSize, row * cellSize, cellSize, cellSize);
+            }
+        }
+
+        ctx.strokeStyle = '#b58863';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(cellSize / 2, cellSize / 2, cellSize * 8, cellSize * 8);
+
+    }, [appStore.whiteBottom, width])
 
     return (
         <Canvas
             ref={canvasRef}
-            width={(width + borderSize)}
-            height={(width + borderSize)}
-            $top={-borderSize / 2}
-            $left={-borderSize / 2}
+            width={(width)}
+            height={(width)}
         />
     )
 })

@@ -19,8 +19,8 @@ const HighlightedCell = observer(({ cellSize, highlightedCell }) => {
     const color = highlightedCell.color ? highlightedCell.color : '#999'
     const colTemp = highlightedCell.col
     const rowTemp = highlightedCell.row
-    const col = appStore.currentPlayer === 'white' ? colTemp : (7 - colTemp)
-    const row = appStore.currentPlayer === 'white' ? rowTemp : (7 - rowTemp)
+    const col = appStore.whiteBottom ? colTemp : (7 - colTemp)
+    const row = appStore.whiteBottom ? rowTemp : (7 - rowTemp)
 
     if (!highlightedCell.visible) return
 

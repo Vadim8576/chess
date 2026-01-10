@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { files, ranks } from "../../constants/boardInitial";
+import { observer } from "mobx-react-lite";
 import styled from "styled-components"
+import { files, ranks } from "../../constants/boardInitial";
 import Figure from "./Figure"
 import HighlightedCell from "./HighlightedCell"
 import { getSrc } from "../../utils/getSrc";
 import appStore from "../../store/appStore";
-import { observer } from "mobx-react-lite";
 
 
 
@@ -24,7 +24,7 @@ const BoardElements = observer(({ cellSize, startX, startY }) => {
     col: 0, row: 0, color: 'green', visible: false
   })
   const [possibleMoves, setPossibleMoves] = useState({
-    moves: [{ col: 0, row: 0 }], color: 'green', visible: false
+    color: 'green', visible: false
   })
 
 
@@ -33,17 +33,14 @@ const BoardElements = observer(({ cellSize, startX, startY }) => {
 
   return (
     <>
-      {possibleMoves.moves && possibleMoves.moves.map((move, i) => {
-        return (
-          <HighlightedCell
-            key={move.col + '' + move.row + ''}
-            cellSize={cellSize}
-            highlightedCell={{ ...move, color: possibleMoves.color, visible: possibleMoves.visible }}
-          />
-        )
-      }
-      )}
-      
+      {possibleMoves.moves && possibleMoves.moves.map(move => (
+        <HighlightedCell
+          key={`${move.col}${move.row}`}
+          cellSize={cellSize}
+          highlightedCell={{ ...move, color: possibleMoves.color, visible: possibleMoves.visible }}
+        />
+      ))}
+
       {highlightedCell.visible && (
         <HighlightedCell
           cellSize={cellSize}
@@ -55,7 +52,7 @@ const BoardElements = observer(({ cellSize, startX, startY }) => {
       <Figures>
         {ranks.map((rank, y) => {
           return files.map((file, x) => {
-            const src = getSrc(appStore.currentPlayer, appStore.chess.board(), x, y)
+            const src = getSrc(appStore.whiteBottom, appStore.chess.board(), x, y)
             if (src) return (
               <Figure
                 key={file + rank}

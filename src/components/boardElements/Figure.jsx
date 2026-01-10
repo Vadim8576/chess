@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import useLoadImage from "../../hooks/useLoadImage"
+import { useLoadImage } from "../../hooks/useLoadImage"
 import styled from 'styled-components'
 import { observer } from "mobx-react-lite";
 import { toJS } from 'mobx';
@@ -30,7 +30,7 @@ const Img = styled.img`
 `;
 
 const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighlightedCell, setPossibleMoves }) => {
-    const [imgStyle, setImgStyle] = useState({zIndex: 100, transition: 'none'})
+    const [imgStyle, setImgStyle] = useState({ zIndex: 100, transition: 'none' })
     const { isLoading, isError, image } = useLoadImage(src)
 
     const {
@@ -41,7 +41,7 @@ const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighligh
         handleMouseDown,
         handleMouseMove,
         handleMouseUp
-      } = useFigureDrag(appStore, cellSize, startX, startY, setHighlightedCell, setPossibleMoves, setImgStyle)
+    } = useFigureDrag(appStore, cellSize, startX, startY, setHighlightedCell, setPossibleMoves, setImgStyle)
 
 
     useEffect(() => {
@@ -52,22 +52,30 @@ const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighligh
     useEffect(() => {
         if (isDragging) {
             document.addEventListener('mousemove', handleMouseMove)
-            document.addEventListener('mouseup', handleMouseUp)
+            document.addEventListener('mouseup', handleMouseUp)    
+
+            // document.addEventListener('touchstart', handleMouseMove, { passive: false })
+            // document.addEventListener('touchmove', handleMouseDown, { passive: false })
+            // document.addEventListener('touchend', handleMouseUp, { passive: false })     
         }
 
         return () => {
             document.removeEventListener('mousemove', handleMouseMove)
             document.removeEventListener('mouseup', handleMouseUp)
+
+            // document.removeEventListener('touchstart', handleMouseMove, { passive: false })
+            // document.removeEventListener('touchmove', handleMouseMove, { passive: false })
+            // document.removeEventListener('touchend', handleMouseUp, { passive: false })   
         }
     }, [isDragging])
 
 
     if (isLoading) {
-        return <div>.</div>
+        return
     }
 
     if (isError) {
-        return <div>!</div>
+        return
     }
 
     if (!src) return

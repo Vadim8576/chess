@@ -1,10 +1,11 @@
-import ChessBoard from './components/ChessBoard/ChessBoard';
+import MainPage from "./pages/MainPage"
+
 
 
 function App() {
   return (
     <div id="game">
-      <ChessBoard />
+      <MainPage />     
     </div>
   )
 }
