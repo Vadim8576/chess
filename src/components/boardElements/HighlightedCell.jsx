@@ -14,7 +14,7 @@ border: none;
 `;
 
 
-const HighlightedCell = observer(({ cellSize, highlightedCell }) => {
+const HighlightedCell = observer(({ cellSize, highlightedCell, startX, startY }) => {
 
     const color = highlightedCell.color ? highlightedCell.color : '#999'
     const colTemp = highlightedCell.col
@@ -27,8 +27,8 @@ const HighlightedCell = observer(({ cellSize, highlightedCell }) => {
     return (
         <Cell
             style={{
-                top: row * cellSize,
-                left: col * cellSize
+                top: row * cellSize + startY,
+                left: col * cellSize + startX
             }}
             $cellSize={cellSize}
             color={color}

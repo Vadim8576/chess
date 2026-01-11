@@ -9,8 +9,6 @@ import { useFigureDrag } from "../../hooks/useFigureDrag";
 
 const ImgWrapper = styled.div`
     position: absolute;
-    top: 0;
-    left: 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -29,8 +27,9 @@ const Img = styled.img`
     pointer-events: none;
 `;
 
-const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighlightedCell, setPossibleMoves }) => {
+const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighlightedCell, setPossibleMoves,getGameStatus }) => {
     const [imgStyle, setImgStyle] = useState({ zIndex: 100, transition: 'none' })
+    // const [gameStatus, setGameStatus] = useState({ currentPlayer: 'w', status: '' })
     const { isLoading, isError, image } = useLoadImage(src)
 
     const {
@@ -41,7 +40,15 @@ const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighligh
         handleMouseDown,
         handleMouseMove,
         handleMouseUp
-    } = useFigureDrag(appStore, cellSize, startX, startY, setHighlightedCell, setPossibleMoves, setImgStyle)
+    } = useFigureDrag(appStore,
+        cellSize,
+        startX,
+        startY,
+        setHighlightedCell,
+        setPossibleMoves,
+        setImgStyle,
+        getGameStatus
+    )
 
 
     useEffect(() => {
@@ -49,10 +56,12 @@ const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighligh
     }, [left, top])
 
 
+    
+
     useEffect(() => {
         if (isDragging) {
             document.addEventListener('mousemove', handleMouseMove)
-            document.addEventListener('mouseup', handleMouseUp)    
+            document.addEventListener('mouseup', handleMouseUp)
 
             // document.addEventListener('touchstart', handleMouseMove, { passive: false })
             // document.addEventListener('touchmove', handleMouseDown, { passive: false })

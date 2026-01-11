@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components"
 import { files, ranks } from "../../constants/boardInitial";
@@ -28,7 +28,42 @@ const BoardElements = observer(({ cellSize, startX, startY }) => {
   })
 
 
+  const getGameStatus = () => {
+    appStore.setGameStatus('w', '')
+    appStore.setGameStatus('b', '')
+    const player = appStore.chess.turn()
 
+    if (appStore.chess.inCheck()) {
+      appStore.setGameStatus(player, 'Шах!')
+    }
+
+    if (appStore.chess.isCheckmate()) {
+      appStore.setGameStatus(player, 'Мат!')
+    }
+
+    if (appStore.chess.isStalemate()) {
+      const status = 'Пат. Ничья!'
+      appStore.setGameStatus('w', status)
+      appStore.setGameStatus('b', status)
+    }
+
+    if (appStore.chess.isThreefoldRepetition()) {
+      const status = 'Троекратное повторение. Ничья!'
+      appStore.setGameStatus('w', status)
+      appStore.setGameStatus('b', status)
+    }
+
+    if (appStore.chess.isDraw()) {
+      const status = 'Правило 50 ходов. Ничья!'
+      appStore.setGameStatus('w', status)
+      appStore.setGameStatus('b', status)
+    }
+
+
+    if (appStore.chess.isGameOver()) {
+      console.log('Игра окончена.')
+    }
+  }
 
 
   return (
@@ -38,6 +73,8 @@ const BoardElements = observer(({ cellSize, startX, startY }) => {
           key={`${move.col}${move.row}`}
           cellSize={cellSize}
           highlightedCell={{ ...move, color: possibleMoves.color, visible: possibleMoves.visible }}
+          startX={startX}
+          startY={startY}
         />
       ))}
 
@@ -45,6 +82,8 @@ const BoardElements = observer(({ cellSize, startX, startY }) => {
         <HighlightedCell
           cellSize={cellSize}
           highlightedCell={highlightedCell}
+          startX={startX}
+          startY={startY}
         />
       )}
 
@@ -57,13 +96,14 @@ const BoardElements = observer(({ cellSize, startX, startY }) => {
               <Figure
                 key={file + rank}
                 src={src}
-                top={cellSize * y}
-                left={cellSize * x}
+                top={startY + cellSize * y}
+                left={startX + cellSize * x}
                 startX={startX}
                 startY={startY}
                 cellSize={cellSize}
                 setHighlightedCell={setHighlightedCell}
                 setPossibleMoves={setPossibleMoves}
+                getGameStatus={getGameStatus}
               />
             )
           })

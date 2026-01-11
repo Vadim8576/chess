@@ -3,7 +3,16 @@ import { getCellPosition } from '../utils/getCellPosition'
 import { getSquare } from '../utils/getSquare'
 import { squareToIndices } from '../utils/squareToIndices'
 
-export function useFigureDrag(appStore, cellSize, startX, startY, setHighlightedCell, setPossibleMoves, setImgStyle) {
+export function useFigureDrag(
+  appStore,
+  cellSize,
+  startX,
+  startY,
+  setHighlightedCell,
+  setPossibleMoves,
+  setImgStyle,
+  getGameStatus
+) {
   const [isDragging, setIsDragging] = useState(false)
   const [grabCell, setGrabCell] = useState({ col: 0, row: 0 })
   const [position, setPosition] = useState({ x: 0, y: 0 })
@@ -56,9 +65,13 @@ export function useFigureDrag(appStore, cellSize, startX, startY, setHighlighted
     const rect = imageRef.current.getBoundingClientRect()
     const x = e.clientX - startX
     const y = e.clientY - startY
-    const xc = x - rect.width / 2
-    const yc = y - rect.height / 2
+    const xc = x - rect.width / 2 + startX
+    const yc = y - rect.height / 2 + startY
     const [col, row] = getCellPosition(x, y, cellSize, appStore.whiteBottom)
+
+    const square = getSquare(appStore.whiteBottom, col, row)
+
+    // console.log('Фигура на:', square)
 
     setPosition({ x: xc, y: yc })
 
@@ -118,8 +131,8 @@ export function useFigureDrag(appStore, cellSize, startX, startY, setHighlighted
       const finalCol = appStore.whiteBottom ? colTemp : (7 - colTemp)
       const finalRow = appStore.whiteBottom ? rowTemp : (7 - rowTemp)
       setPosition({
-        x: finalCol * cellSize,
-        y: finalRow * cellSize
+        x: finalCol * cellSize + startX,
+        y: finalRow * cellSize + startY
       })
       // Удаляем подсветку
       setHighlightedCell((state) => ({
@@ -134,6 +147,8 @@ export function useFigureDrag(appStore, cellSize, startX, startY, setHighlighted
 
     const square = getSquare(appStore.whiteBottom, col, row)
 
+    // console.log('Отпущено на:', square)
+
     if (!moves.includes(square)) {
       console.log('Недопустимый ход!')
       const colTemp = grabCell.col;
@@ -142,8 +157,8 @@ export function useFigureDrag(appStore, cellSize, startX, startY, setHighlighted
       const finalRow = appStore.whiteBottom ? rowTemp : (7 - rowTemp)
 
       setPosition({
-        x: finalCol * cellSize,
-        y: finalRow * cellSize
+        x: finalCol * cellSize + startX,
+        y: finalRow * cellSize + startY
       })
 
       setHighlightedCell((state) => ({
@@ -156,8 +171,8 @@ export function useFigureDrag(appStore, cellSize, startX, startY, setHighlighted
     // Ставим фигуру на новую клетку
     const colTemp = Math.floor(x / cellSize)
     const rowTemp = Math.floor(y / cellSize)
-    const newX = cellSize * colTemp
-    const newY = cellSize * rowTemp
+    const newX = cellSize * colTemp + startX
+    const newY = cellSize * rowTemp + startY
 
     setPosition({ x: newX, y: newY })
     setHighlightedCell((state) => ({
@@ -166,7 +181,23 @@ export function useFigureDrag(appStore, cellSize, startX, startY, setHighlighted
     }))
 
     console.log(grabCell.square, square)
+
+
+    const capturedFigure = appStore.chess.board()[row][col]
+    console.log(capturedFigure)
+
+    // {square: 'f7', type: 'p', color: 'b'}
+    if(capturedFigure) {
+      appStore.addCapturedFigures(capturedFigure.color, `${capturedFigure.type}${capturedFigure.color}`)
+    }
+
     appStore.chess.move(grabCell.square + square)
+
+
+    getGameStatus()
+    //  console.log('Статус игры: ', getGameStatus().status)
+
+
 
 
     /*********************************************************************/
@@ -202,15 +233,15 @@ export function useFigureDrag(appStore, cellSize, startX, startY, setHighlighted
   console.log(getGameStatus(game)); // 'Мат! Игра завершена.'
 
   */
-}
+  }
 
-return {
-  isDragging,
-  position,
-  imageRef,
-  setPosition,
-  handleMouseDown,
-  handleMouseMove,
-  handleMouseUp
-};
+  return {
+    isDragging,
+    position,
+    imageRef,
+    setPosition,
+    handleMouseDown,
+    handleMouseMove,
+    handleMouseUp
+  };
 }

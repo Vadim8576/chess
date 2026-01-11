@@ -6,27 +6,47 @@ import { Chess } from "chess.js";
 
 class appStore {
 
-  checked = true
+  // checked = true
   chess = new Chess()
-  whiteBottom = true
-  
+  whiteBottom = true // true | false
+  blackStatus = 'black'
+  whiteStatus = 'white'
+  capturedFigures = {
+    'w': [],
+    'b': []
+  }
+
   constructor() {
     makeAutoObservable(this);
-
   }
 
   get whiteBottom() {
     return this.whiteBottom
   }
 
-  setChess = (chess) => {
-
+  setGameStatus(player, status) {
+    if (player === 'w') {
+      this.whiteStatus = status
+    } else {
+      this.blackStatus = status
+    }
   }
 
-  setChecked = () => {
-    this.checked = !this.checked
-    this.whiteBottom = this.checked
+  //Взятые фигуры
+  addCapturedFigures(color, figure) {
+    this.capturedFigures[color] = [...this.capturedFigures[color], figure]
   }
+
+
+
+
+
+
+
+  // setChecked = () => {
+  //   this.checked = !this.checked
+  //   this.whiteBottom = this.checked
+  // }
 
 }
 
