@@ -21,21 +21,39 @@ export function useFigureDrag(
 
 
   const handleMouseDown = (e) => {
+    // appStore.chess.clear()
+    // appStore.chess.load('r2qkbnr/ppp2ppp/2n5/1B2pQ2/4P3/8/PPP2PPP/RNB1K2R b KQkq - 3 7')
+    // return
     e.preventDefault();
     if (e.button !== 0) return // Только левая кнопка мыши
+    if (appStore.chess.isGameOver()) return
+
 
     const x = e.clientX - startX
     const y = e.clientY - startY
     const [col, row] = getCellPosition(x, y, cellSize, appStore.whiteBottom)
     const grabFigure = appStore.chess.board()[row][col]
 
-    // moves - массив допустимых ходов для данной фигуры grabFigure
-    const moves = appStore.chess.moves({ square: grabFigure.square, verbose: true }).map(m => m.to)
+    if (grabFigure.color !== appStore.chess.turn()) {
+      console.log('Сейчас ход другого игрока!')
+      return
+    }
+
+    // moves - массив допустимых ходов для данной фигуры grabFigure. verbose: true - возвращает объект
+    const movesTemp = appStore.chess.moves({ square: grabFigure.square, verbose: true }).map(m => m.to)
+    if (movesTemp.length <= 0) {
+      console.log('Нет доступного хода для этой фигуры!')
+      return
+    }
+    const square = getSquare(appStore.whiteBottom, col, row)
+
+    const moves = [...movesTemp, square] // Добавляем клетку, с которой взяли фигуру, для ее подсветки
 
     console.log('Взята: ', grabFigure, ' Доступные ходы: ', moves)
-    // console.log('Доступные ходы: ', moves)
 
-    // Массив с доступными ходами в виде индексов 
+
+
+    // Массив с доступными ходами в виде индексов [{0, 5},{...}] -  координаты клетки в массиве доски
     const moveIndices = moves.map(square => squareToIndices(square))
 
     // console.log(moveIndices)
@@ -78,7 +96,7 @@ export function useFigureDrag(
     // Если фигура перемещается в пределах доски
     if (col >= 0 && col <= 7 && row >= 0 && row <= 7) {
       // Получаем адрес текущей клетки, например, A7
-      const square = getSquare(appStore.whiteBottom, col, row)
+      // const square = getSquare(appStore.whiteBottom, col, row)
       // console.log(square)
 
       // Подсвечиваем красным, если ход сюда не доступен
@@ -123,6 +141,7 @@ export function useFigureDrag(
     const y = e.clientY - startY
     const [col, row] = getCellPosition(x, y, cellSize, appStore.whiteBottom)
 
+
     if (col < 0 || col > 7 || row < 0 || row > 7) {
       console.log('Фигура вне доски')
       // Возвращаем фигуру на исходную клетку
@@ -142,14 +161,13 @@ export function useFigureDrag(
       return
     }
 
-
     // Получаем адрес текущей клетки, например, A7
-
     const square = getSquare(appStore.whiteBottom, col, row)
-
     // console.log('Отпущено на:', square)
 
-    if (!moves.includes(square)) {
+    console.log(grabCell.square, square)
+
+    if (!moves.includes(square) || grabCell.square === square) {
       console.log('Недопустимый ход!')
       const colTemp = grabCell.col;
       const rowTemp = grabCell.row;
@@ -180,59 +198,34 @@ export function useFigureDrag(
       visible: false
     }))
 
-    console.log(grabCell.square, square)
 
 
-    const capturedFigure = appStore.chess.board()[row][col]
-    console.log(capturedFigure)
 
-    // {square: 'f7', type: 'p', color: 'b'}
-    if(capturedFigure) {
+    let capturedFigure = appStore.chess.board()[row][col]
+
+    const move = appStore.chess.move(grabCell.square + square)
+    // если присутствует flags 'e', произошло взятие на проходе
+    if (move && move.flags.includes('e')) {
+      console.log('Взятие на проходе!')
+      capturedFigure = {
+        type: 'p',
+        color: move.color === 'w' ? 'b' : 'w'
+      }
+    }
+    
+    
+    console.log(capturedFigure) // {square: 'f7', type: 'p', color: 'b'}
+
+    
+    if (capturedFigure) {
       appStore.addCapturedFigures(capturedFigure.color, `${capturedFigure.type}${capturedFigure.color}`)
     }
 
-    appStore.chess.move(grabCell.square + square)
 
+    
 
     getGameStatus()
-    //  console.log('Статус игры: ', getGameStatus().status)
 
-
-
-
-    /*********************************************************************/
-    /*
-    function getGameStatus(game) {
-      if (game.gameOver()) {
-        if (game.isCheckmate()) {
-          console.log('Мат! Игра окончена.');
-        } else if (game.inStalemate()) {
-          console.log('Пат! Ничья.');
-        } else if (game.inThreefoldRepetition()) {
-          console.log('Троекратное повторение. Ничья.');
-        } else if (game.inFiftyMoveRule()) {
-          console.log('Правило 50 ходов. Ничья.');
-        } else {
-          console.log('Игра окончена (другая причина).');
-        }
-      } else {
-        console.log('Игра продолжается.');
-      }
-
-    // За последние 50 ходов не было ни одного взятия и ни одной пешки, перемещённой вперёд.
-    //game.inFiftyMoveRule()
-
-    // автоматическая ничья - Ни один из игроков не может поставить мат любой последовательностью ходов
-    // (например, король + слон против короля).
-
-    return 'Игра продолжается.';
-  }
-
-  // Пример использования
-  const game = new Chess('4k3/8/8/8/8/8/4K3/4Q3 b - - 0 1');
-  console.log(getGameStatus(game)); // 'Мат! Игра завершена.'
-
-  */
   }
 
   return {

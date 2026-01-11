@@ -9,9 +9,11 @@ const Status = styled.div`
 display: flex;
 justify-content: center;
 align-items: center;
-width: 100%;
+width: 40%;
 height: 30px;
+margin-left: 30%;
 color: #fff;
+font-size: 14px;
 font-size: bold;
 background-color: #414833;
 border-radius: ${props => props.$position === 'top' ? '0 0 20px 20px' : '20px 20px 0 0'};
