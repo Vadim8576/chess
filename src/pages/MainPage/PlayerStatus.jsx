@@ -11,12 +11,16 @@ justify-content: center;
 align-items: center;
 width: 100%;
 height: 30px;
-background-color: #A4AC86;
+color: #fff;
+font-size: bold;
+background-color: #414833;
+border-radius: ${props => props.$position === 'top' ? '0 0 20px 20px' : '20px 20px 0 0'};
 `;
 
-const PlayerStatus = observer(({status}) => {
+const PlayerStatus = observer(({status, position}) => {
+	
 	return (
-		<Status>
+		<Status $position={position}>
 			{`${status}`}
 		</Status>
 	)

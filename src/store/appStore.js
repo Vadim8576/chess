@@ -9,8 +9,8 @@ class appStore {
   // checked = true
   chess = new Chess()
   whiteBottom = true // true | false
-  blackStatus = 'black'
-  whiteStatus = 'white'
+  blackStatus = ''
+  whiteStatus = ''
   capturedFigures = {
     'w': [],
     'b': []

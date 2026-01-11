@@ -23,11 +23,11 @@ const MainPage = observer(() => {
 		<PageContainer>
 			<Panel grow={1}></Panel>
 			<Panel grow={3}>
-				<PlayerStatus status={appStore.whiteBottom ? appStore.blackStatus : appStore.whiteStatus} />
+				<PlayerStatus position={'top'} status={appStore.whiteBottom ? appStore.blackStatus : appStore.whiteStatus} />
 				<CapturedArea capturedFigures={appStore.whiteBottom ? appStore.capturedFigures['w'] : appStore.capturedFigures['b']} />
 				<BoardContainer />
 				<CapturedArea capturedFigures={appStore.whiteBottom ? appStore.capturedFigures['b'] : appStore.capturedFigures['w']} />
-				<PlayerStatus status={appStore.whiteBottom ? appStore.whiteStatus : appStore.blackStatus} />
+				<PlayerStatus position={'bottom'} status={appStore.whiteBottom ? appStore.whiteStatus : appStore.blackStatus} />
 			</Panel>
 			<Panel grow={1}></Panel>
 		</PageContainer>

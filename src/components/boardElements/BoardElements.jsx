@@ -6,6 +6,7 @@ import Figure from "./Figure"
 import HighlightedCell from "./HighlightedCell"
 import { getSrc } from "../../utils/getSrc";
 import appStore from "../../store/appStore";
+import useGameStatus from "../../hooks/useGameStatus";
 
 
 
@@ -28,42 +29,11 @@ const BoardElements = observer(({ cellSize, startX, startY }) => {
   })
 
 
-  const getGameStatus = () => {
-    appStore.setGameStatus('w', '')
-    appStore.setGameStatus('b', '')
-    const player = appStore.chess.turn()
+  const [getGameStatus] = useGameStatus(appStore)
 
-    if (appStore.chess.inCheck()) {
-      appStore.setGameStatus(player, 'Шах!')
-    }
-
-    if (appStore.chess.isCheckmate()) {
-      appStore.setGameStatus(player, 'Мат!')
-    }
-
-    if (appStore.chess.isStalemate()) {
-      const status = 'Пат. Ничья!'
-      appStore.setGameStatus('w', status)
-      appStore.setGameStatus('b', status)
-    }
-
-    if (appStore.chess.isThreefoldRepetition()) {
-      const status = 'Троекратное повторение. Ничья!'
-      appStore.setGameStatus('w', status)
-      appStore.setGameStatus('b', status)
-    }
-
-    if (appStore.chess.isDraw()) {
-      const status = 'Правило 50 ходов. Ничья!'
-      appStore.setGameStatus('w', status)
-      appStore.setGameStatus('b', status)
-    }
-
-
-    if (appStore.chess.isGameOver()) {
-      console.log('Игра окончена.')
-    }
-  }
+  useEffect(() => {
+    getGameStatus()
+  }, [appStore.whiteBottom])
 
 
   return (

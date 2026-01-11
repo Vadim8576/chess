@@ -10,11 +10,14 @@ justify-content: center;
 align-items: center;
 width: 100%;
 height: 50px;
-background-color: #A68A64;
 `;
 
 
 const CapturedArea = observer(({ capturedFigures }) => {
+
+  console.log(capturedFigures)
+  if(!capturedFigures) return
+
   return (
     <Area>
       {capturedFigures.map((cf, key) => (
