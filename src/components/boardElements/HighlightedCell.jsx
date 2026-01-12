@@ -8,15 +8,17 @@ position: absolute;
 background-color: ${props => props.color};
 opacity: .5;
 z-index: 99;
-width: ${props => props.$cellSize}px;
-height: ${props => props.$cellSize}px;
+width: ${props => props.$cellSize - 2}px;
+height: ${props => props.$cellSize - 2}px;
+top: ${props => props.$top}px;
+left: ${props => props.$left}px;
 border: none;
 `;
 
 
-const HighlightedCell = observer(({ cellSize, highlightedCell, startX, startY }) => {
+const HighlightedCell = observer(({ cellSize, highlightedCell }) => {
 
-    const color = highlightedCell.color ? highlightedCell.color : '#999'
+    // const color = highlightedCell.color ? highlightedCell.color : '#999'
     const colTemp = highlightedCell.col
     const rowTemp = highlightedCell.row
     const col = appStore.whiteBottom ? colTemp : (7 - colTemp)
@@ -26,12 +28,10 @@ const HighlightedCell = observer(({ cellSize, highlightedCell, startX, startY })
 
     return (
         <Cell
-            style={{
-                top: row * cellSize + startY,
-                left: col * cellSize + startX
-            }}
+            $top={row * cellSize + 1}
+            $left={col * cellSize + 1}
             $cellSize={cellSize}
-            color={color}
+            color={highlightedCell.color}
         />
     )
 })

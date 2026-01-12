@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import ChessBoard from "../../components/ChessBoard/ChessBoard";
 import { useEffect, useRef, useState } from "react";
-import useWindowResizeThrottle from "../../hooks/useWindowResizeThrottle";
 import { observer } from "mobx-react-lite";
 
 const Container = styled.div`

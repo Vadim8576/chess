@@ -4,6 +4,9 @@ import styled from 'styled-components';
 import appStore from '../../store/appStore';
 
 const Canvas = styled.canvas`
+	position: absolute;
+	top: 0;
+	left: 0;
   border: 2px solid #b58863;
   display: block;
   width: ${props => props.width}px;
@@ -15,16 +18,30 @@ const BoardCanvas = observer(({ cellSize, setBoardRect, containerRect }) => {
 	const canvasRef = useRef(null)
 
 
-	 console.log('BoardCanvas Render')
+	console.log('BoardCanvas Render')
 
 	useEffect(() => {
 		const boardRect = canvasRef.current.getBoundingClientRect()
-    // console.log(boardRect)
-    setBoardRect(state => ({
-			...state,
-      x: boardRect.x,
-      y: boardRect.y
-    }))
+		// console.log(containerRect)
+		// console.log(canvasRef.current.getBoundingClientRect().left)
+
+
+		const coord = containerRect.w > containerRect.h
+		? {x: (containerRect.w - boardRect.width) / 2, y: 0}
+		: {x: 0, y: (containerRect.h - boardRect.height) / 2}
+
+		setBoardRect({
+			w: boardRect.width,
+			h: boardRect.height,
+		  x: containerRect.x + coord.x,
+		  y: containerRect.y + coord.y
+		})
+		// setBoardRect({
+		// 	w: boardRect.width,
+		// 	h: boardRect.height,
+		// 	x: boardRect.x,
+		// 	y: boardRect.y
+		// })
 
 		const canvas = canvasRef.current
 		const ctx = canvas.getContext('2d')
@@ -42,7 +59,7 @@ const BoardCanvas = observer(({ cellSize, setBoardRect, containerRect }) => {
 
 		// Подписи: буквы (a–h) внизу
 		// const cellSize = width / 8
-		ctx.font = `${cellSize*.2}px Arial`;
+		ctx.font = `${cellSize * .2}px Arial`;
 		ctx.textAlign = 'center';
 		ctx.fillStyle = '#000';
 		for (let col = 0; col < 8; col++) {
@@ -66,7 +83,7 @@ const BoardCanvas = observer(({ cellSize, setBoardRect, containerRect }) => {
 			)
 		}
 
-	}, [appStore.whiteBottom, cellSize, containerRect])
+	}, [appStore.whiteBottom, cellSize, containerRect.w, containerRect.h])
 
 	return (
 		<Canvas

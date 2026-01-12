@@ -22,6 +22,6 @@ const withColumn = (options = {}) => {
   }
 }
 
-const Panel = withColumn({ defaultGrow: 2 })(null)
+const Panel = withColumn({ defaultGrow: 1 })(null)
 
-export default Panel;
+export default Panel

@@ -10,8 +10,17 @@ import useGameStatus from "../../hooks/useGameStatus";
 
 
 
-const Figures = styled.div`
+
+
+const ElementsWrapper = styled.div`
   position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+`;
+const Figures = styled.div`
+  position: relative;
   width: 100%;
   height: 100%;
   margin: 0;
@@ -28,6 +37,7 @@ const BoardElements = observer(({ cellSize, startX, startY }) => {
     color: 'green', visible: false
   })
 
+  // console.log(startX, startY)
 
   const [getGameStatus] = useGameStatus(appStore)
 
@@ -37,14 +47,12 @@ const BoardElements = observer(({ cellSize, startX, startY }) => {
 
 
   return (
-    <>
+    <ElementsWrapper>
       {possibleMoves.moves && possibleMoves.moves.map(move => (
         <HighlightedCell
           key={`${move.col}${move.row}`}
           cellSize={cellSize}
           highlightedCell={{ ...move, color: possibleMoves.color, visible: possibleMoves.visible }}
-          startX={startX}
-          startY={startY}
         />
       ))}
 
@@ -52,13 +60,11 @@ const BoardElements = observer(({ cellSize, startX, startY }) => {
         <HighlightedCell
           cellSize={cellSize}
           highlightedCell={highlightedCell}
-          startX={startX}
-          startY={startY}
         />
       )}
 
 
-      <Figures>
+      <>
         {ranks.map((rank, y) => {
           return files.map((file, x) => {
             const src = getSrc(appStore.whiteBottom, appStore.chess.board(), x, y)
@@ -66,8 +72,8 @@ const BoardElements = observer(({ cellSize, startX, startY }) => {
               <Figure
                 key={file + rank}
                 src={src}
-                top={startY + cellSize * y}
-                left={startX + cellSize * x}
+                top={cellSize * y}
+                left={cellSize * x}
                 startX={startX}
                 startY={startY}
                 cellSize={cellSize}
@@ -78,8 +84,8 @@ const BoardElements = observer(({ cellSize, startX, startY }) => {
             )
           })
         })}
-      </Figures>
-    </>
+      </>
+    </ElementsWrapper>
   )
 })
 

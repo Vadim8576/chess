@@ -8,17 +8,17 @@ import { useFigureDrag } from "../../hooks/useFigureDrag";
 
 
 const ImgWrapper = styled.div`
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: ${props => props.$width}px;
-    height: ${props => props.$height}px;
-    cursor: ${props => props.$cursor};
-    user-select: none;
-    touch-action: none;
-    z-index: ${props => props.$zIndex};
-    transition: ${props => props.$transition};
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: ${props => props.$width}px;
+  height: ${props => props.$height}px;
+  cursor: ${props => props.$cursor};
+  user-select: none;
+  touch-action: none;
+  z-index: ${props => props.$zIndex};
+  transition: ${props => props.$transition};
 `;
 
 const Img = styled.img`
@@ -27,86 +27,86 @@ const Img = styled.img`
     pointer-events: none;
 `;
 
-const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighlightedCell, setPossibleMoves,getGameStatus }) => {
-    const [imgStyle, setImgStyle] = useState({ zIndex: 100, transition: 'none' })
-    // const [gameStatus, setGameStatus] = useState({ currentPlayer: 'w', status: '' })
-    const { isLoading, isError, image } = useLoadImage(src)
+const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighlightedCell, setPossibleMoves, getGameStatus }) => {
+	const [imgStyle, setImgStyle] = useState({ zIndex: 100, transition: 'none' })
+	// const [gameStatus, setGameStatus] = useState({ currentPlayer: 'w', status: '' })
+	const { isLoading, isError, image } = useLoadImage(src)
 
-    const {
-        isDragging,
-        position,
-        imageRef,
-        setPosition,
-        handleMouseDown,
-        handleMouseMove,
-        handleMouseUp
-    } = useFigureDrag(appStore,
-        cellSize,
-        startX,
-        startY,
-        setHighlightedCell,
-        setPossibleMoves,
-        setImgStyle,
-        getGameStatus
-    )
-
-
-    useEffect(() => {
-        setPosition({ x: left, y: top })
-    }, [left, top])
+	const {
+		isDragging,
+		position,
+		imageRef,
+		setPosition,
+		handleMouseDown,
+		handleMouseMove,
+		handleMouseUp
+	} = useFigureDrag(appStore,
+		cellSize,
+		startX,
+		startY,
+		setHighlightedCell,
+		setPossibleMoves,
+		setImgStyle,
+		getGameStatus
+	)
 
 
-    
-
-    useEffect(() => {
-        if (isDragging) {
-            document.addEventListener('mousemove', handleMouseMove)
-            document.addEventListener('mouseup', handleMouseUp)
-
-            // document.addEventListener('touchstart', handleMouseMove, { passive: false })
-            // document.addEventListener('touchmove', handleMouseDown, { passive: false })
-            // document.addEventListener('touchend', handleMouseUp, { passive: false })     
-        }
-
-        return () => {
-            document.removeEventListener('mousemove', handleMouseMove)
-            document.removeEventListener('mouseup', handleMouseUp)
-
-            // document.removeEventListener('touchstart', handleMouseMove, { passive: false })
-            // document.removeEventListener('touchmove', handleMouseMove, { passive: false })
-            // document.removeEventListener('touchend', handleMouseUp, { passive: false })   
-        }
-    }, [isDragging])
+	useEffect(() => {
+		setPosition({ x: left, y: top })
+	}, [left, top])
 
 
-    if (isLoading) {
-        return
-    }
 
-    if (isError) {
-        return
-    }
 
-    if (!src) return
+	useEffect(() => {
+		if (isDragging) {
+			document.addEventListener('mousemove', handleMouseMove)
+			document.addEventListener('mouseup', handleMouseUp)
 
-    return (
-        <ImgWrapper
-            ref={imageRef}
-            onMouseDown={handleMouseDown}
-            draggable={false}
-            $cursor={isDragging ? 'grabbing' : 'grab'}
-            $width={cellSize}
-            $height={cellSize}
-            $zIndex={imgStyle.zIndex}
-            $transition={imgStyle.transition}
-            style={{
-                top: position.y,
-                left: position.x
-            }}
-        >
-            <Img src={image.src} />
-        </ImgWrapper>
-    )
+			// document.addEventListener('touchstart', handleMouseMove, { passive: false })
+			// document.addEventListener('touchmove', handleMouseDown, { passive: false })
+			// document.addEventListener('touchend', handleMouseUp, { passive: false })     
+		}
+
+		return () => {
+			document.removeEventListener('mousemove', handleMouseMove)
+			document.removeEventListener('mouseup', handleMouseUp)
+
+			// document.removeEventListener('touchstart', handleMouseMove, { passive: false })
+			// document.removeEventListener('touchmove', handleMouseMove, { passive: false })
+			// document.removeEventListener('touchend', handleMouseUp, { passive: false })   
+		}
+	}, [isDragging])
+
+
+	if (isLoading) {
+		return
+	}
+
+	if (isError) {
+		return
+	}
+
+	if (!src) return
+
+	return (
+		<ImgWrapper
+			ref={imageRef}
+			onMouseDown={handleMouseDown}
+			draggable={false}
+			$cursor={isDragging ? 'grabbing' : 'grab'}
+			$width={cellSize}
+			$height={cellSize}
+			$zIndex={imgStyle.zIndex}
+			$transition={imgStyle.transition}
+			style={{
+				top: position.y,
+				left: position.x
+			}}
+		>
+			<Img src={image.src} />
+		</ImgWrapper>
+	)
 })
 
 export default Figure

@@ -32,7 +32,15 @@ export function useFigureDrag(
     const x = e.clientX - startX
     const y = e.clientY - startY
     const [col, row] = getCellPosition(x, y, cellSize, appStore.whiteBottom)
+
+    console.log(startX, startY)
+    console.log(x, y, cellSize)
+    console.log(col, row)
+
     const grabFigure = appStore.chess.board()[row][col]
+
+    console.log(x, y, cellSize)
+    console.log(col, row)
 
     if (grabFigure.color !== appStore.chess.turn()) {
       console.log('Сейчас ход другого игрока!')
@@ -83,8 +91,8 @@ export function useFigureDrag(
     const rect = imageRef.current.getBoundingClientRect()
     const x = e.clientX - startX
     const y = e.clientY - startY
-    const xc = x - rect.width / 2 + startX
-    const yc = y - rect.height / 2 + startY
+    const xc = x - rect.width / 2
+    const yc = y - rect.height / 2
     const [col, row] = getCellPosition(x, y, cellSize, appStore.whiteBottom)
 
     const square = getSquare(appStore.whiteBottom, col, row)
@@ -118,12 +126,12 @@ export function useFigureDrag(
       }))
     } else {
       // если фигура вне доски, подсвечиваем первоначальную клетку
-      setHighlightedCell(state => ({
+      setHighlightedCell({
         col: grabCell.col,
         row: grabCell.row,
         color: 'green',
         visible: true
-      }))
+      })
     }
   }
 
@@ -150,8 +158,8 @@ export function useFigureDrag(
       const finalCol = appStore.whiteBottom ? colTemp : (7 - colTemp)
       const finalRow = appStore.whiteBottom ? rowTemp : (7 - rowTemp)
       setPosition({
-        x: finalCol * cellSize + startX,
-        y: finalRow * cellSize + startY
+        x: finalCol * cellSize,
+        y: finalRow * cellSize
       })
       // Удаляем подсветку
       setHighlightedCell((state) => ({
@@ -175,8 +183,8 @@ export function useFigureDrag(
       const finalRow = appStore.whiteBottom ? rowTemp : (7 - rowTemp)
 
       setPosition({
-        x: finalCol * cellSize + startX,
-        y: finalRow * cellSize + startY
+        x: finalCol * cellSize,
+        y: finalRow * cellSize
       })
 
       setHighlightedCell((state) => ({
@@ -199,11 +207,9 @@ export function useFigureDrag(
     }))
 
 
-
-
     let capturedFigure = appStore.chess.board()[row][col]
-
     const move = appStore.chess.move(grabCell.square + square)
+  
     // если присутствует flags 'e', произошло взятие на проходе
     if (move && move.flags.includes('e')) {
       console.log('Взятие на проходе!')
@@ -225,6 +231,10 @@ export function useFigureDrag(
     
 
     getGameStatus()
+
+    setTimeout(() => {
+      setImgStyle({ zIndex: 100, transition: 'none' })
+    })
 
   }
 
