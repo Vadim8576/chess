@@ -232,9 +232,10 @@ export function useFigureDrag(
 
     getGameStatus()
 
-    setTimeout(() => {
-      setImgStyle({ zIndex: 100, transition: 'none' })
-    })
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // не срабатывает
+    setImgStyle({ zIndex: 100, transition: 'none' })
+  
 
   }
 

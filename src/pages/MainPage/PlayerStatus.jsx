@@ -12,7 +12,7 @@ justify-content: center;
 align-items: center;
 width: 40%;
 height: 30px;
-// margin-left: 30%;
+margin-left: 30%;
 color: #fff;
 font-size: 14px;
 font-weight: bold;

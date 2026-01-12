@@ -4,6 +4,7 @@ import styled from 'styled-components';
 const Column = styled.div`
   flex: ${props => props.$grow} 1 0%;
   height: 100%;
+  flex-shrink: 0;
 `;
 
 const withColumn = (options = {}) => {

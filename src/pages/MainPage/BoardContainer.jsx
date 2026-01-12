@@ -54,6 +54,7 @@ const BoardContainer = observer(({windowSize}) => {
 			<ChessBoard
 				containerRect={containerRect}
 				cellSize={cellSize}
+				windowSize={windowSize}
 			/>
 		</Container>
 	)

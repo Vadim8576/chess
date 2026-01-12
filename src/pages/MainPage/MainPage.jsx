@@ -32,7 +32,9 @@ const MainPage = observer(() => {
 
 	return (
 		<PageContainer>
-			<Panel grow={1}></Panel>
+			<Panel grow={1}>
+			<CapturedArea capturedFigures={appStore.whiteBottom ? appStore.capturedFigures['w'] : appStore.capturedFigures['b']} />
+			</Panel>
 			<Panel grow={3}>
 				<PlayerStatus position={'top'} status={appStore.whiteBottom ? appStore.blackStatus : appStore.whiteStatus} />
 				<CapturedArea capturedFigures={appStore.whiteBottom ? appStore.capturedFigures['w'] : appStore.capturedFigures['b']} />

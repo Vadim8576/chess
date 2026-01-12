@@ -29,7 +29,7 @@ const BoardWrapper = styled.div`
 
 
 
-const ChessBoard = observer(({ containerRect, cellSize }) => {
+const ChessBoard = observer(({ containerRect, cellSize, windowSize }) => {
 
   const [boardRect, setBoardRect] = useState({
     w: 0,
@@ -38,12 +38,14 @@ const ChessBoard = observer(({ containerRect, cellSize }) => {
     y: 0
   })
 
+
   console.log('ChessBoard Render')
+ 
   
 
-  useEffect(() => {
-    console.log('boardRect = ', boardRect)
-  }, [boardRect.w, boardRect.h, boardRect.x, boardRect.y])
+  // useEffect(() => {
+  //   console.log('boardRect = ', boardRect)
+  // }, [boardRect.w, boardRect.h, boardRect.x, boardRect.y])
 
 
   return (
@@ -55,11 +57,13 @@ const ChessBoard = observer(({ containerRect, cellSize }) => {
         cellSize={cellSize}
         setBoardRect={setBoardRect}
         containerRect={containerRect}
+        windowSize={windowSize}
       />
       <BoardElements
         cellSize={cellSize}
         startX={boardRect.x}
         startY={boardRect.y}
+
       />
 
 
