@@ -9,7 +9,7 @@ const BorderCanvas = styled.canvas`
   left: -${props => props.$left}px;
   width: ${props => props.width}px;
   height: ${props => props.height}px;
-  border: 2px solid #b58863;
+	border: 2px solid #414833;
 	border-radius: 15px;
 `;
 
