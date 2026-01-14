@@ -28,7 +28,7 @@ const Figures = styled.div`
 `;
 
 
-const BoardElements = observer(({ cellSize, startX, startY }) => {
+const BoardElements = observer(({ startX, startY }) => {
 
   const [highlightedCell, setHighlightedCell] = useState({
     col: 0, row: 0, color: 'green', visible: false
@@ -51,14 +51,12 @@ const BoardElements = observer(({ cellSize, startX, startY }) => {
       {possibleMoves.moves && possibleMoves.moves.map(move => (
         <HighlightedCell
           key={`${move.col}${move.row}`}
-          cellSize={cellSize}
           highlightedCell={{ ...move, color: possibleMoves.color, visible: possibleMoves.visible }}
         />
       ))}
 
       {highlightedCell.visible && (
         <HighlightedCell
-          cellSize={cellSize}
           highlightedCell={highlightedCell}
         />
       )}
@@ -72,11 +70,10 @@ const BoardElements = observer(({ cellSize, startX, startY }) => {
               <Figure
                 key={file + rank}
                 src={src}
-                top={cellSize * y}
-                left={cellSize * x}
+                top={appStore.board.cellSize * y}
+                left={appStore.board.cellSize * x}
                 startX={startX}
                 startY={startY}
-                cellSize={cellSize}
                 setHighlightedCell={setHighlightedCell}
                 setPossibleMoves={setPossibleMoves}
                 getGameStatus={getGameStatus}

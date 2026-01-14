@@ -23,73 +23,29 @@ const Canvas = styled.canvas`
 `;
 
 
-const BoardCanvas = observer(({ cellSize, setBoardRect, containerRect, windowSize }) => {
-	const [borderSize, setBorderSize] = useState(cellSize / 2)
-	const borderCanvasRef = useRef(null)
+const BoardCanvas = observer(({ setBoardRect, containerRect }) => {
 	const canvasRef = useRef(null)
 
-
-	console.log('cellsize = ',  cellSize)
-
+	// console.log('cellsize = ',  appStore.board.cellSize)
+	// console.log('borderSize = ',  appStore.board.borderSize)
 	console.log('BoardCanvas Render')
 
 
 	useEffect(() => {
-		setBorderSize(cellSize / 2.5)
-		const borderCanvas = borderCanvasRef.current
-		const ctx = borderCanvas.getContext('2d')
-		ctx.clearRect(0, 0, borderCanvas.width, borderCanvas.width)
 
-		ctx.fillStyle = '#b58863';
-		ctx.fillRect(
-			0,
-			0,
-			borderCanvas.width,
-			borderCanvas.width
-		)
-
-
-		// Подписи: буквы (a–h) внизу
-		ctx.font = `${cellSize * .18}px Arial`;
-		ctx.textAlign = 'center';
-		ctx.fillStyle = '#fff';
-		for (let col = 0; col < 8; col++) {
-			const value = appStore.whiteBottom === true ? (97 + col) : (104 - col)
-			const letter = String.fromCharCode(value).toUpperCase(); // a, b, ..., h
-			ctx.fillText(
-				letter,
-				col * cellSize + cellSize,
-				borderCanvas.height - borderSize / 2 + 8
-			)
-		}
-
-		// Подписи: цифры (1–8) справа
-		ctx.textAlign = 'center';
-		for (let row = 0; row < 8; row++) {
-			const value = appStore.whiteBottom === true ? (8 - row) : (row + 1)
-			ctx.fillText(
-				value,
-				borderSize / 2 - 2,
-				row * cellSize + cellSize
-			)
-		}
-
-	})
-
-
-
-	useEffect(() => {
-	
 		const boardRect = canvasRef.current.getBoundingClientRect()
-		const coord = containerRect.w > containerRect.h
-			? { x: (containerRect.w - boardRect.width) / 2, y: 0 }
-			: { x: 0, y: (containerRect.h - boardRect.height) / 2 }
+
+		console.log(boardRect)
+
+		// const coord = containerRect.w > containerRect.h
+		// 	? { x: (containerRect.w - boardRect.width) / 2, y: 0 }
+		// 	: { x: 0, y: (containerRect.h - boardRect.height) / 2 }
 
 		setBoardRect({
 			w: boardRect.width,
 			h: boardRect.height,
-			x: containerRect.x + coord.x,
-			y: containerRect.y + coord.y
+			x: boardRect.x,
+			y: boardRect.y
 		})
 
 		const canvas = canvasRef.current
@@ -103,29 +59,21 @@ const BoardCanvas = observer(({ cellSize, setBoardRect, containerRect, windowSiz
 			for (let col = 0; col < 8; col++) {
 				const isBlack = (row + col) % 2 === 0;
 				ctx.fillStyle = !isBlack ? '#b58863' : '#f0d9b5';
-				ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize)
+				ctx.fillRect(col * appStore.board.cellSize, row * appStore.board.cellSize, appStore.board.cellSize, appStore.board.cellSize)
 			}
 		}
 
 
 		
 
-	}, [appStore.whiteBottom, cellSize, windowSize])
+	}, [appStore.whiteBottom, appStore.board.cellSize])
 
 	return (
 		<>
-			<BorderCanvas
-				ref={borderCanvasRef}
-				width={cellSize * 8 + borderSize * 2}
-				height={cellSize * 8 + borderSize * 2}
-				$top={borderSize}
-				$left={borderSize}
-
-			/>
 			<Canvas
 				ref={canvasRef}
-				width={cellSize * 8}
-				height={cellSize * 8}
+				width={appStore.board.cellSize * 8}
+				height={appStore.board.cellSize * 8}
 			/>
 		</>
 	)

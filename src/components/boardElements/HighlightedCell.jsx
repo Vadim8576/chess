@@ -16,7 +16,7 @@ border: none;
 `;
 
 
-const HighlightedCell = observer(({ cellSize, highlightedCell }) => {
+const HighlightedCell = observer(({ highlightedCell }) => {
 
     // const color = highlightedCell.color ? highlightedCell.color : '#999'
     const colTemp = highlightedCell.col
@@ -28,9 +28,9 @@ const HighlightedCell = observer(({ cellSize, highlightedCell }) => {
 
     return (
         <Cell
-            $top={row * cellSize + 1}
-            $left={col * cellSize + 1}
-            $cellSize={cellSize}
+            $top={row * appStore.board.cellSize + 1}
+            $left={col * appStore.board.cellSize + 1}
+            $cellSize={appStore.board.cellSize}
             color={highlightedCell.color}
         />
     )

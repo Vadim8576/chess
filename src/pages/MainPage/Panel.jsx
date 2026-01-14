@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 const Column = styled.div`
   flex: ${props => props.$grow} 1 0%;
+  min-width: ${props => props.$grow * 100}px;
   height: 100%;
   flex-shrink: 0;
 `;

@@ -10,14 +10,13 @@ text-align: center;
 display: flex;
 justify-content: center;
 align-items: center;
-width: 40%;
+width: 80%;
 height: 30px;
-margin-left: 30%;
 color: #fff;
 font-size: 14px;
 font-weight: bold;
 background-color: #414833;
-border-radius: ${props => props.$position === 'top' ? '0 0 20px 20px' : '20px 20px 0 0'};
+// border-radius: ${props => props.$position === 'top' ? '0 0 20px 20px' : '20px 20px 0 0'};
 `;
 
 const PlayerStatus = observer(({status, position}) => {

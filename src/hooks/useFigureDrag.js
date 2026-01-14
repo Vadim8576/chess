@@ -5,7 +5,7 @@ import { squareToIndices } from '../utils/squareToIndices'
 
 export function useFigureDrag(
   appStore,
-  cellSize,
+  // cellSize,
   startX,
   startY,
   setHighlightedCell,
@@ -31,15 +31,15 @@ export function useFigureDrag(
 
     const x = e.clientX - startX
     const y = e.clientY - startY
-    const [col, row] = getCellPosition(x, y, cellSize, appStore.whiteBottom)
+    const [col, row] = getCellPosition(x, y, appStore.board.cellSize, appStore.whiteBottom)
 
     console.log(startX, startY)
-    console.log(x, y, cellSize)
+    console.log(x, y, appStore.board.cellSize)
     console.log(col, row)
 
     const grabFigure = appStore.chess.board()[row][col]
 
-    console.log(x, y, cellSize)
+    console.log(x, y, appStore.board.cellSize)
     console.log(col, row)
 
     if (grabFigure.color !== appStore.chess.turn()) {
@@ -93,7 +93,7 @@ export function useFigureDrag(
     const y = e.clientY - startY
     const xc = x - rect.width / 2
     const yc = y - rect.height / 2
-    const [col, row] = getCellPosition(x, y, cellSize, appStore.whiteBottom)
+    const [col, row] = getCellPosition(x, y, appStore.board.cellSize, appStore.whiteBottom)
 
     const square = getSquare(appStore.whiteBottom, col, row)
 
@@ -147,7 +147,7 @@ export function useFigureDrag(
 
     const x = e.clientX - startX
     const y = e.clientY - startY
-    const [col, row] = getCellPosition(x, y, cellSize, appStore.whiteBottom)
+    const [col, row] = getCellPosition(x, y, appStore.board.cellSize, appStore.whiteBottom)
 
 
     if (col < 0 || col > 7 || row < 0 || row > 7) {
@@ -158,8 +158,8 @@ export function useFigureDrag(
       const finalCol = appStore.whiteBottom ? colTemp : (7 - colTemp)
       const finalRow = appStore.whiteBottom ? rowTemp : (7 - rowTemp)
       setPosition({
-        x: finalCol * cellSize,
-        y: finalRow * cellSize
+        x: finalCol * appStore.board.cellSize,
+        y: finalRow * appStore.board.cellSize
       })
       // Удаляем подсветку
       setHighlightedCell((state) => ({
@@ -183,8 +183,8 @@ export function useFigureDrag(
       const finalRow = appStore.whiteBottom ? rowTemp : (7 - rowTemp)
 
       setPosition({
-        x: finalCol * cellSize,
-        y: finalRow * cellSize
+        x: finalCol * appStore.board.cellSize,
+        y: finalRow * appStore.board.cellSize
       })
 
       setHighlightedCell((state) => ({
@@ -195,10 +195,10 @@ export function useFigureDrag(
     }
 
     // Ставим фигуру на новую клетку
-    const colTemp = Math.floor(x / cellSize)
-    const rowTemp = Math.floor(y / cellSize)
-    const newX = cellSize * colTemp + startX
-    const newY = cellSize * rowTemp + startY
+    const colTemp = Math.floor(x / appStore.board.cellSize)
+    const rowTemp = Math.floor(y / appStore.board.cellSize)
+    const newX = appStore.board.cellSize * colTemp + startX
+    const newY = appStore.board.cellSize * rowTemp + startY
 
     setPosition({ x: newX, y: newY })
     setHighlightedCell((state) => ({
@@ -227,15 +227,18 @@ export function useFigureDrag(
       appStore.addCapturedFigures(capturedFigure.color, `${capturedFigure.type}${capturedFigure.color}`)
     }
 
+    console.log(appStore.chess.history({ verbose: true }))
 
+    const historyMove = appStore.chess.history({ verbose: true })
     
+    appStore.updateHistory(`${historyMove}.from - ${historyMove}.to`)
 
     getGameStatus()
 
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // не срабатывает
     setImgStyle({ zIndex: 100, transition: 'none' })
-  
+    
 
   }
 

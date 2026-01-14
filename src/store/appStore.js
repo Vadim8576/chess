@@ -8,6 +8,11 @@ class appStore {
 
   // checked = true
   chess = new Chess()
+  board = {
+    cellSize: 0,
+    borderSize: 0,
+  }
+  history = []
   whiteBottom = true // true | false
   blackStatus = ''
   whiteStatus = ''
@@ -22,6 +27,15 @@ class appStore {
 
   get whiteBottom() {
     return this.whiteBottom
+  }
+
+  setBoard(board) {
+    this.board = {...board}
+    // console.log('board = ', toJS(this.board))
+  }
+
+  updateHistory(move) {
+    this.history = [...this.history, move]
   }
 
   setGameStatus(player, status) {

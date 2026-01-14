@@ -27,7 +27,7 @@ const Img = styled.img`
     pointer-events: none;
 `;
 
-const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighlightedCell, setPossibleMoves, getGameStatus }) => {
+const Figure = observer(({ src, top, left, startX, startY, setHighlightedCell, setPossibleMoves, getGameStatus }) => {
 	const [imgStyle, setImgStyle] = useState({ zIndex: 100, transition: 'none' })
 	// const [gameStatus, setGameStatus] = useState({ currentPlayer: 'w', status: '' })
 	const { isLoading, isError, image } = useLoadImage(src)
@@ -40,8 +40,8 @@ const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighligh
 		handleMouseDown,
 		handleMouseMove,
 		handleMouseUp
-	} = useFigureDrag(appStore,
-		cellSize,
+	} = useFigureDrag(
+		appStore,
 		startX,
 		startY,
 		setHighlightedCell,
@@ -95,8 +95,8 @@ const Figure = observer(({ src, top, left, startX, startY, cellSize, setHighligh
 			onMouseDown={handleMouseDown}
 			draggable={false}
 			$cursor={isDragging ? 'grabbing' : 'grab'}
-			$width={cellSize}
-			$height={cellSize}
+			$width={appStore.board.cellSize}
+			$height={appStore.board.cellSize}
 			$zIndex={imgStyle.zIndex}
 			$transition={imgStyle.transition}
 			style={{
