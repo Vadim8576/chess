@@ -1,5 +1,6 @@
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
+import { gameColors } from "../constants/gameInitial";
 
 
 
@@ -15,10 +16,17 @@ import styled from "styled-components";
 const headerHeight = 30
 
 const HeaderLine = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
 width: 100%;
 height: ${headerHeight}px;
-color: ${props => props.$color};
+font-size: .9rem;
+
+color: ${gameColors.neutral};
+// color: ${props => props.color};
 background-color: ${props => props.$background};
+border-radius: 10px 10px 0 0;
 `;
 
 const Header = observer(({ title }) => {
@@ -26,10 +34,10 @@ const Header = observer(({ title }) => {
 
   return (
     <HeaderLine
-      $color={title.color}
+      color={title.color}
       $background={title.background}
     >
-      <h5>{title.title}</h5>
+      {title.title}
     </HeaderLine>
   )
 })

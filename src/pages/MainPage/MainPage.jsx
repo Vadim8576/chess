@@ -11,12 +11,14 @@ import HistoryList from "../../widgets/HistoryList";
 import GameStatus from "../../widgets/GameStatus";
 import Widget from "../../widgets/Widget";
 import CapturedArea from "../../widgets/CapturedArea";
+import { gameColors } from "../../constants/gameInitial";
 
-const headerHeight = 40
+const headerHeight = 50
 
 const PageContainer = styled.div`
 width: 100%;
 height: 100%;
+background-color: ${gameColors.background};
 `;
 const PanelWrapper = styled.div`
 display: flex;
@@ -30,7 +32,7 @@ const MainPage = observer(() => {
 	console.log('MainPage')
 
 	const ref = useRef(null)
-	const [bodyRect, setBodyRect] = useState({ width: 0, height: 0 })	
+	const [bodyRect, setBodyRect] = useState({ width: 0, height: 0 })
 
 	const { width, height } = useWindowResizeThrottle(100)
 
@@ -57,43 +59,42 @@ const MainPage = observer(() => {
 			<Header headerHeight={headerHeight} />
 			<PanelWrapper>
 				<Panel>
-					<Widget
-						title={{
-							title: 'Взятые фигуры',
-							color: '#fff',
-							background: '#666'
-						}}
-					>
+					<Widget title={{
+						title: 'Взятые фигуры',
+						color: '#fff',
+						background: gameColors.secondary
+					}}>
 						<CapturedArea player={appStore.whiteBottom ? 'w' : 'b'} />
 					</Widget>
-					<Widget title={{ title: 'Взятые фигуры', color: '#fff', background: '#666' }}>
+					<Widget title={{
+						title: 'Взятые фигуры',
+						color: '#fff',
+						background: gameColors.secondary
+					}}>
 						<CapturedArea player={appStore.whiteBottom ? 'b' : 'w'} />
 					</Widget>
 				</Panel>
-				<Panel grow={2}>
-					<BoardContainer
-						windowSize={{
-							width: bodyRect.width,
-							height: bodyRect.height
-						}}
+				<Panel grow={3}>
+					<BoardContainer windowSize={{
+						width: bodyRect.width,
+						height: bodyRect.height
+					}}
 					/>
 				</Panel>
 				<Panel>
-					<Widget
-						title={{
-							title: 'Статус игры',
-							color: '#fff',
-							background: '#666'
-						}}
+					<Widget title={{
+						title: 'Статус игры',
+						color: '#fff',
+						background: gameColors.secondary
+					}}
 					>
 						<GameStatus />
 					</Widget>
-					<Widget
-						title={{
-							title: 'История',
-							color: '#fff',
-							background: '#666'
-						}}
+					<Widget title={{
+						title: 'История',
+						color: '#fff',
+						background: gameColors.secondary
+					}}
 					>
 						<HistoryList />
 					</Widget>

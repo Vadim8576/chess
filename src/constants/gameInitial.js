@@ -16,6 +16,20 @@ export const figure = {
   'rw': '/figures/rook-white.svg',
 }
 
+
+export const gameColors = {
+  primary: '#283618',
+  secondary: '#606c38',
+  neutral: '#C2C5AA', // нейтральные оттенки (текст, границы, фоны)
+  // surface: '#606c38', //цвета поверхностей (карточки, панели)
+  background: '#fefae0'
+}
+
+
+
+
+
+/*
 export const boardMap = [
   ['rb', 'nb', 'bb', 'qb', 'kb', 'bb', 'nb', 'rb'],
   ['pb', 'pb', 'pb', 'pb', 'pb', 'pb', 'pb', 'pb'],
@@ -27,22 +41,4 @@ export const boardMap = [
   ['rw', 'nw', 'bw', 'qw', 'kw', 'bw', 'nw', 'rw']
 ]
 
-export const board2 = [
-  ['rw', 'nw', 'bw', 'kw', 'qw', 'bw', 'nw', 'rw'],
-  ['pw', 'pw', 'pw', 'pw', 'pw', 'pw', 'pw', 'pw'],
-  ['  ', '  ', '  ', '  ', '  ', '  ', '  ', '  '],
-  ['  ', '  ', '  ', '  ', '  ', '  ', '  ', '  '],
-  ['  ', '  ', '  ', '  ', '  ', '  ', '  ', '  '],
-  ['  ', '  ', '  ', '  ', '  ', '  ', '  ', '  '],
-  ['pb', 'pb', 'pb', 'pb', 'pb', 'pb', 'pb', 'pb'],
-  ['rb', 'nb', 'bb', 'kb', 'qb', 'bb', 'nb', 'rb']
-]
-
-
-/*
-const b = {
-  '8': {'a': 'rb', 'b': 'nb'}
-}
-
-console.log(b['8']['b'])
 */

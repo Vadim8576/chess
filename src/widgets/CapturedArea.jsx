@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import appStore from "../store/appStore";
 import CapturedFigure from "../components/boardElements/CapturedFigure";
-import { figure } from "../constants/boardInitial";
+import { figure, gameColors } from "../constants/gameInitial";
 import { toJS } from 'mobx';
 
 
@@ -19,6 +19,9 @@ overflow-y: auto;
 display: flex;
 flex-wrap: wrap;
 align-content: flex-start;
+padding: 10px;
+border-radius: 0 0 10px 10px;
+border: 1px ${gameColors.neutral} solid;
 `;
 
 

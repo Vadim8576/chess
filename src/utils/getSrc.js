@@ -1,4 +1,4 @@
-import { figure } from "../constants/boardInitial";
+import { figure } from "../constants/gameInitial";
 
 
 export const getSrc = (whiteBottom, board, x, y) => {

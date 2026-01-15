@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components"
-import { files, ranks } from "../../constants/boardInitial";
+import { files, ranks } from "../../constants/gameInitial";
 import Figure from "./Figure"
 import HighlightedCell from "./HighlightedCell"
 import { getSrc } from "../../utils/getSrc";
@@ -52,12 +52,14 @@ const BoardElements = observer(({ startX, startY }) => {
         <HighlightedCell
           key={`${move.col}${move.row}`}
           highlightedCell={{ ...move, color: possibleMoves.color, visible: possibleMoves.visible }}
+          type={'possibleMoves'}
         />
       ))}
 
       {highlightedCell.visible && (
         <HighlightedCell
           highlightedCell={highlightedCell}
+          type={'highlightedCell'}
         />
       )}
 

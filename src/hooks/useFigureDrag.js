@@ -78,7 +78,8 @@ export function useFigureDrag(
     setPossibleMoves({
       moves: [...moveIndices],
       visible: true,
-      color: 'lightgreen'
+      color: 'lightgreen',
+      
     })
     setImgStyle({ zIndex: 101, transition: 'none' })
   }
