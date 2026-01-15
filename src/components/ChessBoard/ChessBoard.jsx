@@ -69,7 +69,6 @@ const ChessBoard = observer(({ containerRect }) => {
       />
       <BoardCanvas
         setBoardRect={setBoardRect}
-        containerRect={containerRect}
       />
       <BoardElements
         startX={boardRect.x}

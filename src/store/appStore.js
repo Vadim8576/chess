@@ -12,7 +12,7 @@ class appStore {
     cellSize: 0,
     borderSize: 0,
   }
-  history = []
+  historyList = []
   whiteBottom = true // true | false
   blackStatus = ''
   whiteStatus = ''
@@ -34,8 +34,8 @@ class appStore {
     // console.log('board = ', toJS(this.board))
   }
 
-  updateHistory(move) {
-    this.history = [...this.history, move]
+  updateHistoryList(newHistoryList) {
+    this.historyList = [...newHistoryList]
   }
 
   setGameStatus(player, status) {

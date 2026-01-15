@@ -16,49 +16,39 @@ const Container = styled.div`
 
 
 const BoardContainer = observer(({ windowSize }) => {
-	const [containerRect, setContainerRect] = useState({ y: 0, x: 0, w: 0, h: 0 })
-
-
-
-
+	// const [containerRect, setContainerRect] = useState({ y: 0, x: 0, w: 0, h: 0 })
 	const ref = useRef(null)
 
 
 	useEffect(() => {
-		const containerRect = ref.current.getBoundingClientRect()
+		// const containerRect = ref.current.getBoundingClientRect()
 		// console.log(containerRect)
 
-		setContainerRect({
-			y: containerRect.y,
-			x: containerRect.x,
-			w: containerRect.width,
-			h: containerRect.height
-		})
+		// setContainerRect({
+		// 	y: containerRect.y,
+		// 	x: containerRect.x,
+		// 	w: containerRect.width,
+		// 	h: containerRect.height
+		// })
 
 		const headerHeight = 40
 		let cellSize
 
 		if ((windowSize.height - headerHeight) < windowSize.width / 2) {
 			cellSize = (windowSize.height - headerHeight) / 9
-			console.log('if ', 1)
 		} else {
 			cellSize = windowSize.width / 2 / 10
-			console.log('if ', 2)
 		}
 
 		appStore.setBoard({ cellSize, borderSize: cellSize / 2.5 })
 
 		console.log('cellSize = ', cellSize)
 
-
 	}, [windowSize.width, windowSize.height])
 
 	return (
 		<Container ref={ref}>
-			<ChessBoard
-				containerRect={containerRect}
-
-			/>
+			<ChessBoard />
 		</Container>
 	)
 })

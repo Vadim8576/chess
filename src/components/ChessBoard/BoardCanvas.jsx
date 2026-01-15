@@ -23,7 +23,7 @@ const Canvas = styled.canvas`
 `;
 
 
-const BoardCanvas = observer(({ setBoardRect, containerRect }) => {
+const BoardCanvas = observer(({ setBoardRect }) => {
 	const canvasRef = useRef(null)
 
 	// console.log('cellsize = ',  appStore.board.cellSize)
@@ -32,14 +32,7 @@ const BoardCanvas = observer(({ setBoardRect, containerRect }) => {
 
 
 	useEffect(() => {
-
 		const boardRect = canvasRef.current.getBoundingClientRect()
-
-		console.log(boardRect)
-
-		// const coord = containerRect.w > containerRect.h
-		// 	? { x: (containerRect.w - boardRect.width) / 2, y: 0 }
-		// 	: { x: 0, y: (containerRect.h - boardRect.height) / 2 }
 
 		setBoardRect({
 			w: boardRect.width,

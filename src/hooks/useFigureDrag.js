@@ -228,10 +228,12 @@ export function useFigureDrag(
     }
 
     console.log(appStore.chess.history({ verbose: true }))
+    console.log(appStore.chess.history({ verbose: true })[0].from)
 
-    const historyMove = appStore.chess.history({ verbose: true })
+    // const historyMove = appStore.chess.history({ verbose: true })
     
-    appStore.updateHistory(`${historyMove}.from - ${historyMove}.to`)
+    appStore.updateHistoryList(appStore.chess.history({ verbose: true }))
+    // appStore.updateHistory(`${historyMove}.from - ${historyMove}.to`)
 
     getGameStatus()
 
