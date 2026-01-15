@@ -14,8 +14,7 @@ class appStore {
   }
   historyList = []
   whiteBottom = true // true | false
-  blackStatus = ''
-  whiteStatus = ''
+  status = ''
   capturedFigures = {
     'w': [],
     'b': []
@@ -38,17 +37,18 @@ class appStore {
     this.historyList = [...newHistoryList]
   }
 
-  setGameStatus(player, status) {
-    if (player === 'w') {
-      this.whiteStatus = status
-    } else {
-      this.blackStatus = status
-    }
+  setGameStatus(status) {
+    this.status = status
   }
 
   //Взятые фигуры
   addCapturedFigures(color, figure) {
-    this.capturedFigures[color] = [...this.capturedFigures[color], figure]
+    // this.capturedFigures[color] = [...this.capturedFigures[color], figure]
+    this.capturedFigures = {
+      ...this.capturedFigures,
+      [color]: [...this.capturedFigures[color], figure]
+    }
+    console.log(toJS(this.capturedFigures))
   }
 
 

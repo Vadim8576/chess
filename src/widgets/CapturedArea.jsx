@@ -3,7 +3,7 @@ import styled from "styled-components";
 import appStore from "../store/appStore";
 import CapturedFigure from "../components/boardElements/CapturedFigure";
 import { figure } from "../constants/boardInitial";
-
+import { toJS } from 'mobx';
 
 
 // const Wrapper = styled.div`
@@ -19,43 +19,31 @@ overflow-y: auto;
 display: flex;
 flex-wrap: wrap;
 align-content: flex-start;
-width: 100%;
-height: 50%;
 `;
 
 
 
-// const Separator = styled.div`
-// width: 100%;
-// height: 1px;
-// background-color: #666;
-// `;
 
+const CapturedArea = observer(({player}) => {
+  const figureList = appStore.capturedFigures[player] // player 'w' || 'b'
 
-
-const CapturedArea = observer(() => {
-  const topFigures = appStore.whiteBottom ? appStore.capturedFigures['w'] : appStore.capturedFigures['b']
+  console.log('CapturedArea')
+  console.log(toJS(figureList))
 
   return (
-    <>
-      <Area>
-        {topFigures.map((cf, key) => (
-          <CapturedFigure
-            key={key}
-            src={figure[cf]}
-          />
-        ))}
-      </Area>
-      {/* <Separator /> */}
-      {/* <Area>
-          {botomFigures.map((cf, key) => (
+    <Area>
+      {figureList.map((cf, key) => 
+        {
+          console.log(figure[cf])
+          return (
             <CapturedFigure
-              key={key}
-              src={figure[cf]}
-            />
-          ))}
-        </Area> */}
-    </>
+            key = { key }
+            src = { figure[cf]}
+        />
+      )
+        }
+      )}
+    </Area>
   )
 })
 

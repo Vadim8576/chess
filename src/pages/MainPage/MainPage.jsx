@@ -1,16 +1,16 @@
 
-import styled from "styled-components";
-import Panel from "./Panel";
-import CapturedArea from "../../widgets/CapturedArea";
-import BoardContainer from "./BoardContainer";
-import appStore from "../../store/appStore";
+import { useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react-lite";
+import styled from "styled-components";
+import appStore from "../../store/appStore";
 import useWindowResizeThrottle from "../../hooks/useWindowResizeThrottle";
-import { useRef } from "react";
+import Panel from "./Panel";
+import BoardContainer from "./BoardContainer";
 import Header from "./Header";
 import HistoryList from "../../widgets/HistoryList";
 import GameStatus from "../../widgets/GameStatus";
 import Widget from "../../widgets/Widget";
+import CapturedArea from "../../widgets/CapturedArea";
 
 const headerHeight = 40
 
@@ -27,12 +27,21 @@ height: calc(100% - ${headerHeight}px);
 
 
 const MainPage = observer(() => {
-	const ref = useRef(null)
-	// const headerHeight = 40
-
 	console.log('MainPage')
 
+	const ref = useRef(null)
+	const [bodyRect, setBodyRect] = useState({ width: 0, height: 0 })	
+
 	const { width, height } = useWindowResizeThrottle(100)
+
+	useEffect(() => {
+		const bodyRect = document.body.getBoundingClientRect()
+		setBodyRect({
+			width: bodyRect.width,
+			height: bodyRect.height
+		})
+	}, [width, height])
+
 	/*
 		useEffect(() => {
 			// appStore.chess.load('rnb1kbnr/pppp1ppp/8/4p3/5PPq/8/PPPPP2P/RNBQKBNR w KQkq - 1 3') // Мат
@@ -49,27 +58,42 @@ const MainPage = observer(() => {
 			<PanelWrapper>
 				<Panel>
 					<Widget
-						title={{ title: 'Взятые фигуры', color: '#fff', background: '#666' }}
+						title={{
+							title: 'Взятые фигуры',
+							color: '#fff',
+							background: '#666'
+						}}
 					>
-						<CapturedArea />
+						<CapturedArea player={appStore.whiteBottom ? 'w' : 'b'} />
 					</Widget>
-					<Widget
-						title={{ title: 'Взятые фигуры', color: '#fff', background: '#666' }}
-					>
-						<CapturedArea />
+					<Widget title={{ title: 'Взятые фигуры', color: '#fff', background: '#666' }}>
+						<CapturedArea player={appStore.whiteBottom ? 'b' : 'w'} />
 					</Widget>
 				</Panel>
 				<Panel grow={2}>
-					<BoardContainer windowSize={{ width, height }} />
+					<BoardContainer
+						windowSize={{
+							width: bodyRect.width,
+							height: bodyRect.height
+						}}
+					/>
 				</Panel>
 				<Panel>
 					<Widget
-						title={{ title: 'Статус игры', color: '#fff', background: '#666' }}
+						title={{
+							title: 'Статус игры',
+							color: '#fff',
+							background: '#666'
+						}}
 					>
-						<GameStatus status={appStore.whiteBottom ? appStore.blackStatus : appStore.whiteStatus} />
+						<GameStatus />
 					</Widget>
 					<Widget
-						title={{ title: 'История', color: '#fff', background: '#666' }}
+						title={{
+							title: 'История',
+							color: '#fff',
+							background: '#666'
+						}}
 					>
 						<HistoryList />
 					</Widget>

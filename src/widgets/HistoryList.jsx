@@ -17,7 +17,7 @@ const HistoryList = observer(() => {
   return (
     <History>
       {appStore.historyList.map((list, key) => (
-        <p key={key}>{`${list.from} - ${list.to}`}</p>
+        <p key={key}>{`${list.from} - ${list.to} ${list.status ? list.status : ''}`}</p>
       ))}
     </History>
   )

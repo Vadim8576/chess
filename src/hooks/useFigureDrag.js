@@ -33,9 +33,9 @@ export function useFigureDrag(
     const y = e.clientY - startY
     const [col, row] = getCellPosition(x, y, appStore.board.cellSize, appStore.whiteBottom)
 
-    console.log(startX, startY)
-    console.log(x, y, appStore.board.cellSize)
-    console.log(col, row)
+    // console.log(startX, startY)
+    // console.log(x, y, appStore.board.cellSize)
+    // console.log(col, row)
 
     const grabFigure = appStore.chess.board()[row][col]
 
@@ -173,7 +173,7 @@ export function useFigureDrag(
     const square = getSquare(appStore.whiteBottom, col, row)
     // console.log('Отпущено на:', square)
 
-    console.log(grabCell.square, square)
+    
 
     if (!moves.includes(square) || grabCell.square === square) {
       console.log('Недопустимый ход!')
@@ -207,8 +207,11 @@ export function useFigureDrag(
     }))
 
 
+    
     let capturedFigure = appStore.chess.board()[row][col]
-    const move = appStore.chess.move(grabCell.square + square)
+    
+    console.log(grabCell.square, square)
+    const move = appStore.chess.move(grabCell.square + square) // Сделать ход
   
     // если присутствует flags 'e', произошло взятие на проходе
     if (move && move.flags.includes('e')) {
@@ -219,21 +222,16 @@ export function useFigureDrag(
       }
     }
     
-    
-    console.log(capturedFigure) // {square: 'f7', type: 'p', color: 'b'}
-
-    
-    if (capturedFigure) {
+    if (capturedFigure != null || capturedFigure != undefined) {
+      // console.log('съел фигуру')
+      // console.log(capturedFigure.color, `${capturedFigure.type}${capturedFigure.color}` )
       appStore.addCapturedFigures(capturedFigure.color, `${capturedFigure.type}${capturedFigure.color}`)
     }
 
-    console.log(appStore.chess.history({ verbose: true }))
-    console.log(appStore.chess.history({ verbose: true })[0].from)
-
-    // const historyMove = appStore.chess.history({ verbose: true })
+    // console.log(appStore.chess.history({ verbose: true }))
     
     appStore.updateHistoryList(appStore.chess.history({ verbose: true }))
-    // appStore.updateHistory(`${historyMove}.from - ${historyMove}.to`)
+
 
     getGameStatus()
 

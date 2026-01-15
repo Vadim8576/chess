@@ -2,6 +2,7 @@
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 import Header from "./Header";
+import appStore from "../store/appStore";
 
 
 // const Wrapper = styled.div`
@@ -23,11 +24,11 @@ font-weight: bold;
 background-color: #414833;
 `;
 
-const GameStatus = observer(({ status }) => {
+const GameStatus = observer(() => {
 
 	return (
 		<Status>
-			{`${status}`}
+			{appStore.status}
 		</Status>
 	)
 })

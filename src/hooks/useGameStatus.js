@@ -1,38 +1,42 @@
+import { toJS } from 'mobx';
 
 const useGameStatus = (appStore) => {
   const getGameStatus = () => {
-    appStore.setGameStatus('w', '')
-    appStore.setGameStatus('b', '')
     const player = appStore.chess.turn()
-    appStore.setGameStatus(player, 'Ваш ход!')
-    const contender = player === 'w' ? 'b' : 'w'
-    appStore.setGameStatus(contender, `Ход ${contender === 'b' ? 'белых' : 'черных'}!`)
+    console.log('player = ', player)
+    appStore.setGameStatus(`Ход ${player === 'w' ? 'белых' : 'чёрных'}!`)
 
     if (appStore.chess.inCheck()) {
-      appStore.setGameStatus(player, 'Шах!')
+      appStore.setGameStatus(`Шах ${player === 'w' ? 'белым' : 'чёрным'}!`)
+
+      // updateHistoryItem('Шах!')
     }
 
     if (appStore.chess.isCheckmate()) {
-      appStore.setGameStatus(player, 'Мат!')
+      appStore.setGameStatus(`Мат ${player === 'w' ? 'белым' : 'чёрным'}!`)
 
+      // updateHistoryItem('Мат!')
     }
 
     if (appStore.chess.isStalemate()) {
       const status = 'Пат. Ничья!'
-      appStore.setGameStatus('w', status)
-      appStore.setGameStatus('b', status)
+      appStore.setGameStatus(status)
+
+      // updateHistoryItem('Пат!')
     }
 
     if (appStore.chess.isThreefoldRepetition()) {
       const status = 'Троекратное повторение. Ничья!'
-      appStore.setGameStatus('w', status)
-      appStore.setGameStatus('b', status)
+      appStore.setGameStatus(status)
+
+      // updateHistoryItem('Ничья!')
     }
 
     if (appStore.chess.isDraw()) {
       const status = 'Правило 50 ходов. Ничья!'
-      appStore.setGameStatus('w', status)
-      appStore.setGameStatus('b', status)
+      appStore.setGameStatus(status)
+
+      // updateHistoryItem('Ничья!')
     }
 
 
@@ -40,7 +44,18 @@ const useGameStatus = (appStore) => {
       console.log('Игра окончена.')
     }
   }
+
+  const updateHistoryItem = (status) => {
+    const newHistoryList = [...appStore.historyList]
+    newHistoryList.pop()
+    const lastValue = { ...appStore.historyList[appStore.historyList.length - 1], status }
+    newHistoryList.push({ ...lastValue })
+    appStore.updateHistoryList(newHistoryList)
+  }
+
   return [getGameStatus]
 }
+
+
 
 export default useGameStatus

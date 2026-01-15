@@ -27,7 +27,7 @@ const Img = styled.img`
 
 const CapturedFigure = observer(({ src }) => {
 
-    console.log(src)
+    // console.log(src)
 
 
     const { isLoading, isError, image } = useLoadImage(src)
