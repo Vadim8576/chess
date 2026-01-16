@@ -8,9 +8,13 @@ class appStore {
 
   // checked = true
   chess = new Chess()
+  board = {
+    cellSize: 0,
+    borderSize: 0,
+  }
+  historyList = []
   whiteBottom = true // true | false
-  blackStatus = ''
-  whiteStatus = ''
+  status = ''
   capturedFigures = {
     'w': [],
     'b': []
@@ -24,17 +28,27 @@ class appStore {
     return this.whiteBottom
   }
 
-  setGameStatus(player, status) {
-    if (player === 'w') {
-      this.whiteStatus = status
-    } else {
-      this.blackStatus = status
-    }
+  setBoard(board) {
+    this.board = {...board}
+    // console.log('board = ', toJS(this.board))
+  }
+
+  updateHistoryList(newHistoryList) {
+    this.historyList = [...newHistoryList]
+  }
+
+  setGameStatus(status) {
+    this.status = status
   }
 
   //Взятые фигуры
   addCapturedFigures(color, figure) {
-    this.capturedFigures[color] = [...this.capturedFigures[color], figure]
+    // this.capturedFigures[color] = [...this.capturedFigures[color], figure]
+    this.capturedFigures = {
+      ...this.capturedFigures,
+      [color]: [...this.capturedFigures[color], figure]
+    }
+    console.log(toJS(this.capturedFigures))
   }
 
 

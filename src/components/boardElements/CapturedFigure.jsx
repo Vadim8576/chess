@@ -11,6 +11,7 @@ const ImgWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    flex: 0 0 25%;
     width: ${props => props.$width}px;
     height: ${props => props.$height}px;
     cursor: ${props => props.$cursor};
@@ -25,6 +26,8 @@ const Img = styled.img`
 `;
 
 const CapturedFigure = observer(({ src }) => {
+
+    // console.log(src)
 
 
     const { isLoading, isError, image } = useLoadImage(src)

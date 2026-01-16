@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import BoardElements from '../boardElements/BoardElements';
 import { observer } from 'mobx-react-lite';
 import BoardCanvas from './BoardCanvas';
-import HighlightedCell from '../boardElements/HighlightedCell';
+import appStore from '../../store/appStore';
+import BorderCanvas from './BorderCanvas';
 
 
 
@@ -29,7 +30,8 @@ const BoardWrapper = styled.div`
 
 
 
-const ChessBoard = observer(({ containerRect, cellSize, windowSize }) => {
+const ChessBoard = observer(({ containerRect }) => {
+  const ref = useRef(null)
 
   const [boardRect, setBoardRect] = useState({
     w: 0,
@@ -40,37 +42,44 @@ const ChessBoard = observer(({ containerRect, cellSize, windowSize }) => {
 
 
   console.log('ChessBoard Render')
- 
-  
 
-  // useEffect(() => {
-  //   console.log('boardRect = ', boardRect)
-  // }, [boardRect.w, boardRect.h, boardRect.x, boardRect.y])
+
+
+  useEffect(() => {
+    // const boardWrapper = ref.current.getBoundingClientRect()
+
+    // console.log('BoardWrapper = ', boardWrapper)
+
+
+    // setBoardRect({
+    //   x: boardWrapper.x,
+    //   y: boardWrapper.y,
+    //   w: boardWrapper.width,
+    //   h: boardWrapper.height,
+    // })
+  }, [])
 
 
   return (
     <BoardWrapper
-      $width={boardRect.w}
-      $height={boardRect.h}
+      $width={appStore.board.cellSize * 8}
+      $height={appStore.board.cellSize * 8}
     >
+      <BorderCanvas
+      />
       <BoardCanvas
-        cellSize={cellSize}
         setBoardRect={setBoardRect}
-        containerRect={containerRect}
-        windowSize={windowSize}
       />
       <BoardElements
-        cellSize={cellSize}
         startX={boardRect.x}
         startY={boardRect.y}
-
       />
 
 
       {/* <Cell
-          $top={boardRect.y}
-          $left={boardRect.x}
-        /> */}
+        $top={boardRect.y}
+        $left={boardRect.x}
+      /> */}
     </BoardWrapper>
   )
 })

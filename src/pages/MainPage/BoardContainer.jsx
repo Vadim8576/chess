@@ -2,60 +2,53 @@ import styled from "styled-components";
 import ChessBoard from "../../components/ChessBoard/ChessBoard";
 import { useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react-lite";
+import appStore from "../../store/appStore";
 
 const Container = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	width: 100%;
-  height: calc(100% - 30px * 2 - 60px * 2);
+  // height: calc(100% - 30px * 2 - 60px * 2);
+	height: 100%;
 `;
 
 
 
-const BoardContainer = observer(({windowSize}) => {
-	const [containerRect, setContainerRect] = useState({ y: 0, x: 0, w: 0, h: 0 })
-	const [cellSize, setCellSize] = useState(0)
-	
+const BoardContainer = observer(({ windowSize }) => {
+	// const [containerRect, setContainerRect] = useState({ y: 0, x: 0, w: 0, h: 0 })
 	const ref = useRef(null)
 
 
 	useEffect(() => {
-		const containerRect = ref.current.getBoundingClientRect()
-		console.log(containerRect)
+		// const containerRect = ref.current.getBoundingClientRect()
+		// console.log(containerRect)
 
-		setContainerRect({
-			y: containerRect.y,
-			x: containerRect.x,
-			w: containerRect.width,
-			h: containerRect.height
-		})
+		// setContainerRect({
+		// 	y: containerRect.y,
+		// 	x: containerRect.x,
+		// 	w: containerRect.width,
+		// 	h: containerRect.height
+		// })
 
-
-		
+		const headerHeight = 40
 		let cellSize
-		if (containerRect.height > containerRect.width) {
-			cellSize = (containerRect.width) / 8
+
+		if ((windowSize.height - headerHeight) < windowSize.width / 2) {
+			cellSize = (windowSize.height - headerHeight) / 9
 		} else {
-			cellSize = (containerRect.height) / 8
+			cellSize = windowSize.width / 2 / 10
 		}
 
+		appStore.setBoard({ cellSize, borderSize: cellSize / 2.5 })
 
-		// cellSizeTemp = (containerRect.width - 60) / 8// 10 потому что еще границы доски
-
-		// console.log('width = ', containerRect.width)
-		// console.log('cellSizeTemp = ', cellSizeTemp)
-		setCellSize(cellSize)
+		console.log('cellSize = ', cellSize)
 
 	}, [windowSize.width, windowSize.height])
 
 	return (
 		<Container ref={ref}>
-			<ChessBoard
-				containerRect={containerRect}
-				cellSize={cellSize}
-				windowSize={windowSize}
-			/>
+			<ChessBoard />
 		</Container>
 	)
 })
