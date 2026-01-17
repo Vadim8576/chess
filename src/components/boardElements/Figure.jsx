@@ -27,9 +27,17 @@ const Img = styled.img`
     pointer-events: none;
 `;
 
-const Figure = observer(({ src, top, left, startX, startY, setHighlightedCell, setPossibleMoves, getGameStatus }) => {
+const Figure = observer(({
+	src,
+	top,
+	left,
+	setHighlightedCell,
+	setPossibleMoves,
+	getGameStatus,
+	figure
+}) => {
 	const [imgStyle, setImgStyle] = useState({ zIndex: 100, transition: 'none' })
-	// const [gameStatus, setGameStatus] = useState({ currentPlayer: 'w', status: '' })
+
 	const { isLoading, isError, image } = useLoadImage(src)
 
 	const {
@@ -41,9 +49,8 @@ const Figure = observer(({ src, top, left, startX, startY, setHighlightedCell, s
 		handleMouseMove,
 		handleMouseUp
 	} = useFigureDrag(
+		figure,
 		appStore,
-		startX,
-		startY,
 		setHighlightedCell,
 		setPossibleMoves,
 		setImgStyle,
@@ -56,25 +63,15 @@ const Figure = observer(({ src, top, left, startX, startY, setHighlightedCell, s
 	}, [left, top])
 
 
-
-
 	useEffect(() => {
 		if (isDragging) {
 			document.addEventListener('mousemove', handleMouseMove)
-			document.addEventListener('mouseup', handleMouseUp)
-
-			// document.addEventListener('touchstart', handleMouseMove, { passive: false })
-			// document.addEventListener('touchmove', handleMouseDown, { passive: false })
-			// document.addEventListener('touchend', handleMouseUp, { passive: false })     
+			document.addEventListener('mouseup', handleMouseUp)    
 		}
 
 		return () => {
 			document.removeEventListener('mousemove', handleMouseMove)
-			document.removeEventListener('mouseup', handleMouseUp)
-
-			// document.removeEventListener('touchstart', handleMouseMove, { passive: false })
-			// document.removeEventListener('touchmove', handleMouseMove, { passive: false })
-			// document.removeEventListener('touchend', handleMouseUp, { passive: false })   
+			document.removeEventListener('mouseup', handleMouseUp)  
 		}
 	}, [isDragging])
 
@@ -108,5 +105,6 @@ const Figure = observer(({ src, top, left, startX, startY, setHighlightedCell, s
 		</ImgWrapper>
 	)
 })
+
 
 export default Figure

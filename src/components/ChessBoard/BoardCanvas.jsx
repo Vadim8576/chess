@@ -1,51 +1,39 @@
 import { observer } from 'mobx-react-lite';
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import appStore from '../../store/appStore';
 
-const BorderCanvas = styled.canvas`
-	position: absolute;
-  top: -${props => props.$top}px;
-  left: -${props => props.$left}px;
-  width: ${props => props.width}px;
-  height: ${props => props.height}px;
-	border: 2px solid #414833;
-	border-radius: 15px;
-`;
 
 const Canvas = styled.canvas`
 	position: absolute;
 	top: 0;
 	left: 0;
-  border: 2px solid #414833;
+  border: 1px solid #f0d9b5;
   width: ${props => props.width}px;
   height: ${props => props.height}px;
 `;
 
 
-const BoardCanvas = observer(({ setBoardRect }) => {
-	const canvasRef = useRef(null)
+const BoardCanvas = observer(() => {
 
-	// console.log('cellsize = ',  appStore.board.cellSize)
-	// console.log('borderSize = ',  appStore.board.borderSize)
 	console.log('BoardCanvas Render')
 
+	const canvasRef = useRef(null)
 
 	useEffect(() => {
-		const boardRect = canvasRef.current.getBoundingClientRect()
+		if (canvasRef.current) {
+			const canvasRect = canvasRef.current.getBoundingClientRect()
+			appStore.setBoard({
+				x: canvasRect.x,
+				y: canvasRect.y
+			})
+		}
+	}, [appStore.board.cellSize])
 
-		setBoardRect({
-			w: boardRect.width,
-			h: boardRect.height,
-			x: boardRect.x,
-			y: boardRect.y
-		})
-
+	useEffect(() => {
 		const canvas = canvasRef.current
 		const ctx = canvas.getContext('2d')
 		ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-		
 
 		// Доска
 		for (let row = 0; row < 8; row++) {
@@ -56,14 +44,12 @@ const BoardCanvas = observer(({ setBoardRect }) => {
 			}
 		}
 
-
-		
-
 	}, [appStore.whiteBottom, appStore.board.cellSize])
 
 	return (
 		<>
 			<Canvas
+				id='board'
 				ref={canvasRef}
 				width={appStore.board.cellSize * 8}
 				height={appStore.board.cellSize * 8}

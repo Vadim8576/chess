@@ -3,7 +3,7 @@ import { toJS } from 'mobx';
 const useGameStatus = (appStore) => {
   const getGameStatus = () => {
     const player = appStore.chess.turn()
-    console.log('player = ', player)
+    // console.log('player = ', player)
     appStore.setGameStatus(`Ход ${player === 'w' ? 'белых' : 'чёрных'}!`)
 
     if (appStore.chess.inCheck()) {
@@ -53,7 +53,7 @@ const useGameStatus = (appStore) => {
     appStore.updateHistoryList(newHistoryList)
   }
 
-  return [getGameStatus]
+  return getGameStatus
 }
 
 

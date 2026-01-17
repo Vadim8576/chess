@@ -31,29 +31,17 @@ height: calc(100% - ${headerHeight}px);
 const MainPage = observer(() => {
 	console.log('MainPage')
 
-	const ref = useRef(null)
-	const [bodyRect, setBodyRect] = useState({ width: 0, height: 0 })
 
-	const { width, height } = useWindowResizeThrottle(100)
+	const { width, height } = useWindowResizeThrottle(300)
 
-	useEffect(() => {
-		const bodyRect = document.body.getBoundingClientRect()
-		setBodyRect({
-			width: bodyRect.width,
-			height: bodyRect.height
-		})
-	}, [width, height])
 
 	/*
 		useEffect(() => {
 			// appStore.chess.load('rnb1kbnr/pppp1ppp/8/4p3/5PPq/8/PPPPP2P/RNBQKBNR w KQkq - 1 3') // Мат
 			// appStore.chess.load('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2')
-	
-	
-	
-	
 		}, [width, height])
 	*/
+	
 	return (
 		<PageContainer>
 			<Header headerHeight={headerHeight} />
@@ -76,8 +64,8 @@ const MainPage = observer(() => {
 				</Panel>
 				<Panel grow={3}>
 					<BoardContainer windowSize={{
-						width: bodyRect.width,
-						height: bodyRect.height
+						width,
+						height
 					}}
 					/>
 				</Panel>

@@ -17,7 +17,8 @@ text-align: center;
 display: flex;
 justify-content: center;
 align-items: center;
-flex-grow: 1;
+// flex-grow: 1;
+height: 100%;
 overflow-y: auto;
 color: ${gameColors.neutral};
 font-size: 14px;
@@ -29,6 +30,8 @@ border: 1px ${gameColors.neutral} solid;
 `;
 
 const GameStatus = observer(() => {
+
+	console.log('GameStatus')
 
 	return (
 		<Status>

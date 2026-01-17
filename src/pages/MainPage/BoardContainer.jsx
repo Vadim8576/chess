@@ -9,7 +9,6 @@ const Container = styled.div`
 	justify-content: center;
 	align-items: center;
 	width: 100%;
-  // height: calc(100% - 30px * 2 - 60px * 2);
 	height: 100%;
 `;
 
@@ -21,28 +20,18 @@ const BoardContainer = observer(({ windowSize }) => {
 
 
 	useEffect(() => {
-		// const containerRect = ref.current.getBoundingClientRect()
-		// console.log(containerRect)
+		if(!ref.current) return
 
-		// setContainerRect({
-		// 	y: containerRect.y,
-		// 	x: containerRect.x,
-		// 	w: containerRect.width,
-		// 	h: containerRect.height
-		// })
-
-		const headerHeight = 40
+		const boardContainerRect = ref.current.getBoundingClientRect()
+		
 		let cellSize
-
-		if ((windowSize.height - headerHeight) < windowSize.width / 2) {
-			cellSize = (windowSize.height - headerHeight) / 9
+		if ((boardContainerRect.height) < boardContainerRect.width) {
+			cellSize = (boardContainerRect.height) / 9
 		} else {
-			cellSize = windowSize.width / 2 / 10
+			cellSize = boardContainerRect.width / 9
 		}
-
 		appStore.setBoard({ cellSize, borderSize: cellSize / 2.5 })
 
-		console.log('cellSize = ', cellSize)
 
 	}, [windowSize.width, windowSize.height])
 

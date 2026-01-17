@@ -4,10 +4,8 @@ import { getSquare } from '../utils/getSquare'
 import { squareToIndices } from '../utils/squareToIndices'
 
 export function useFigureDrag(
+  figure,
   appStore,
-  // cellSize,
-  startX,
-  startY,
   setHighlightedCell,
   setPossibleMoves,
   setImgStyle,
@@ -21,26 +19,31 @@ export function useFigureDrag(
 
 
   const handleMouseDown = (e) => {
-    // appStore.chess.clear()
-    // appStore.chess.load('r2qkbnr/ppp2ppp/2n5/1B2pQ2/4P3/8/PPP2PPP/RNB1K2R b KQkq - 3 7')
-    // return
     e.preventDefault();
     if (e.button !== 0) return // Только левая кнопка мыши
     if (appStore.chess.isGameOver()) return
 
+    // const boardRect = document.getElementById('board').getBoundingClientRect()
+    const startX = appStore.board.x
+    const startY = appStore.board.y
 
     const x = e.clientX - startX
     const y = e.clientY - startY
-    const [col, row] = getCellPosition(x, y, appStore.board.cellSize, appStore.whiteBottom)
+    const [col, row] = getCellPosition(x, y, appStore)
 
-    // console.log(startX, startY)
-    // console.log(x, y, appStore.board.cellSize)
-    // console.log(col, row)
+
 
     const grabFigure = appStore.chess.board()[row][col]
 
-    console.log(x, y, appStore.board.cellSize)
+    // console.log(x, y, appStore.board.cellSize)
     console.log(col, row)
+    // console.log(figure)
+
+    if (figure.square !== grabFigure.square) {
+      console.log('Взял одну фигуру, а по расчетам другая')
+      return
+    }
+
 
     if (grabFigure.color !== appStore.chess.turn()) {
       console.log('Сейчас ход другого игрока!')
@@ -79,9 +82,9 @@ export function useFigureDrag(
       moves: [...moveIndices],
       visible: true,
       color: 'lightgreen',
-      
+
     })
-    setImgStyle({ zIndex: 101, transition: 'none' })
+    // setImgStyle({ zIndex: 101, transition: 'none' })
   }
 
 
@@ -89,12 +92,13 @@ export function useFigureDrag(
   const handleMouseMove = (e) => {
     if (!isDragging) return
 
-    const rect = imageRef.current.getBoundingClientRect()
+    const startX = appStore.board.x
+    const startY = appStore.board.y
     const x = e.clientX - startX
     const y = e.clientY - startY
-    const xc = x - rect.width / 2
-    const yc = y - rect.height / 2
-    const [col, row] = getCellPosition(x, y, appStore.board.cellSize, appStore.whiteBottom)
+    const xc = x - appStore.board.cellSize / 2
+    const yc = y - appStore.board.cellSize / 2
+    const [col, row] = getCellPosition(x, y, appStore)
 
     const square = getSquare(appStore.whiteBottom, col, row)
 
@@ -140,15 +144,18 @@ export function useFigureDrag(
 
   const handleMouseUp = (e) => {
     setIsDragging(false)
-    setImgStyle({ zIndex: 100, transition: '.3s' })
+    // setImgStyle({ zIndex: 100, transition: '.3s' })
     setPossibleMoves(state => ({
       ...state,
       visible: false
     }))
 
+    const startX = appStore.board.x
+    const startY = appStore.board.y
+
     const x = e.clientX - startX
     const y = e.clientY - startY
-    const [col, row] = getCellPosition(x, y, appStore.board.cellSize, appStore.whiteBottom)
+    const [col, row] = getCellPosition(x, y, appStore)
 
 
     if (col < 0 || col > 7 || row < 0 || row > 7) {
@@ -174,7 +181,7 @@ export function useFigureDrag(
     const square = getSquare(appStore.whiteBottom, col, row)
     // console.log('Отпущено на:', square)
 
-    
+
 
     if (!moves.includes(square) || grabCell.square === square) {
       console.log('Недопустимый ход!')
@@ -208,12 +215,12 @@ export function useFigureDrag(
     }))
 
 
-    
+
     let capturedFigure = appStore.chess.board()[row][col]
-    
+
     console.log(grabCell.square, square)
     const move = appStore.chess.move(grabCell.square + square) // Сделать ход
-  
+
     // если присутствует flags 'e', произошло взятие на проходе
     if (move && move.flags.includes('e')) {
       console.log('Взятие на проходе!')
@@ -222,7 +229,7 @@ export function useFigureDrag(
         color: move.color === 'w' ? 'b' : 'w'
       }
     }
-    
+
     if (capturedFigure != null || capturedFigure != undefined) {
       // console.log('съел фигуру')
       // console.log(capturedFigure.color, `${capturedFigure.type}${capturedFigure.color}` )
@@ -230,7 +237,7 @@ export function useFigureDrag(
     }
 
     // console.log(appStore.chess.history({ verbose: true }))
-    
+
     appStore.updateHistoryList(appStore.chess.history({ verbose: true }))
 
 
@@ -238,8 +245,8 @@ export function useFigureDrag(
 
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // не срабатывает
-    setImgStyle({ zIndex: 100, transition: 'none' })
-    
+    // setImgStyle({ zIndex: 100, transition: 'none' })
+
 
   }
 

@@ -7,6 +7,9 @@ export const useLoadImage = (url) => {
 
     useEffect(() => {
 
+
+        // console.log('useLoadImage');
+
         // Сброс состояний при новом URL
         setIsLoading(!!url);
         setIsError(false);

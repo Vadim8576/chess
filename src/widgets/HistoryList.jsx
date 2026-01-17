@@ -7,7 +7,7 @@ import { gameColors } from "../constants/gameInitial";
 const headerHeight = 30
 
 const History = styled.div`
-flex-grow: 1;
+height: 100%;
 overflow-y: auto;
 padding: 10px;
 border-radius: 0 0 10px 10px;
@@ -19,13 +19,12 @@ font-size: 1rem;
 `
 
 
-
 const HistoryList = observer(() => {
-
+  console.log('HistoryList')
   return (
     <History>
       {appStore.historyList.map((list, key) => (
-        <Text  key={key}>{`${list.from} - ${list.to} ${list.status ? list.status : ''}`}</Text>
+        <Text key={key}>{`${list.from} - ${list.to} ${list.status ? list.status : ''}`}</Text>
       ))}
     </History>
   )

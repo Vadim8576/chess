@@ -13,7 +13,7 @@ import { gameColors } from "../constants/gameInitial";
 // border: 1px #666 solid;
 // `;
 
-const headerHeight = 30
+const headerHeight = 40
 
 const HeaderLine = styled.div`
 display: flex;

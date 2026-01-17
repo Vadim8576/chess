@@ -10,7 +10,7 @@ class appStore {
   chess = new Chess()
   board = {
     cellSize: 0,
-    borderSize: 0,
+    borderSize: 0
   }
   historyList = []
   whiteBottom = true // true | false
@@ -24,12 +24,12 @@ class appStore {
     makeAutoObservable(this);
   }
 
-  get whiteBottom() {
-    return this.whiteBottom
-  }
+  // get whiteBottom() {
+  //   return this.whiteBottom
+  // }
 
   setBoard(board) {
-    this.board = {...board}
+    this.board = {...this.board, ...board}
     // console.log('board = ', toJS(this.board))
   }
 

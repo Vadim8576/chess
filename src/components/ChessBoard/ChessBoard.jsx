@@ -30,34 +30,10 @@ const BoardWrapper = styled.div`
 
 
 
-const ChessBoard = observer(({ containerRect }) => {
-  const ref = useRef(null)
-
-  const [boardRect, setBoardRect] = useState({
-    w: 0,
-    h: 0,
-    x: 0,
-    y: 0
-  })
+const ChessBoard = observer(() => {
 
 
   console.log('ChessBoard Render')
-
-
-
-  useEffect(() => {
-    // const boardWrapper = ref.current.getBoundingClientRect()
-
-    // console.log('BoardWrapper = ', boardWrapper)
-
-
-    // setBoardRect({
-    //   x: boardWrapper.x,
-    //   y: boardWrapper.y,
-    //   w: boardWrapper.width,
-    //   h: boardWrapper.height,
-    // })
-  }, [])
 
 
   return (
@@ -65,15 +41,9 @@ const ChessBoard = observer(({ containerRect }) => {
       $width={appStore.board.cellSize * 8}
       $height={appStore.board.cellSize * 8}
     >
-      <BorderCanvas
-      />
-      <BoardCanvas
-        setBoardRect={setBoardRect}
-      />
-      <BoardElements
-        startX={boardRect.x}
-        startY={boardRect.y}
-      />
+      <BorderCanvas />
+      <BoardCanvas />
+      <BoardElements />
 
 
       {/* <Cell

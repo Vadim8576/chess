@@ -9,9 +9,6 @@ import appStore from "../../store/appStore";
 import useGameStatus from "../../hooks/useGameStatus";
 
 
-
-
-
 const ElementsWrapper = styled.div`
   position: absolute;
   top: 0;
@@ -19,31 +16,34 @@ const ElementsWrapper = styled.div`
   width: 100%;
   height: 100%;
 `;
-const Figures = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-`;
+
+const BoardElements = observer(() => {
+
+  const board = appStore.chess.board()
 
 
-const BoardElements = observer(({ startX, startY }) => {
+  console.log('BoardElements')
 
   const [highlightedCell, setHighlightedCell] = useState({
-    col: 0, row: 0, color: 'green', visible: false
+    col: 0,
+    row: 0,
+    color: 'green',
+    visible: false
   })
+
   const [possibleMoves, setPossibleMoves] = useState({
-    color: 'green', visible: false
+    color: 'green',
+    visible: false
   })
 
-  // console.log(startX, startY)
 
-  const [getGameStatus] = useGameStatus(appStore)
+  const getGameStatus = useGameStatus(appStore)
+
 
   useEffect(() => {
     getGameStatus()
   }, [appStore.whiteBottom])
+
 
 
   return (
@@ -51,7 +51,11 @@ const BoardElements = observer(({ startX, startY }) => {
       {possibleMoves.moves && possibleMoves.moves.map(move => (
         <HighlightedCell
           key={`${move.col}${move.row}`}
-          highlightedCell={{ ...move, color: possibleMoves.color, visible: possibleMoves.visible }}
+          highlightedCell={{
+            ...move,
+            color: possibleMoves.color,
+            visible: possibleMoves.visible
+          }}
           type={'possibleMoves'}
         />
       ))}
@@ -63,27 +67,24 @@ const BoardElements = observer(({ startX, startY }) => {
         />
       )}
 
-
-      <>
-        {ranks.map((rank, y) => {
-          return files.map((file, x) => {
-            const src = getSrc(appStore.whiteBottom, appStore.chess.board(), x, y)
-            if (src) return (
-              <Figure
-                key={file + rank}
-                src={src}
-                top={appStore.board.cellSize * y}
-                left={appStore.board.cellSize * x}
-                startX={startX}
-                startY={startY}
-                setHighlightedCell={setHighlightedCell}
-                setPossibleMoves={setPossibleMoves}
-                getGameStatus={getGameStatus}
-              />
-            )
-          })
-        })}
-      </>
+      {ranks.map((rank, y) => {
+        return files.map((file, x) => {          
+          const figure = board[y][x]
+          const src = getSrc(appStore.whiteBottom, board, x, y)
+          if (src) return (
+            <Figure
+              key={`${file}${rank}`}
+              src={src}
+              top={appStore.board.cellSize * y}
+              left={appStore.board.cellSize * x}
+              setHighlightedCell={setHighlightedCell}
+              setPossibleMoves={setPossibleMoves}
+              getGameStatus={getGameStatus}
+              figure={figure}
+            />
+          )
+        })
+      })}
     </ElementsWrapper>
   )
 })

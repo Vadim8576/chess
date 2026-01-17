@@ -4,10 +4,9 @@ import Header from './Header';
 
 const WidgetWrapper = styled.div`
 display: flex;
-flex-grow: 1;
 flex-direction: column;
 width: 100%;
-// height: 40%;
+height: 20%;
 // border: 1px #666 solid;
 margin-bottom: 20px;
 border-radius: 10px;
@@ -15,18 +14,16 @@ border-radius: 10px;
 `;
 
 
-const withWidget = (options = {}) => {
+const withWidget = () => {
   return (WrappedComponent) => {
     return function WithColumn({ title, ...restProps }) {
       return (
         <WidgetWrapper>
-          <Header
-            title={title}
-          />
+          <Header title={title} />
           {WrappedComponent ? (
             <WrappedComponent {...restProps} />
           ) : (
-            restProps.children // если компонента нет — рендерим children
+            restProps.children
           )}
         </WidgetWrapper >
       )
@@ -34,6 +31,6 @@ const withWidget = (options = {}) => {
   }
 }
 
-const Widget = withWidget({ title: '', titleColors: {color: '#fff', background: '#999'} })(null)
+const Widget = withWidget()(null)
 
 export default Widget
