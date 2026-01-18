@@ -14,12 +14,18 @@ import { toJS } from 'mobx';
 // `;
 
 const Area = styled.div`
-flex-grow: 1;
-min-height: 40%;
-// overflow-y: auto;
-display: flex;
-flex-wrap: wrap;
-align-content: flex-start;
+width: 100%;
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+grid-template-rows: repeat(4, 1fr);
+// padding-top: 100%;
+aspect-ratio: 1 / 1; 
+// gap: 10px;
+// flex-grow: 1;
+// flex-grow: 1;
+// display: flex;
+// flex-wrap: wrap;
+// align-content: flex-start;
 padding: 10px;
 border-radius: 0 0 10px 10px;
 border: 1px ${gameColors.neutral} solid;

@@ -25,6 +25,7 @@ const BoardWrapper = styled.div`
   position: relative;
   width: ${props => props.$width}px;
   height: ${props => props.$height}px;
+  
 `;
 
 
@@ -41,7 +42,7 @@ const ChessBoard = observer(() => {
       $width={appStore.board.cellSize * 8}
       $height={appStore.board.cellSize * 8}
     >
-      <BorderCanvas />
+      {/* <BorderCanvas /> */}
       <BoardCanvas />
       <BoardElements />
 

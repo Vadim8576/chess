@@ -3,11 +3,12 @@ import styled from 'styled-components';
 
 const Column = styled.div`
   display: flex;
+  justify-content: center;
   flex-direction: column;
   flex: ${props => props.$grow} 1 0%;
-  min-width: ${props => props.$grow * 100}px;
+  min-width: ${props => props.$grow * 200}px;
   height: 100%;
-  flex-shrink: 0;
+  // flex-shrink: 0;
   padding: ${props => props.$grow === 3 ? '0' : '20px'} 10px 0 10px;
 `;
 

@@ -5,12 +5,18 @@ import Header from './Header';
 const WidgetWrapper = styled.div`
 display: flex;
 flex-direction: column;
-width: 100%;
-height: 20%;
+flex-grow: 1;
+flex-shrink: 0;
+flex-basis: 0;
+min-width: 0;
+
+// width: 100%;
+// height: 20%;
 // border: 1px #666 solid;
 margin-bottom: 20px;
 border-radius: 10px;
 // box-shadow: 0px 5px 5px rgba(0, 0, 0, .4);
+
 `;
 
 

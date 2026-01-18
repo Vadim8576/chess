@@ -12,6 +12,7 @@ height: ${props => props.$height}px;
 padding: 10px;
 // border: 1px #666 solid;
 background-color: ${gameColors.primary};
+margin-bottom: 20px;
 `;
 
 

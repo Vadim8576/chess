@@ -12,8 +12,10 @@ const ImgWrapper = styled.div`
     justify-content: center;
     align-items: center;
     flex: 0 0 25%;
-    width: ${props => props.$width}px;
-    height: ${props => props.$height}px;
+    // width: ${props => props.$width}px;
+    // height: ${props => props.$height}px;
+    width: 100%;
+    height: auto;
     cursor: ${props => props.$cursor};
     user-select: none;
     touch-action: none;
@@ -43,8 +45,8 @@ const CapturedFigure = observer(({ src }) => {
 
     return (
         <ImgWrapper
-            $width={40}
-            $height={40}
+            // $width={}
+            // $height={40}
         >
             <Img src={image.src} />
         </ImgWrapper>

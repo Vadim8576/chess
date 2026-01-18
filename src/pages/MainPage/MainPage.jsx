@@ -18,13 +18,39 @@ const headerHeight = 50
 const PageContainer = styled.div`
 width: 100%;
 height: 100%;
+min-height: 500px;
 background-color: ${gameColors.background};
 `;
+
+
+// const PanelWrapper = styled.div`
+// display: flex;
+// // flex-direction: column;
+// width: 100%;
+
+// height: calc(100% - ${headerHeight}px);
+// `;
+
+
 const PanelWrapper = styled.div`
 display: flex;
-width: 100%;
-height: calc(100% - ${headerHeight}px);
+max-width: 1437px;
+padding: 0 40px;
+// width: 100%;
+height: 798px;
+margin: 0 auto;
+
+flex: 0 0 70%;
+	max-width: 70%;
 `;
+
+const RightSide = styled.div`
+display: flex;
+flex: 0 0 30%;
+max-width: 30%;
+height: 100%;
+padding-left: 20px;
+`
 
 
 
@@ -41,12 +67,12 @@ const MainPage = observer(() => {
 			// appStore.chess.load('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2')
 		}, [width, height])
 	*/
-	
+
 	return (
 		<PageContainer>
 			<Header headerHeight={headerHeight} />
 			<PanelWrapper>
-				<Panel>
+				{/* <Panel>
 					<Widget title={{
 						title: 'Взятые фигуры',
 						color: '#fff',
@@ -61,15 +87,25 @@ const MainPage = observer(() => {
 					}}>
 						<CapturedArea player={appStore.whiteBottom ? 'b' : 'w'} />
 					</Widget>
-				</Panel>
-				<Panel grow={3}>
-					<BoardContainer windowSize={{
-						width,
-						height
+				</Panel> */}
+				{/* <Panel grow={3}> */}
+				<BoardContainer windowSize={{
+					width,
+					height
+				}}
+				/>
+				<RightSide>
+					<Widget title={{
+						title: 'Статус игры',
+						color: '#fff',
+						background: gameColors.secondary
 					}}
-					/>
-				</Panel>
-				<Panel>
+					>
+						<GameStatus />
+					</Widget>
+				</RightSide>
+				{/* </Panel> */}
+				{/* <Panel>
 					<Widget title={{
 						title: 'Статус игры',
 						color: '#fff',
@@ -86,10 +122,58 @@ const MainPage = observer(() => {
 					>
 						<HistoryList />
 					</Widget>
-				</Panel>
+				</Panel> */}
 			</PanelWrapper>
 		</PageContainer>
 	)
+	// return (
+	// 	<PageContainer>
+	// 		<Header headerHeight={headerHeight} />
+	// 		<PanelWrapper>
+	// 			<Panel>
+	// 				<Widget title={{
+	// 					title: 'Взятые фигуры',
+	// 					color: '#fff',
+	// 					background: gameColors.secondary
+	// 				}}>
+	// 					<CapturedArea player={appStore.whiteBottom ? 'w' : 'b'} />
+	// 				</Widget>
+	// 				<Widget title={{
+	// 					title: 'Взятые фигуры',
+	// 					color: '#fff',
+	// 					background: gameColors.secondary
+	// 				}}>
+	// 					<CapturedArea player={appStore.whiteBottom ? 'b' : 'w'} />
+	// 				</Widget>
+	// 			</Panel>
+	// 			<Panel grow={3}>
+	// 				<BoardContainer windowSize={{
+	// 					width,
+	// 					height
+	// 				}}
+	// 				/>
+	// 			</Panel>
+	// 			<Panel>
+	// 				<Widget title={{
+	// 					title: 'Статус игры',
+	// 					color: '#fff',
+	// 					background: gameColors.secondary
+	// 				}}
+	// 				>
+	// 					<GameStatus />
+	// 				</Widget>
+	// 				<Widget title={{
+	// 					title: 'История',
+	// 					color: '#fff',
+	// 					background: gameColors.secondary
+	// 				}}
+	// 				>
+	// 					<HistoryList />
+	// 				</Widget>
+	// 			</Panel>
+	// 		</PanelWrapper>
+	// 	</PageContainer>
+	// )
 })
 
 export default MainPage
