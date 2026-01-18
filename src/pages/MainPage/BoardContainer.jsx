@@ -34,17 +34,17 @@ const BoardContainer = observer(({ windowSize }) => {
 
 		const boardContainerRect = ref.current.getBoundingClientRect()
 
-		let cellSize
-		if ((boardContainerRect.height) < boardContainerRect.width) {
-			cellSize = (boardContainerRect.height) / 8
-		} else {
-			cellSize = boardContainerRect.width / 8
-		}
+		console.log(boardContainerRect.x, boardContainerRect.y)
 
-		// cellSize = 798 / 8
 
-		appStore.setBoard({ cellSize, borderSize: cellSize / 2.5 })
+		const cellSize = boardContainerRect.width / 8
 
+		appStore.setBoard({
+			cellSize,
+			borderSize: cellSize / 2.5,
+			x: boardContainerRect.x,
+			y: boardContainerRect.y
+		})
 
 	}, [windowSize.width, windowSize.height])
 

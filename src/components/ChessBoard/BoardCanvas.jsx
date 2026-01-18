@@ -21,16 +21,6 @@ const BoardCanvas = observer(() => {
 	const canvasRef = useRef(null)
 
 	useEffect(() => {
-		if (canvasRef.current) {
-			const canvasRect = canvasRef.current.getBoundingClientRect()
-			appStore.setBoard({
-				x: canvasRect.x,
-				y: canvasRect.y
-			})
-		}
-	}, [appStore.board.cellSize])
-
-	useEffect(() => {
 		const canvas = canvasRef.current
 		const ctx = canvas.getContext('2d')
 		ctx.clearRect(0, 0, canvas.width, canvas.height)

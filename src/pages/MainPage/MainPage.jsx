@@ -36,12 +36,11 @@ const PanelWrapper = styled.div`
 display: flex;
 max-width: 1437px;
 padding: 0 40px;
-// width: 100%;
 height: 798px;
 margin: 0 auto;
-
 flex: 0 0 70%;
-	max-width: 70%;
+max-width: 70%;
+min-width: 768px;
 `;
 
 const RightSide = styled.div`
@@ -89,10 +88,11 @@ const MainPage = observer(() => {
 					</Widget>
 				</Panel> */}
 				{/* <Panel grow={3}> */}
-				<BoardContainer windowSize={{
-					width,
-					height
-				}}
+				<BoardContainer
+					windowSize={{
+						width,
+						height
+					}}
 				/>
 				<RightSide>
 					<Widget title={{
