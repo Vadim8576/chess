@@ -14,6 +14,7 @@ min-width: 0;
 // height: 20%;
 // border: 1px #666 solid;
 margin-bottom: 20px;
+margin: 0 10px;
 border-radius: 10px;
 // box-shadow: 0px 5px 5px rgba(0, 0, 0, .4);
 

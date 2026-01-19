@@ -14,21 +14,23 @@ import { toJS } from 'mobx';
 // `;
 
 const Area = styled.div`
-width: 100%;
-display: grid;
-grid-template-columns: repeat(4, 1fr);
-grid-template-rows: repeat(4, 1fr);
-// padding-top: 100%;
-aspect-ratio: 1 / 1; 
-// gap: 10px;
-// flex-grow: 1;
-// flex-grow: 1;
-// display: flex;
-// flex-wrap: wrap;
-// align-content: flex-start;
-padding: 10px;
-border-radius: 0 0 10px 10px;
-border: 1px ${gameColors.neutral} solid;
+// width: 100%;
+// display: grid;
+// grid-template-columns: repeat(4, 1fr);
+// grid-template-rows: repeat(4, 1fr);
+// // padding-top: 100%;
+// aspect-ratio: 1 / 1; 
+// // gap: 10px;
+// // flex-grow: 1;
+// // flex-grow: 1;
+display: flex;
+// // flex-wrap: wrap;
+justify-content: center;
+align-content: center;
+// padding: 10px;
+// border-radius: 0 0 10px 10px;
+// border: 1px ${gameColors.neutral} solid;
+
 `;
 
 
@@ -42,7 +44,7 @@ const CapturedArea = observer(({ player }) => {
   // console.log(toJS(figureList))
 
   return (
-    <Area>
+    <>
       {figureList.map((cf, key) => {
         console.log(figure[cf])
         return (
@@ -53,7 +55,7 @@ const CapturedArea = observer(({ player }) => {
         )
       }
       )}
-    </Area>
+    </>
   )
 })
 

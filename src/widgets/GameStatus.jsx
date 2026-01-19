@@ -17,7 +17,7 @@ text-align: center;
 display: flex;
 justify-content: center;
 align-items: center;
-height: 60px;
+// height: 60px;
 // flex-grow: 1;
 // height: 100%;
 // overflow-y: auto;

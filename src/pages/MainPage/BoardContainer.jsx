@@ -8,15 +8,18 @@ import GameStatus from "../../widgets/GameStatus";
 import { gameColors } from "../../constants/gameInitial";
 
 const Container = styled.div`
-	display: flex;
-	justify-content: center;
-	align-items: flex-start;
+	// display: flex;
+	// justify-content: center;
+	// align-items: flex-start;
 	// width: 100%;
-	height: 100%;
-	// aspect-ratio: 1 / 1;
-	flex: 0 0 60%;
-	max-width: 60%;
+	// height: 100%;
+	// flex: 0 0 60%;
+	// max-width: 60%;
 	
+	aspect-ratio: 1 / 1;
+
+	grid-column: 1 / 8; /* занимает столбцы с 1‑й по 2‑ю линию (2 столбца) */
+  grid-row: 2 / 10;    /* занимает строки со 2‑й по 3‑ю линию (2 строки) */
 `;
 
 
@@ -37,7 +40,16 @@ const BoardContainer = observer(({ windowSize }) => {
 		console.log(boardContainerRect.x, boardContainerRect.y)
 
 
-		const cellSize = boardContainerRect.width / 8
+		let cellSize = (windowSize.height - 50) / 11
+
+		// if(windowSize.height < windowSize.width) {
+		// 	cellSize = windowSize.height / 12
+		// } else {
+		// 	cellSize = windowSize.width / 12
+		// }
+
+
+
 
 		appStore.setBoard({
 			cellSize,

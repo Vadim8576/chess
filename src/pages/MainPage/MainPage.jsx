@@ -23,34 +23,74 @@ background-color: ${gameColors.background};
 `;
 
 
-// const PanelWrapper = styled.div`
-// display: flex;
-// // flex-direction: column;
-// width: 100%;
-
-// height: calc(100% - ${headerHeight}px);
-// `;
-
-
-const PanelWrapper = styled.div`
+const PageWrapper = styled.div`
 display: flex;
-max-width: 1437px;
-padding: 0 40px;
-height: 798px;
-margin: 0 auto;
-flex: 0 0 70%;
-max-width: 70%;
-min-width: 768px;
+justify-content: center;
+align-items: center;
+width: 100%;
+height: calc(100% - ${headerHeight}px	);
+
 `;
 
-const RightSide = styled.div`
-display: flex;
-flex: 0 0 30%;
-max-width: 30%;
-height: 100%;
-padding-left: 20px;
+
+const Grid = styled.div`
+display: flow-root;
+padding-top: 1px;
+width: ${props => props.$width}px;
+height: ${props => props.$width}px;
+// max-width: 400px;
+// max-height: 400px;
+// height: 500px;
+margin: 0;
+display: grid;
+grid-template-columns: repeat(11, 1fr);
+grid-template-rows: repeat(11, 1fr);
+border: 1px #666 solid;
+aspect-ratio: 1 / 1;
+`;
+
+
+// const PanelWrapper = styled.div`
+// display: flex;
+// max-width: 1437px;
+// padding: 0 40px;
+// min-height: 100px;
+// margin: 0 auto;
+// flex: 0 0 70%;
+// max-width: 70%;
+// min-width: 768px;
+// `;
+
+const Status = styled.div`
+grid-column: 9 / 12; /* занимает столбцы с 1‑й по 2‑ю линию (2 столбца) */
+grid-row: 2 / 4;    /* занимает строки со 2‑й по 3‑ю линию (2 строки) */
 `
 
+
+const History = styled.div`
+grid-column: 9 / 12; /* занимает столбцы с 1‑й по 2‑ю линию (2 столбца) */
+grid-row: 4 / 10;    /* занимает строки со 2‑й по 3‑ю линию (2 строки) */
+`
+
+
+const CapturedAreaBlack = styled.div`
+grid-column: 1 / 9; /* занимает столбцы с 1‑й по 2‑ю линию (2 столбца) */
+grid-row: 1 / 2;    /* занимает строки со 2‑й по 3‑ю линию (2 строки) */
+
+display: grid;
+grid-template-columns: repeat(16, 1fr);
+grid-template-rows: repeat(1, 1fr);
+`
+
+const CapturedAreaWhite = styled.div`
+grid-column: 1 / 9; /* занимает столбцы с 1‑й по 2‑ю линию (2 столбца) */
+grid-row: 10 / 11;    /* занимает строки со 2‑й по 3‑ю линию (2 строки) */
+
+
+display: grid;
+grid-template-columns: repeat(16, 1fr);
+grid-template-rows: repeat(1, 1fr);
+`
 
 
 const MainPage = observer(() => {
@@ -70,8 +110,13 @@ const MainPage = observer(() => {
 	return (
 		<PageContainer>
 			<Header headerHeight={headerHeight} />
-			<PanelWrapper>
-				{/* <Panel>
+			<PageWrapper>
+
+				<Grid
+					$width={height - headerHeight}
+				// $height={height - headerHeight}
+				>
+					{/* <Panel>
 					<Widget title={{
 						title: 'Взятые фигуры',
 						color: '#fff',
@@ -87,25 +132,44 @@ const MainPage = observer(() => {
 						<CapturedArea player={appStore.whiteBottom ? 'b' : 'w'} />
 					</Widget>
 				</Panel> */}
-				{/* <Panel grow={3}> */}
-				<BoardContainer
-					windowSize={{
-						width,
-						height
-					}}
-				/>
-				<RightSide>
-					<Widget title={{
-						title: 'Статус игры',
-						color: '#fff',
-						background: gameColors.secondary
-					}}
-					>
-						<GameStatus />
-					</Widget>
-				</RightSide>
-				{/* </Panel> */}
-				{/* <Panel>
+					{/* <Panel grow={3}> */}
+					<CapturedAreaBlack>
+						<CapturedArea player={appStore.whiteBottom ? 'w' : 'b'} />
+					</CapturedAreaBlack>
+					<CapturedAreaWhite>
+						<CapturedArea player={appStore.whiteBottom ? 'b' : 'w'} />
+					</CapturedAreaWhite>
+					<BoardContainer
+						windowSize={{
+							width,
+							height
+						}}
+					/>
+					<Status>
+						<Widget title={{
+							title: 'Статус игры',
+							color: '#fff',
+							background: gameColors.secondary
+						}}
+						>
+							<GameStatus />
+						</Widget>
+					</Status>
+
+					<History>
+						<Widget title={{
+							title: 'История',
+							color: '#fff',
+							background: gameColors.secondary
+						}}
+						>
+							<HistoryList />
+						</Widget>
+					</History>
+
+
+					{/* </Panel> */}
+					{/* <Panel>
 					<Widget title={{
 						title: 'Статус игры',
 						color: '#fff',
@@ -123,7 +187,8 @@ const MainPage = observer(() => {
 						<HistoryList />
 					</Widget>
 				</Panel> */}
-			</PanelWrapper>
+				</Grid>
+			</PageWrapper>
 		</PageContainer>
 	)
 	// return (

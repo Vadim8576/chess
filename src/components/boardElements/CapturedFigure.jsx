@@ -11,7 +11,7 @@ const ImgWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    flex: 0 0 25%;
+    // flex: 0 0 25%;
     // width: ${props => props.$width}px;
     // height: ${props => props.$height}px;
     width: 100%;
