@@ -3,19 +3,19 @@ import Header from './Header';
 
 
 const WidgetWrapper = styled.div`
-display: flex;
-flex-direction: column;
-flex-grow: 1;
-flex-shrink: 0;
-flex-basis: 0;
-min-width: 0;
+// display: flex;
+// flex-direction: column;
+// flex-grow: 1;
+// flex-shrink: 0;
+// flex-basis: 0;
+// min-width: 0;
 
 // width: 100%;
-// height: 20%;
+height: 100%;
 // border: 1px #666 solid;
 margin-bottom: 20px;
-margin: 0 10px;
-border-radius: 10px;
+margin: 0 0 0 10px;
+// border-radius: 10px;
 // box-shadow: 0px 5px 5px rgba(0, 0, 0, .4);
 
 `;

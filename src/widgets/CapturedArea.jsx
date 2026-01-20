@@ -2,14 +2,14 @@ import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import appStore from "../store/appStore";
 import CapturedFigure from "../components/boardElements/CapturedFigure";
-import { figure, gameColors } from "../constants/gameInitial";
+import { figure, GAME_COLORS } from "../constants/gameInitial";
 import { toJS } from 'mobx';
 
 
 // const Wrapper = styled.div`
 // width: 100%;
 // height: 100%;
-// // height: calc(100% - ${headerHeight}px);
+// // height: calc(100% - ${HEADER_HEIGHT}px);
 // border: 1px #666 solid;
 // `;
 
@@ -29,7 +29,7 @@ justify-content: center;
 align-content: center;
 // padding: 10px;
 // border-radius: 0 0 10px 10px;
-// border: 1px ${gameColors.neutral} solid;
+// border: 1px ${GAME_COLORS.neutral} solid;
 
 `;
 

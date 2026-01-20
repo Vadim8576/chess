@@ -3,17 +3,17 @@ import { getCellPosition } from '../utils/getCellPosition'
 import { getSquare } from '../utils/getSquare'
 import { squareToIndices } from '../utils/squareToIndices'
 
-export function useFigureDrag(
-  figure,
+
+let mouseDownCount = 0
+export const useFigureDrag = (
   appStore,
   setHighlightedCell,
   setPossibleMoves,
-  setImgStyle,
   getGameStatus
-) {
+) => {
   const [isDragging, setIsDragging] = useState(false)
   const [grabCell, setGrabCell] = useState({ col: 0, row: 0 })
-  const [position, setPosition] = useState({ x: 0, y: 0 })
+  const [position, setPosition] = useState(null)
   const [moves, setmoves] = useState([])
   const imageRef = useRef(null)
 
@@ -23,67 +23,65 @@ export function useFigureDrag(
     if (e.button !== 0) return // Только левая кнопка мыши
     if (appStore.chess.isGameOver()) return
 
-    // const boardRect = document.getElementById('board').getBoundingClientRect()
     const startX = appStore.board.x
     const startY = appStore.board.y
-
     const x = e.clientX - startX
     const y = e.clientY - startY
     const [col, row] = getCellPosition(x, y, appStore)
-
-
-
     const grabFigure = appStore.chess.board()[row][col]
+    if (!grabFigure) return
 
-    // console.log(x, y, appStore.board.cellSize)
+    // console.log(grabFigure)
     console.log(col, row)
-    // console.log(figure)
 
-    if (figure.square !== grabFigure.square) {
-      console.log('Взял одну фигуру, а по расчетам другая')
-      return
-    }
-
+    // if (figure.square !== grabFigure.square) {
+    //   console.log('Взял одну фигуру, а по расчетам другая')
+    //   return
+    // }
 
     if (grabFigure.color !== appStore.chess.turn()) {
       console.log('Сейчас ход другого игрока!')
       return
     }
 
-    // moves - массив допустимых ходов для данной фигуры grabFigure. verbose: true - возвращает объект
+    // movesTemp - массив допустимых ходов для данной фигуры grabFigure. verbose: true - возвращает объект
     const movesTemp = appStore.chess.moves({ square: grabFigure.square, verbose: true }).map(m => m.to)
     if (movesTemp.length <= 0) {
       console.log('Нет доступного хода для этой фигуры!')
       return
     }
     const square = getSquare(appStore.whiteBottom, col, row)
-
+    console.log(square)
     const moves = [...movesTemp, square] // Добавляем клетку, с которой взяли фигуру, для ее подсветки
 
     console.log('Взята: ', grabFigure, ' Доступные ходы: ', moves)
 
 
+    // Массив с доступными ходами в виде индексов [cell: {0, 5}, id, cell: {...}, id...] -  координаты клетки в массиве доски
+    const moveIndices = moves.map(square => ({ cell: squareToIndices(square), id: square }))
 
-    // Массив с доступными ходами в виде индексов [{0, 5},{...}] -  координаты клетки в массиве доски
-    const moveIndices = moves.map(square => squareToIndices(square))
-
-    // console.log(moveIndices)
+    console.log(moveIndices)
 
     setmoves(moves)
     setIsDragging(true)
     setGrabCell({ col, row, square: grabFigure.square })
     setHighlightedCell({
-      col,
-      row,
+      cell: {
+        col,
+        row,
+      },
       visible: true,
       color: 'green'
     })
+
     setPossibleMoves({
       moves: [...moveIndices],
       visible: true,
       color: 'lightgreen',
 
     })
+
+    mouseDownCount++
     // setImgStyle({ zIndex: 101, transition: 'none' })
   }
 
@@ -104,7 +102,9 @@ export function useFigureDrag(
 
     // console.log('Фигура на:', square)
 
-    setPosition({ x: xc, y: yc })
+    // setPosition({ x: xc, y: yc })
+
+
 
     // Если фигура перемещается в пределах доски
     if (col >= 0 && col <= 7 && row >= 0 && row <= 7) {
@@ -114,28 +114,37 @@ export function useFigureDrag(
 
       // Подсвечиваем красным, если ход сюда не доступен
       if (!moves.includes(square) && square !== grabCell.square) {
-        setHighlightedCell(state => ({
-          ...state,
-          col,
-          row,
-          color: 'red'
-        }))
+        setHighlightedCell(prev => {
+          if (prev.cell.col === col && prev.cell.row === row) return prev; // не меняем состояние → нет ререндера
+          return {
+            ...prev,
+            cell: { col, row },
+            color: 'red'
+          }
+        })
         return
       }
 
-      setHighlightedCell(state => ({
-        ...state,
-        col,
-        row,
-        color: 'green'
-      }))
+      setHighlightedCell(prev => {
+        if (prev.cell.col === col && prev.cell.row === row) return prev; // не меняем состояние → нет ререндера
+        return {
+          ...prev,
+          cell: { col, row },
+          color: 'green'
+        }
+      })
     } else {
       // если фигура вне доски, подсвечиваем первоначальную клетку
-      setHighlightedCell({
-        col: grabCell.col,
-        row: grabCell.row,
-        color: 'green',
-        visible: true
+      setHighlightedCell(prev => {
+        if (prev.cell.col === grabCell.col && prev.cell.row === grabCell.col) return prev
+        return {
+          cell: {
+            col: grabCell.col,
+            row: grabCell.col,
+          },
+          color: 'green',
+          visible: true
+        }
       })
     }
   }
@@ -143,12 +152,26 @@ export function useFigureDrag(
 
 
   const handleMouseUp = (e) => {
+
+
+    console.log('mouseCount = ', mouseDownCount)
+
     setIsDragging(false)
     // setImgStyle({ zIndex: 100, transition: '.3s' })
+
+
     setPossibleMoves(state => ({
       ...state,
       visible: false
     }))
+
+    // if (mouseDownCount >= 2) {
+    //   setPossibleMoves(state => ({
+    //     ...state,
+    //     visible: false
+    //   }))
+    //   mouseDownCount = 0
+    // }
 
     const startX = appStore.board.x
     const startY = appStore.board.y
@@ -176,6 +199,14 @@ export function useFigureDrag(
       }))
       return
     }
+
+
+    if (col === grabCell.col && row === grabCell.row) {
+      console.log('Поставил туда же, где взял!')
+    }
+
+
+
 
     // Получаем адрес текущей клетки, например, A7
     const square = getSquare(appStore.whiteBottom, col, row)
@@ -253,7 +284,6 @@ export function useFigureDrag(
   return {
     isDragging,
     position,
-    imageRef,
     setPosition,
     handleMouseDown,
     handleMouseMove,

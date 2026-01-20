@@ -11,86 +11,66 @@ import HistoryList from "../../widgets/HistoryList";
 import GameStatus from "../../widgets/GameStatus";
 import Widget from "../../widgets/Widget";
 import CapturedArea from "../../widgets/CapturedArea";
-import { gameColors } from "../../constants/gameInitial";
+import { FOOTER_HEIGHT, GAME_COLORS, HEADER_HEIGHT } from "../../constants/gameInitial";
+import Footer from "./Footer";
 
-const headerHeight = 50
+
 
 const PageContainer = styled.div`
 width: 100%;
 height: 100%;
-min-height: 500px;
-background-color: ${gameColors.background};
+background-color: ${GAME_COLORS.background};
 `;
-
 
 const PageWrapper = styled.div`
 display: flex;
 justify-content: center;
 align-items: center;
 width: 100%;
-height: calc(100% - ${headerHeight}px	);
-
+height: calc(100% - ${HEADER_HEIGHT}px - ${FOOTER_HEIGHT}px);
 `;
-
 
 const Grid = styled.div`
-display: flow-root;
-padding-top: 1px;
+
+display: grid;
+grid-template-columns: repeat(12, 1fr);
+grid-template-rows: repeat(12, 1fr);
 width: ${props => props.$width}px;
 height: ${props => props.$width}px;
-// max-width: 400px;
-// max-height: 400px;
-// height: 500px;
-margin: 0;
-display: grid;
-grid-template-columns: repeat(11, 1fr);
-grid-template-rows: repeat(11, 1fr);
-border: 1px #666 solid;
+// width: 450px;
+// height: 450px;
+// min-width: 450px;
+// min-height: 450px;
 aspect-ratio: 1 / 1;
-`;
-
-
-// const PanelWrapper = styled.div`
-// display: flex;
-// max-width: 1437px;
-// padding: 0 40px;
-// min-height: 100px;
-// margin: 0 auto;
-// flex: 0 0 70%;
-// max-width: 70%;
-// min-width: 768px;
-// `;
+`
 
 const Status = styled.div`
-grid-column: 9 / 12; /* занимает столбцы с 1‑й по 2‑ю линию (2 столбца) */
-grid-row: 2 / 4;    /* занимает строки со 2‑й по 3‑ю линию (2 строки) */
+grid-column: 9 / 13;
+grid-row: 3 / 5;
 `
-
 
 const History = styled.div`
-grid-column: 9 / 12; /* занимает столбцы с 1‑й по 2‑ю линию (2 столбца) */
-grid-row: 4 / 10;    /* занимает строки со 2‑й по 3‑ю линию (2 строки) */
+grid-column: 9 / 13;
+grid-row: 6 / 11;
 `
 
-
 const CapturedAreaBlack = styled.div`
-grid-column: 1 / 9; /* занимает столбцы с 1‑й по 2‑ю линию (2 столбца) */
-grid-row: 1 / 2;    /* занимает строки со 2‑й по 3‑ю линию (2 строки) */
-
 display: grid;
 grid-template-columns: repeat(16, 1fr);
 grid-template-rows: repeat(1, 1fr);
+grid-column: 1 / 9;
+grid-row: 2 / 3;
 `
 
 const CapturedAreaWhite = styled.div`
-grid-column: 1 / 9; /* занимает столбцы с 1‑й по 2‑ю линию (2 столбца) */
-grid-row: 10 / 11;    /* занимает строки со 2‑й по 3‑ю линию (2 строки) */
-
-
 display: grid;
 grid-template-columns: repeat(16, 1fr);
 grid-template-rows: repeat(1, 1fr);
+grid-column: 1 / 9;
+grid-row: 11 / 12;
 `
+
+
 
 
 const MainPage = observer(() => {
@@ -109,30 +89,10 @@ const MainPage = observer(() => {
 
 	return (
 		<PageContainer>
-			<Header headerHeight={headerHeight} />
+			<Header />
 			<PageWrapper>
 
-				<Grid
-					$width={height - headerHeight}
-				// $height={height - headerHeight}
-				>
-					{/* <Panel>
-					<Widget title={{
-						title: 'Взятые фигуры',
-						color: '#fff',
-						background: gameColors.secondary
-					}}>
-						<CapturedArea player={appStore.whiteBottom ? 'w' : 'b'} />
-					</Widget>
-					<Widget title={{
-						title: 'Взятые фигуры',
-						color: '#fff',
-						background: gameColors.secondary
-					}}>
-						<CapturedArea player={appStore.whiteBottom ? 'b' : 'w'} />
-					</Widget>
-				</Panel> */}
-					{/* <Panel grow={3}> */}
+				<Grid $width={height > 500 ? (height - HEADER_HEIGHT - FOOTER_HEIGHT) : 500}>
 					<CapturedAreaBlack>
 						<CapturedArea player={appStore.whiteBottom ? 'w' : 'b'} />
 					</CapturedAreaBlack>
@@ -149,7 +109,7 @@ const MainPage = observer(() => {
 						<Widget title={{
 							title: 'Статус игры',
 							color: '#fff',
-							background: gameColors.secondary
+							background: GAME_COLORS.secondary
 						}}
 						>
 							<GameStatus />
@@ -160,53 +120,36 @@ const MainPage = observer(() => {
 						<Widget title={{
 							title: 'История',
 							color: '#fff',
-							background: gameColors.secondary
+							background: GAME_COLORS.secondary
 						}}
 						>
 							<HistoryList />
 						</Widget>
 					</History>
-
-
-					{/* </Panel> */}
-					{/* <Panel>
-					<Widget title={{
-						title: 'Статус игры',
-						color: '#fff',
-						background: gameColors.secondary
-					}}
-					>
-						<GameStatus />
-					</Widget>
-					<Widget title={{
-						title: 'История',
-						color: '#fff',
-						background: gameColors.secondary
-					}}
-					>
-						<HistoryList />
-					</Widget>
-				</Panel> */}
 				</Grid>
 			</PageWrapper>
+			<Footer />
 		</PageContainer>
 	)
+
+
+
 	// return (
 	// 	<PageContainer>
-	// 		<Header headerHeight={headerHeight} />
+	// 		<Header HEADER_HEIGHT={HEADER_HEIGHT} />
 	// 		<PanelWrapper>
 	// 			<Panel>
 	// 				<Widget title={{
 	// 					title: 'Взятые фигуры',
 	// 					color: '#fff',
-	// 					background: gameColors.secondary
+	// 					background: GAME_COLORS.secondary
 	// 				}}>
 	// 					<CapturedArea player={appStore.whiteBottom ? 'w' : 'b'} />
 	// 				</Widget>
 	// 				<Widget title={{
 	// 					title: 'Взятые фигуры',
 	// 					color: '#fff',
-	// 					background: gameColors.secondary
+	// 					background: GAME_COLORS.secondary
 	// 				}}>
 	// 					<CapturedArea player={appStore.whiteBottom ? 'b' : 'w'} />
 	// 				</Widget>
@@ -222,7 +165,7 @@ const MainPage = observer(() => {
 	// 				<Widget title={{
 	// 					title: 'Статус игры',
 	// 					color: '#fff',
-	// 					background: gameColors.secondary
+	// 					background: GAME_COLORS.secondary
 	// 				}}
 	// 				>
 	// 					<GameStatus />
@@ -230,7 +173,7 @@ const MainPage = observer(() => {
 	// 				<Widget title={{
 	// 					title: 'История',
 	// 					color: '#fff',
-	// 					background: gameColors.secondary
+	// 					background: GAME_COLORS.secondary
 	// 				}}
 	// 				>
 	// 					<HistoryList />

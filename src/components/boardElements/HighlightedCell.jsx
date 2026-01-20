@@ -31,19 +31,22 @@ transform: rotate(${props => props.$type === 'possibleMoves' ? '45' : ''}deg);
 
 
 const HighlightedCell = observer(({ highlightedCell, type }) => {
+	
+	if (!highlightedCell.visible) return null
 
-	// const color = highlightedCell.color ? highlightedCell.color : '#999'
-	const colTemp = highlightedCell.col
-	const rowTemp = highlightedCell.row
+	const colTemp = highlightedCell.cell.col
+	const rowTemp = highlightedCell.cell.row
 	const col = appStore.whiteBottom ? colTemp : (7 - colTemp)
 	const row = appStore.whiteBottom ? rowTemp : (7 - rowTemp)
+	const top = row * appStore.board.cellSize + 1
+	const left = col * appStore.board.cellSize + 1
 
-	if (!highlightedCell.visible) return
+
 
 	return (
 		<CellWrapper
-			$top={row * appStore.board.cellSize + 1}
-			$left={col * appStore.board.cellSize + 1}
+			$top={top}
+			$left={left}
 			$cellSize={appStore.board.cellSize}
 		>
 			<Cell

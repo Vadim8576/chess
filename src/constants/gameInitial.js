@@ -1,3 +1,19 @@
+export const HEADER_HEIGHT = 50
+export const FOOTER_HEIGHT = 0
+export const GRID_MIN_HEIGHT = 500 // body {min-height: 500px;}
+
+export const GAME_COLORS = {
+  primary: '#283618',
+  secondary: '#606c38',
+  neutral: '#C2C5AA', // нейтральные оттенки (текст, границы, фоны)
+  // surface: '#606c38', //цвета поверхностей (карточки, панели)
+  background: '#fefae0'
+}
+
+
+
+
+
 export const ranks = [8, 7, 6, 5, 4, 3, 2, 1]
 export const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
@@ -17,17 +33,6 @@ export const figure = {
 }
 
 
-export const gameColors = {
-  primary: '#283618',
-  secondary: '#606c38',
-  neutral: '#C2C5AA', // нейтральные оттенки (текст, границы, фоны)
-  // surface: '#606c38', //цвета поверхностей (карточки, панели)
-  background: '#fefae0'
-}
-
-
-
-
 
 /*
 export const boardMap = [
@@ -39,6 +44,6 @@ export const boardMap = [
   ['  ', '  ', '  ', '  ', '  ', '  ', '  ', '  '],
   ['pw', 'pw', 'pw', 'pw', 'pw', 'pw', 'pw', 'pw'],
   ['rw', 'nw', 'bw', 'qw', 'kw', 'bw', 'nw', 'rw']
-]
+  ]
 
 */

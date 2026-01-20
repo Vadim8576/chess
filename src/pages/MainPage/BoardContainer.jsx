@@ -5,21 +5,14 @@ import { observer } from "mobx-react-lite";
 import appStore from "../../store/appStore";
 import Widget from "../../widgets/Widget";
 import GameStatus from "../../widgets/GameStatus";
-import { gameColors } from "../../constants/gameInitial";
+import { FOOTER_HEIGHT, GAME_COLORS, HEADER_HEIGHT } from "../../constants/gameInitial";
 
 const Container = styled.div`
-	// display: flex;
-	// justify-content: center;
-	// align-items: flex-start;
-	// width: 100%;
-	// height: 100%;
-	// flex: 0 0 60%;
-	// max-width: 60%;
 	
 	aspect-ratio: 1 / 1;
 
-	grid-column: 1 / 8; /* занимает столбцы с 1‑й по 2‑ю линию (2 столбца) */
-  grid-row: 2 / 10;    /* занимает строки со 2‑й по 3‑ю линию (2 строки) */
+	grid-column: 1 / 9; 
+  grid-row: 3 / 11;
 `;
 
 
@@ -39,8 +32,9 @@ const BoardContainer = observer(({ windowSize }) => {
 
 		console.log(boardContainerRect.x, boardContainerRect.y)
 
-
-		let cellSize = (windowSize.height - 50) / 11
+		// 50 - высота Header
+		 // 12 - размер Grid
+		let cellSize = (windowSize.height > 500 ? (windowSize.height - HEADER_HEIGHT - FOOTER_HEIGHT) : 500) / 12
 
 		// if(windowSize.height < windowSize.width) {
 		// 	cellSize = windowSize.height / 12

@@ -1,21 +1,21 @@
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import appStore from "../store/appStore";
-import { gameColors } from "../constants/gameInitial";
+import { GAME_COLORS } from "../constants/gameInitial";
 
 
-const headerHeight = 30
+const HEADER_HEIGHT = 30
 
 const History = styled.div`
-height: 100%;
+height: calc(100% - 35px);
 overflow-y: auto;
 padding: 10px;
-border-radius: 0 0 10px 10px;
-border: 1px ${gameColors.neutral} solid;
+// border-radius: 0 0 10px 10px;
+border: 1px ${GAME_COLORS.neutral} solid;
 `;
 
 const Text = styled.p`
-font-size: 1rem;
+font-size: .8rem;
 `
 
 

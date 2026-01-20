@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 import Header from "./Header";
 import appStore from "../store/appStore";
-import { gameColors } from "../constants/gameInitial";
+import { GAME_COLORS } from "../constants/gameInitial";
 
 
 // const Wrapper = styled.div`
@@ -19,15 +19,15 @@ justify-content: center;
 align-items: center;
 // height: 60px;
 // flex-grow: 1;
-// height: 100%;
+height: calc(100% - 35px);
 // overflow-y: auto;
-color: ${gameColors.neutral};
+color: #000;
 font-size: 14px;
 font-weight: bold;
 // background-color: #414833;
 padding: 10px;
-border-radius: 0 0 10px 10px;
-border: 1px ${gameColors.neutral} solid;
+// border-radius: 0 0 10px 10px;
+border: 1px ${GAME_COLORS.neutral} solid;
 `;
 
 const GameStatus = observer(() => {
