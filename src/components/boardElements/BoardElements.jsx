@@ -34,15 +34,16 @@ const BoardElements = observer(() => {
 
   const [possibleMoves, setPossibleMoves] = useState([])
   const [figures, setFigures] = useState([])
+  const [position, setPosition] = useState({x: 0, y: 0})
+
 
 
   const getGameStatus = useGameStatus(appStore)
 
 
+
   const {
     isDragging,
-    position,
-    setPosition,
     handleMouseDown,
     handleMouseMove,
     handleMouseUp
@@ -50,7 +51,8 @@ const BoardElements = observer(() => {
     appStore,
     setHighlightedCell,
     setPossibleMoves,
-    getGameStatus
+    getGameStatus,
+    setPosition
   )
 
   // const board = appStore.chess.board()
@@ -113,6 +115,9 @@ const BoardElements = observer(() => {
 
 
 
+
+
+
   return (
     <ElementsWrapper onMouseDown={handleMouseDown}>
       {possibleMoves.moves && possibleMoves.moves.map(cell => (
@@ -140,7 +145,8 @@ const BoardElements = observer(() => {
           src={figure.src}
           top={figure.top}
           left={figure.left}
-          isDragging={isDragging}
+          figureId={figure.id}
+          position={position}
         />
       ))}
     </ElementsWrapper>

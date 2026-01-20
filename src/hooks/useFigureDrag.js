@@ -9,11 +9,11 @@ export const useFigureDrag = (
   appStore,
   setHighlightedCell,
   setPossibleMoves,
-  getGameStatus
+  getGameStatus,
+  setPosition
 ) => {
   const [isDragging, setIsDragging] = useState(false)
   const [grabCell, setGrabCell] = useState({ col: 0, row: 0 })
-  const [position, setPosition] = useState(null)
   const [moves, setmoves] = useState([])
   const imageRef = useRef(null)
 
@@ -102,7 +102,7 @@ export const useFigureDrag = (
 
     // console.log('Фигура на:', square)
 
-    // setPosition({ x: xc, y: yc })
+    setPosition({ x: xc, y: yc })
 
 
 
@@ -283,8 +283,6 @@ export const useFigureDrag = (
 
   return {
     isDragging,
-    position,
-    setPosition,
     handleMouseDown,
     handleMouseMove,
     handleMouseUp

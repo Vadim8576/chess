@@ -21,25 +21,48 @@ const ImgWrapper = styled.div`
   touch-action: none;
   z-index: ${props => props.$zIndex};
   transition: ${props => props.$transition};
+  transform: ${props => props.translate};
 `;
 
+
 const Img = styled.img`
-    width: 75%;
-    height: 75%;
-    pointer-events: none;
+  width: 75%;
+  height: 75%;
+  pointer-events: none;
+	// cursor: ${props => props.$cursor};
+	user-select: none;
+  touch-action: none;
 `;
 
 const Figure = observer(({
 	src,
 	top,
 	left,
-	isDragging
+	figureId,
+	position
 }) => {
+
+	const [activeFigureId, setActiveFigureId] = useState(null);
+	const [currentPosition, setCurrentPosition] = useState({ x: 0, y: 0 })
+
 	const [imgStyle, setImgStyle] = useState({ zIndex: 100, transition: 'none' })
 
 	const { isLoading, isError, image } = useLoadImage(src)
-	
+
 	const cellSize = appStore.board.cellSize
+
+
+	useEffect(() => {
+		const x = left - position.x;
+		const y = top - position.y;
+		setCurrentPosition(x, y)
+		console.log(position)
+	}, [position])
+
+
+	const handleFigureMouseDown = (figureId) => {
+		setActiveFigureId(figureId)
+	}
 
 
 	if (isLoading) {
@@ -52,18 +75,35 @@ const Figure = observer(({
 
 	if (!src) return
 
+
+
 	return (
 		<ImgWrapper
-			draggable={false}
-			$cursor={isDragging ? 'grabbing' : 'grab'}
+			$cursor={activeFigureId === figureId ? 'grabbing' : 'grab'}
 			$width={cellSize}
 			$height={cellSize}
 			$zIndex={imgStyle.zIndex}
 			$transition={imgStyle.transition}
 			$top={top}
 			$left={left}
+			onMouseDown={() => handleFigureMouseDown(figureId)}
+			onMouseUp={() => setActiveFigureId(null)}
+			onMouseLeave={() => setActiveFigureId(null)}
+
+			// style={{
+			// 	left: `${currentPosition.x}px`,
+			// 	top: `${currentPosition.y}px`
+			// }}
+
+
+	
+			translate={`translate(${currentPosition.x}, ${currentPosition.y})`}
+
+
 		>
-			<Img src={image.src} />
+			<Img
+				src={image.src}
+			/>
 		</ImgWrapper>
 	)
 })
