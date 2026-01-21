@@ -52,12 +52,12 @@ const Figure = observer(({
 	const cellSize = appStore.board.cellSize
 
 
-	useEffect(() => {
-		const x = left - position.x;
-		const y = top - position.y;
-		setCurrentPosition(x, y)
-		console.log(position)
-	}, [position])
+	// useEffect(() => {
+	// 	const x = left - position.x;
+	// 	const y = top - position.y;
+	// 	setCurrentPosition(x, y)
+	// 	console.log(position)
+	// }, [position])
 
 
 	const handleFigureMouseDown = (figureId) => {
@@ -84,22 +84,18 @@ const Figure = observer(({
 			$height={cellSize}
 			$zIndex={imgStyle.zIndex}
 			$transition={imgStyle.transition}
-			$top={top}
-			$left={left}
+			$top={(activeFigureId === figureId && position) ? position.y : top}
+			$left={(activeFigureId === figureId && position) ? position.x : left}
 			onMouseDown={() => handleFigureMouseDown(figureId)}
 			onMouseUp={() => setActiveFigureId(null)}
 			onMouseLeave={() => setActiveFigureId(null)}
 
 			// style={{
-			// 	left: `${currentPosition.x}px`,
-			// 	top: `${currentPosition.y}px`
+			// 	left: (activeFigureId === figureId && position) ? `${position.x}px`,
+			// 	top: `${position.y}px`
 			// }}
-
-
 	
-			translate={`translate(${currentPosition.x}, ${currentPosition.y})`}
-
-
+			// translate={`translate(${currentPosition.x}, ${currentPosition.y})`}
 		>
 			<Img
 				src={image.src}

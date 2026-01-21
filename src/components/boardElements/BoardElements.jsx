@@ -20,9 +20,6 @@ const ElementsWrapper = styled.div`
 
 const BoardElements = observer(() => {
 
-
-
-
   console.log('BoardElements')
 
   const [highlightedCell, setHighlightedCell] = useState({
@@ -34,7 +31,7 @@ const BoardElements = observer(() => {
 
   const [possibleMoves, setPossibleMoves] = useState([])
   const [figures, setFigures] = useState([])
-  const [position, setPosition] = useState({x: 0, y: 0})
+  const [position, setPosition] = useState(null)
 
 
 
@@ -63,7 +60,7 @@ const BoardElements = observer(() => {
     ranks.map((rank, y) => {
       return files.map((file, x) => {
 
-        const figure = board[y][x]
+        // const figure = board[y][x]
         const src = getSrc(appStore.whiteBottom, board, x, y)
         if (!src) return
         const state = {
@@ -72,6 +69,8 @@ const BoardElements = observer(() => {
           top: appStore.board.cellSize * y,
           left: appStore.board.cellSize * x
         }
+
+        // setPosition({x: state.left, y: state.top})
 
         // console.log(state)
         setFigures(prev => [...prev, state])
