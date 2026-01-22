@@ -21,7 +21,7 @@ const ImgWrapper = styled.div`
   touch-action: none;
   z-index: ${props => props.$zIndex};
   transition: ${props => props.$transition};
-  transform: ${props => props.translate};
+  // transform: ${props => props.translate};
 `;
 
 
@@ -38,7 +38,7 @@ const Figure = observer(({
 	src,
 	top,
 	left,
-	figureId,
+	id,
 	position
 }) => {
 
@@ -60,9 +60,7 @@ const Figure = observer(({
 	// }, [position])
 
 
-	const handleFigureMouseDown = (figureId) => {
-		setActiveFigureId(figureId)
-	}
+
 
 
 	if (isLoading) {
@@ -75,27 +73,31 @@ const Figure = observer(({
 
 	if (!src) return
 
+	const handleFigureMouseDown = (id) => {
+		setActiveFigureId(id)
+		console.log(id)
+	}
 
 
 	return (
 		<ImgWrapper
-			$cursor={activeFigureId === figureId ? 'grabbing' : 'grab'}
+			$cursor={activeFigureId === id ? 'grabbing' : 'grab'}
 			$width={cellSize}
 			$height={cellSize}
 			$zIndex={imgStyle.zIndex}
 			$transition={imgStyle.transition}
-			$top={(activeFigureId === figureId && position) ? position.y : top}
-			$left={(activeFigureId === figureId && position) ? position.x : left}
-			onMouseDown={() => handleFigureMouseDown(figureId)}
+			$top={(activeFigureId === id && position) ? position.y : top}
+			$left={(activeFigureId === id && position) ? position.x : left}
+			onMouseDown={() => handleFigureMouseDown(id)}
 			onMouseUp={() => setActiveFigureId(null)}
-			onMouseLeave={() => setActiveFigureId(null)}
+			// onMouseLeave={() => setActiveFigureId(null)}
 
-			// style={{
-			// 	left: (activeFigureId === figureId && position) ? `${position.x}px`,
-			// 	top: `${position.y}px`
-			// }}
-	
-			// translate={`translate(${currentPosition.x}, ${currentPosition.y})`}
+		// style={{
+		// 	left: (activeFigureId === figureId && position) ? `${position.x}px`,
+		// 	top: `${position.y}px`
+		// }}
+
+		// translate={`translate(${currentPosition.x}, ${currentPosition.y})`}
 		>
 			<Img
 				src={image.src}

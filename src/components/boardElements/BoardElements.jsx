@@ -117,6 +117,7 @@ const BoardElements = observer(() => {
 
 
 
+
   return (
     <ElementsWrapper onMouseDown={handleMouseDown}>
       {possibleMoves.moves && possibleMoves.moves.map(cell => (
@@ -144,7 +145,7 @@ const BoardElements = observer(() => {
           src={figure.src}
           top={figure.top}
           left={figure.left}
-          figureId={figure.id}
+          id={figure.id}
           position={position}
         />
       ))}

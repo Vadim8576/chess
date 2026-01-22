@@ -154,7 +154,7 @@ export const useFigureDrag = (
   const handleMouseUp = (e) => {
 
 
-    console.log('mouseCount = ', mouseDownCount)
+    // console.log('mouseCount = ', mouseDownCount)
 
     setIsDragging(false)
     // setImgStyle({ zIndex: 100, transition: '.3s' })
@@ -239,7 +239,9 @@ export const useFigureDrag = (
     const newX = appStore.board.cellSize * colTemp + startX
     const newY = appStore.board.cellSize * rowTemp + startY
 
-    setPosition({ x: newX, y: newY })
+    setPosition(null)
+    // setPosition({ x: newX, y: newY })
+
     setHighlightedCell((state) => ({
       ...state,
       visible: false
