@@ -4,32 +4,30 @@ import styled from 'styled-components'
 import { observer } from "mobx-react-lite";
 import { toJS } from 'mobx';
 import appStore from "../../store/appStore";
-import { useFigureDrag } from "../../hooks/useFigureDrag";
+import { getCellPosition } from "../../utils/getCellPosition";
+import { getSquare } from "../../utils/getSquare";
 
 
-const ImgWrapper = styled.div`
+const ImgWrapper = styled.div.attrs(props => ({
+	style: {
+		top: `${props.$top}px`,
+		left: `${props.$left}px`,
+		width: `${props.$width}px`,
+		height: `${props.$height}px`,
+		cursor: props.$cursor,
+		zIndex: props.$zIndex,
+	},
+}))`
   position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${props => props.$width}px;
-  height: ${props => props.$height}px;
-  top: ${props => props.$top}px;
-  left: ${props => props.$left}px;
-  cursor: ${props => props.$cursor};
-  user-select: none;
-  touch-action: none;
-  z-index: ${props => props.$zIndex};
-  transition: ${props => props.$transition};
-  // transform: ${props => props.translate};
 `;
-
 
 const Img = styled.img`
   width: 75%;
   height: 75%;
   pointer-events: none;
-	// cursor: ${props => props.$cursor};
 	user-select: none;
   touch-action: none;
 `;
@@ -39,28 +37,14 @@ const Figure = observer(({
 	top,
 	left,
 	id,
-	position
+	setActiveFigure,
+	activeFigure,
+	imgStyle
 }) => {
 
-	const [activeFigureId, setActiveFigureId] = useState(null);
-	const [currentPosition, setCurrentPosition] = useState({ x: 0, y: 0 })
-
-	const [imgStyle, setImgStyle] = useState({ zIndex: 100, transition: 'none' })
-
+	
 	const { isLoading, isError, image } = useLoadImage(src)
-
 	const cellSize = appStore.board.cellSize
-
-
-	// useEffect(() => {
-	// 	const x = left - position.x;
-	// 	const y = top - position.y;
-	// 	setCurrentPosition(x, y)
-	// 	console.log(position)
-	// }, [position])
-
-
-
 
 
 	if (isLoading) {
@@ -74,30 +58,25 @@ const Figure = observer(({
 	if (!src) return
 
 	const handleFigureMouseDown = (id) => {
-		setActiveFigureId(id)
-		console.log(id)
+		const [col, row] = getCellPosition(left, top, appStore)
+		const square = getSquare(appStore.whiteBottom, col, row)
+		setActiveFigure({id, square})
+
+		console.log(id, square)
 	}
 
 
 	return (
 		<ImgWrapper
-			$cursor={activeFigureId === id ? 'grabbing' : 'grab'}
+			$cursor={activeFigure === id ? 'grabbing' : 'grab'}
 			$width={cellSize}
 			$height={cellSize}
-			$zIndex={imgStyle.zIndex}
-			$transition={imgStyle.transition}
-			$top={(activeFigureId === id && position) ? position.y : top}
-			$left={(activeFigureId === id && position) ? position.x : left}
+			$zIndex={activeFigure === id ? imgStyle.zIndex : 100}
+			// $transition={imgStyle.transition}
+			$top={top}
+			$left={left}
 			onMouseDown={() => handleFigureMouseDown(id)}
-			onMouseUp={() => setActiveFigureId(null)}
-			// onMouseLeave={() => setActiveFigureId(null)}
-
-		// style={{
-		// 	left: (activeFigureId === figureId && position) ? `${position.x}px`,
-		// 	top: `${position.y}px`
-		// }}
-
-		// translate={`translate(${currentPosition.x}, ${currentPosition.y})`}
+			// onMouseUp={() => setActiveFigure({square: null, id: null})}
 		>
 			<Img
 				src={image.src}

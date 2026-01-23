@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite';
 import BoardCanvas from './BoardCanvas';
 import appStore from '../../store/appStore';
 import BorderCanvas from './BorderCanvas';
+import Board from './Board';
 
 
 
@@ -23,8 +24,8 @@ border: none;
 
 const BoardWrapper = styled.div`
   position: relative;
-  width: ${props => props.$width}px;
-  height: ${props => props.$height}px;
+  width: ${props => props.$size}px;
+  height: ${props => props.$size}px;
   
 `;
 
@@ -39,18 +40,11 @@ const ChessBoard = observer(() => {
 
   return (
     <BoardWrapper
-      $width={appStore.board.cellSize * 8}
-      $height={appStore.board.cellSize * 8}
+      $size={appStore.board.cellSize * 8}
     >
-      {/* <BorderCanvas /> */}
-      <BoardCanvas />
+      {/* <BoardCanvas /> */}
+      <Board />
       <BoardElements />
-
-
-      {/* <Cell
-        $top={boardRect.y}
-        $left={boardRect.x}
-      /> */}
     </BoardWrapper>
   )
 })

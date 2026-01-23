@@ -8,6 +8,7 @@ import { getSrc } from "../../utils/getSrc";
 import appStore from "../../store/appStore";
 import useGameStatus from "../../hooks/useGameStatus";
 import { useFigureDrag } from "../../hooks/useFigureDrag";
+import PossibleMove from "./PossibleMove";
 
 
 const ElementsWrapper = styled.div`
@@ -30,13 +31,15 @@ const BoardElements = observer(() => {
   })
 
   const [possibleMoves, setPossibleMoves] = useState([])
+  const [lastMoves, setLastMoves] = useState([])
   const [figures, setFigures] = useState([])
-  const [position, setPosition] = useState(null)
+  const [position, setPosition] = useState([])
+  const [imgStyle, setImgStyle] = useState({ zIndex: 100, transition: 'none' })
+  const [activeFigure, setActiveFigure] = useState({square: null, id: null})
 
 
 
   const getGameStatus = useGameStatus(appStore)
-
 
 
   const {
@@ -49,18 +52,25 @@ const BoardElements = observer(() => {
     setHighlightedCell,
     setPossibleMoves,
     getGameStatus,
-    setPosition
+    setPosition,
+    setImgStyle,
+    activeFigure,
+    setFigures,
+    setLastMoves
   )
 
   // const board = appStore.chess.board()
 
   useEffect(() => {
-    setFigures([])
-    const board = appStore.chess.board()
-    ranks.map((rank, y) => {
-      return files.map((file, x) => {
 
-        // const figure = board[y][x]
+    console.log('BoardElements useEffect!!!!!!!!!!!!!!!!!!!!')
+    console.log(position && position.x, position && position.y)
+
+    setFigures([])
+    // setPosition([])
+    const board = appStore.chess.board()
+    ranks.forEach((rank, y) => {
+      return files.forEach((file, x) => {
         const src = getSrc(appStore.whiteBottom, board, x, y)
         if (!src) return
         const state = {
@@ -70,27 +80,21 @@ const BoardElements = observer(() => {
           left: appStore.board.cellSize * x
         }
 
-        // setPosition({x: state.left, y: state.top})
-
-        // console.log(state)
         setFigures(prev => [...prev, state])
+
+        // setPosition({})
+        
       })
     })
   }, [appStore.board.cellSize, appStore.whiteBottom, appStore.status])
-
-
-
-  // useEffect(() => {
-  //   if (!position) return
-  //   // setFigures(state => ([...state, top: position.y, left: position.x]))
-  // }, [position])
+  // }, [appStore.board.cellSize, appStore.whiteBottom, appStore.status])
 
 
 
 
-  // useEffect(() => {
-  //   console.log(figures)
-  // }, [figures])
+  useEffect(() => {
+    console.log('activeFigure = ', activeFigure)
+  }, [activeFigure])
 
 
 
@@ -113,14 +117,18 @@ const BoardElements = observer(() => {
   }, [appStore.whiteBottom])
 
 
-
-
-
-
-
   return (
     <ElementsWrapper onMouseDown={handleMouseDown}>
-      {possibleMoves.moves && possibleMoves.moves.map(cell => (
+      {possibleMoves.moves && possibleMoves.moves.map(possibleMove => (
+        <PossibleMove
+          key={possibleMove.id}
+          possibleMove={{
+            ...possibleMove,
+            visible: possibleMoves.visible
+          }}
+        />
+      ))}
+      {/* {possibleMoves.moves && possibleMoves.moves.map(cell => (
         <HighlightedCell
           key={cell.id}
           highlightedCell={{
@@ -130,25 +138,47 @@ const BoardElements = observer(() => {
           }}
           type={'possibleMoves'}
         />
-      ))}
+      ))} */}
 
       {highlightedCell.visible && (
         <HighlightedCell
           highlightedCell={highlightedCell}
-          type={'highlightedCell'}
         />
       )}
 
-      {figures && figures.map(figure => (
+      {figures.map(figure => {
+        if (activeFigure === figure.id) {
+
+          // console.log('figure!!!!!!!!!!!!!!!!!!!!!!!')
+          // console.log(activeFigure, figure.id, 'activeFigure === figure.id ', activeFigure === figure.id)
+          // console.log(position && position.x, position && position.y)
+        }
+        return (
+          <Figure
+            key={figure.id}
+            src={figure.src}
+            top={figure.top}
+            left={figure.left}
+            // top={(activeFigure === figure.id && position) ? position.y : figure.top}
+            // left={(activeFigure === figure.id && position) ? position.x : figure.left}
+            id={figure.id}
+            setActiveFigure={setActiveFigure}
+            activeFigure={activeFigure}
+            imgStyle={imgStyle}
+          />)
+      })}
+      {/* {figures.map(figure => (
         <Figure
           key={figure.id}
           src={figure.src}
-          top={figure.top}
-          left={figure.left}
+          top={(activeFigure === figure.id && position) ? position.y : figure.top}
+          left={(activeFigure === figure.id && position) ? position.x : figure.left}
           id={figure.id}
-          position={position}
+          setActiveFigure={setActiveFigure}
+          activeFigure={activeFigure}
+          imgStyle={imgStyle}
         />
-      ))}
+      ))} */}
     </ElementsWrapper>
   )
 })
