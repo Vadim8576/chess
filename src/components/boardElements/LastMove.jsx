@@ -21,7 +21,7 @@ align-items: center;
 
 const Cell = styled.div`
 // background-color: lightgreen;
-border: 3px solid lightgreen;
+border: 3px solid yellow;
 width: 100%;
 height: 100%;
 // transform: rotate(45deg);
@@ -30,9 +30,10 @@ height: 100%;
 `;
 
 
-const PossibleMove = observer(({ cell }) => {
-  
+const LastMove = observer(({ cell }) => {
 
+  console.log(cell)
+  
   const colTemp = cell.col
   const rowTemp = cell.row
   const col = appStore.whiteBottom ? colTemp : (7 - colTemp)
@@ -53,4 +54,4 @@ const PossibleMove = observer(({ cell }) => {
   )
 })
 
-export default PossibleMove
+export default LastMove

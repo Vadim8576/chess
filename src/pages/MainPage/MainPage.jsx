@@ -33,8 +33,8 @@ const Grid = styled.div`
 display: grid;
 grid-template-columns: repeat(12, 1fr);
 grid-template-rows: repeat(12, 1fr);
-width: ${props => props.$width}px;
-height: ${props => props.$width}px;
+width: ${props => props.$size}px;
+height: ${props => props.$size}px;
 // width: 450px;
 // height: 450px;
 // min-width: 450px;
@@ -107,7 +107,7 @@ const MainPage = observer(() => {
 			<Header />
 			<PageWrapper>
 
-				{cellSize && <Grid size={cellSize * 12}>
+				{cellSize && <Grid $size={cellSize * 12}>
 					<CapturedAreaBlack>
 						<CapturedArea player={appStore.whiteBottom ? 'w' : 'b'} />
 					</CapturedAreaBlack>

@@ -16,12 +16,12 @@ export const useFigureDrag = (
 ) => {
   const [isDragging, setIsDragging] = useState(false)
   const [grabCell, setGrabCell] = useState({ col: 0, row: 0 })
-  const [moves, setmoves] = useState([])
+  const [moves, setMoves] = useState([])
   const [activeFigure, setActiveFigure] = useState({ square: null, id: null })
 
 
   const handlePointerDown = (e, currentFigureSquare) => {
-
+    setLastMoves([])
     const startX = appStore.board.x
     const startY = appStore.board.y
     const x = e.clientX - startX
@@ -64,18 +64,16 @@ export const useFigureDrag = (
       // return
     }
     const square = getSquare(appStore.whiteBottom, col, row)
-    console.log(square)
     const moves = [...movesTemp, square] // Добавляем клетку, с которой взяли фигуру, для ее подсветки
 
     console.log('Взята: ', grabFigure, ' Доступные ходы: ', moves)
 
-
     // Массив с доступными ходами в виде индексов [cell: {0, 5}, id, cell: {...}, id...] -  координаты клетки в массиве доски
     const moveIndices = moves.map(square => ({ cell: squareToIndices(square), id: square }))
 
-    // console.log(moveIndices)
+    console.log(moveIndices)
 
-    setmoves(moves)
+    setMoves(moves)
     setIsDragging(true)
     setGrabCell({ col, row, square: grabFigure.square })
 
@@ -88,10 +86,7 @@ export const useFigureDrag = (
       color: 'green'
     })
 
-    setPossibleMoves({
-      moves: [...moveIndices],
-      visible: true
-    })
+    setPossibleMoves([...moveIndices])
 
   }
 
@@ -100,12 +95,7 @@ export const useFigureDrag = (
   const handlePointerMove = (e) => {
 
     if (!isDragging) return
-    // e.preventDefault()
 
-    // if (!(e.button === 0) && e.pointerType !== 'touch') {
-    //   setDraggedFigure({ src: null, id: null })
-    //   return
-    // }
     // console.log('activeFigure = ', activeFigure)
 
     const startX = appStore.board.x
@@ -122,18 +112,9 @@ export const useFigureDrag = (
 
     setPosition({ x: xc, y: yc })
 
-    // setFigures(state => state.map(figure => {
-    //   if (figure.id === activeFigure.id) return { ...figure, top: yc, left: xc }
-    //   return figure
-    // }))
-
 
     // Если фигура перемещается в пределах доски
     if (col >= 0 && col <= 7 && row >= 0 && row <= 7) {
-      // Получаем адрес текущей клетки, например, A7
-      // const square = getSquare(appStore.whiteBottom, col, row)
-      // console.log(square)
-
 
       // console.log('Двигаем фигуру!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 
@@ -186,6 +167,7 @@ export const useFigureDrag = (
 
     if (col === grabCell.col && row === grabCell.row) {
       console.log('Поставил туда же, где взял!')
+      return
     }
 
     if (col < 0 || col > 7 || row < 0 || row > 7 || (!moves.includes(square) || grabCell.square === square)) {
@@ -194,16 +176,24 @@ export const useFigureDrag = (
     }
 
 
-    setLastMoves([
-      {
+
+    // Успешный ход------------------------------------------------------
+
+
+    setLastMoves([{
+      cell: {
         col: grabCell.col,
         row: grabCell.row
       },
-      {
-        col: grabCell.col,
-        row: grabCell.row
-      }
-    ])
+      id: 1
+    },
+    {
+      cell: {
+        col: col,
+        row: row
+      },
+      id: 2
+    }])
 
 
 
@@ -242,6 +232,7 @@ export const useFigureDrag = (
       visible: false
     }))
     setPossibleMoves([])
+    setLastMoves([])
   }
 
   return {

@@ -10,6 +10,7 @@ import useGameStatus from "../../hooks/useGameStatus";
 import { useFigureDrag } from "../../hooks/useFigureDrag";
 import PossibleMove from "./PossibleMove";
 import DraggableFigure from "./DraggableFigure";
+import LastMove from "./LastMove";
 
 
 const ElementsWrapper = styled.div`
@@ -48,7 +49,6 @@ const BoardElements = observer(() => {
   const [lastMoves, setLastMoves] = useState([])
   const [figures, setFigures] = useState([])
   const [position, setPosition] = useState([])
-
   const [draggedFigure, setDraggedFigure] = useState({ src: null, id: null })
 
   const getGameStatus = useGameStatus(appStore)
@@ -120,13 +120,17 @@ const BoardElements = observer(() => {
 
   return (
     <ElementsWrapper>
-      {possibleMoves.moves && possibleMoves.moves.map(possibleMove => (
+      {possibleMoves.map(possibleMove => (
         <PossibleMove
           key={possibleMove.id}
-          possibleMove={{
-            ...possibleMove,
-            visible: possibleMoves.visible
-          }}
+          cell={possibleMove.cell}
+        />
+      ))}
+
+      {lastMoves && lastMoves.map(lastMove => (
+        <LastMove
+          key={lastMove.id}
+          cell={lastMove.cell}
         />
       ))}
 
@@ -166,7 +170,7 @@ const BoardElements = observer(() => {
         left={appStore.board.x}
       /> */}
 
-      
+
     </ElementsWrapper>
   )
 })
