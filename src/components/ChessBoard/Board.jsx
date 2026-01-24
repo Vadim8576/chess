@@ -1,14 +1,8 @@
 import styled from "styled-components";
 import appStore from "../../store/appStore";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { files, ranks } from "../../constants/gameInitial";
 
-
-// const Container = styled.div`
-// position: relative;
-// width: ${props => props.$size}px;
-// height: ${props => props.$size}px;
-// `
 const Container = styled.div.attrs(props => ({
 	style: {
 		width: `${props.$size}px`,
@@ -17,17 +11,6 @@ const Container = styled.div.attrs(props => ({
 }))`
 	position: relative;
 `
-
-// const Cell = styled.div`
-// position: absolute;
-// top: ${props => props.$top}px;
-// left: ${props => props.$left}px;
-// width: ${props => props.$cellSize}px;
-// height: ${props => props.$cellSize}px;
-// background: ${props => props.color};
-// `
-
-
 
 const Cell = styled.div.attrs(props => ({
 	style: {
@@ -41,39 +24,32 @@ const Cell = styled.div.attrs(props => ({
   position: absolute;
 `
 
-
 const Board = () => {
-	const [board, setBoard] = useState([])
+	const board = useMemo(() => {
+		const cells = [];
 
-
-	useEffect(() => {
-		// Доска
-		setBoard([])
 		ranks.forEach((rank, y) => {
-			return files.forEach((file, x) => {
-				const isBlack = (y + x) % 2 === 0;
-				const cell = {
+			files.forEach((file, x) => {
+				const isBlack = (y + x) % 2 === 0
+				cells.push({
 					id: `${file}${rank}`,
 					color: isBlack ? '#f0d9b5' : '#b58863',
 					top: appStore.board.cellSize * y,
-					left: appStore.board.cellSize * x
-				}
-				setBoard(prev => [...prev, cell])
+					left: appStore.board.cellSize * x,
+				})
 			})
 		})
 
-	}, [appStore.whiteBottom, appStore.board.cellSize])
+		return cells;
+	}, [appStore.board.cellSize, appStore.whiteBottom])
 
-
-
-	// useEffect(() => {
-	// 	console.log(board)
-	// }, [board])
+	const containerSize = useMemo(
+		() => appStore.board.cellSize * 8,
+		[appStore.board.cellSize]
+	)
 
 	return (
-		<Container
-			$size={appStore.board.cellSize * 8}
-		>
+		<Container $size={containerSize}>
 			{board.map(cell => (
 				<Cell
 					key={cell.id}
@@ -83,9 +59,8 @@ const Board = () => {
 					$cellSize={appStore.board.cellSize}
 				/>
 			))}
-
 		</Container>
-	);
-};
+	)
+}
 
-export default Board
+export default Board;

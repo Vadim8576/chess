@@ -22,7 +22,7 @@ align-items: center;
 height: calc(100% - 35px);
 // overflow-y: auto;
 color: #000;
-font-size: 14px;
+font-size: clamp(8px, 2.5vw, 14px);
 font-weight: bold;
 // background-color: #414833;
 padding: 10px;

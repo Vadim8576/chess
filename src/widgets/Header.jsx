@@ -21,7 +21,7 @@ justify-content: center;
 align-items: center;
 width: 100%;
 height: ${HEADER_HEIGHT}px;
-font-size: .8rem;
+font-size: clamp(8px, 2.5vw, 14px);
 
 color: ${GAME_COLORS.neutral};
 // color: ${props => props.color};

@@ -71,7 +71,7 @@ const BoardElements = observer(() => {
   )
 
   useEffect(() => {
-    // console.log('Перерисовка фигур')
+    console.log('Перерисовка фигур')
     setFigures([])
     const board = appStore.chess.board()
     ranks.forEach((rank, y) => {
@@ -100,6 +100,7 @@ const BoardElements = observer(() => {
 
   useEffect(() => {
     getGameStatus()
+    appStore.updateHistoryList()
   }, [appStore.whiteBottom])
 
 
@@ -151,7 +152,6 @@ const BoardElements = observer(() => {
               id={figure.id}
               handlePointerDown={handlePointerDown}
               setDraggedFigure={setDraggedFigure}
-              setActiveFigure={setActiveFigure}
             />
           )
         }

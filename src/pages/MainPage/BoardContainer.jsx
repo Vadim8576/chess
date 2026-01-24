@@ -21,8 +21,10 @@ const Container = styled.div`
 
 
 
-const BoardContainer = observer(() => {
-	// const [containerRect, setContainerRect] = useState({ y: 0, x: 0, w: 0, h: 0 })
+const BoardContainer = observer(({windowSize}) => {
+
+	console.log('BoardContainer')
+
 	const ref = useRef(null)
 
 
@@ -33,12 +35,14 @@ const BoardContainer = observer(() => {
 
 		console.log(boardContainerRect.x, boardContainerRect.y)
 
+		console.log('Поменяли координаты доски')
+
 		appStore.setBoard({
 			x: boardContainerRect.x,
 			y: boardContainerRect.y
 		})
 
-	}, [appStore.board. cellSize])
+	}, [windowSize.width, windowSize.height, appStore.board.cellSize])
 
 	return (
 		<Container

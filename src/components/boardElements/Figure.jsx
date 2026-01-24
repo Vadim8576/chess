@@ -41,8 +41,7 @@ const Figure = observer(({
 	left,
 	id,
 	handlePointerDown,
-	setDraggedFigure,
-	setActiveFigure
+	setDraggedFigure
 }) => {
 
 

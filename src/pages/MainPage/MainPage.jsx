@@ -95,12 +95,14 @@ const MainPage = observer(() => {
 	}, [width, height])
 
 
-	/*
-		useEffect(() => {
-			// appStore.chess.load('rnb1kbnr/pppp1ppp/8/4p3/5PPq/8/PPPPP2P/RNBQKBNR w KQkq - 1 3') // Мат
-			// appStore.chess.load('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2')
-		}, [width, height])
-	*/
+
+	useEffect(() => {
+		// ['e2e4', 'e7e5', 'f1c4', 'd7d6'].forEach(move => appStore.chess.move(move))
+		
+		// appStore.chess.load('rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2')
+		// appStore.chess.load('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2')
+	}, [width, height])
+
 
 	return (
 		<PageContainer>
@@ -114,12 +116,7 @@ const MainPage = observer(() => {
 					<CapturedAreaWhite>
 						<CapturedArea player={appStore.whiteBottom ? 'b' : 'w'} />
 					</CapturedAreaWhite>
-					<BoardContainer
-						windowSize={{
-							width,
-							height
-						}}
-					/>
+					<BoardContainer windowSize={{ width, height }} />
 					<Status>
 						<Widget title={{
 							title: 'Статус игры',

@@ -21,6 +21,10 @@ export const useFigureDrag = (
 
 
   const handlePointerDown = (e, currentFigureSquare) => {
+
+
+    console.log('handlePointerDown')
+
     setLastMoves([])
     const startX = appStore.board.x
     const startY = appStore.board.y
@@ -31,7 +35,7 @@ export const useFigureDrag = (
     const [col, row] = getCellPosition(x, y, appStore)
 
 
-    console.log(startX, startY)
+    console.log('Координаты доски', startX, startY)
     console.log(x, y)
     console.log(col, row)
 
@@ -42,7 +46,7 @@ export const useFigureDrag = (
     setPosition({ x: xc, y: yc })
 
 
-    // console.log('!!!!!', currentFigureSquare, grabFigure.square)
+    console.log('!!!!!', 'физически ', currentFigureSquare, 'по расчету ', grabFigure.square)
 
 
     if (currentFigureSquare !== grabFigure.square) {
@@ -198,9 +202,12 @@ export const useFigureDrag = (
 
 
     let capturedFigure = appStore.chess.board()[row][col]
-    const move = appStore.chess.move(grabCell.square + square) // Сделать ход
+    const move = appStore.chess.move(`${grabCell.square}${square}`) // Сделать ход
 
-    console.log(grabCell.square, square)
+
+    
+
+    console.log(grabCell.square + square)
 
     // если присутствует flags 'e', произошло взятие на проходе
     if (move && move.flags.includes('e')) {
@@ -214,8 +221,27 @@ export const useFigureDrag = (
     if (capturedFigure != null || capturedFigure != undefined) {
       appStore.addCapturedFigures(capturedFigure.color, `${capturedFigure.type}${capturedFigure.color}`)
     }
-    appStore.updateHistoryList(appStore.chess.history({ verbose: true }))
 
+
+
+    // console.log(appStore.chess.fen())
+
+    // const historyList = appStore.chess.history({ verbose: true })
+    // const history = historyList[historyList.length - 1]
+
+    // const historyMove = {
+    //   move: `${history.from}-${history.to}`,
+    //   color: history.color,
+    //   id: historyList.length
+    // }
+    
+    // console.log(historyMove)
+
+
+    // appStore.updateHistoryList(historyMove)
+
+    appStore.updateHistoryMoves(`${grabCell.square}${square}`)
+    appStore.updateHistoryList()
     getGameStatus()
   }
 

@@ -19,9 +19,6 @@ left: ${props => props.$left}px;
 border: none;
 `;
 
-
-
-
 const BoardWrapper = styled.div`
   position: relative;
   width: ${props => props.$size}px;
@@ -30,11 +27,7 @@ const BoardWrapper = styled.div`
 `;
 
 
-
-
 const ChessBoard = observer(() => {
-
-
   console.log('ChessBoard Render')
 
 

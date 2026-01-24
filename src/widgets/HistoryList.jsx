@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import appStore from "../store/appStore";
 import { GAME_COLORS } from "../constants/gameInitial";
+import { useAutoScroll } from "../hooks/useAutoScroll";
 
 
 const HEADER_HEIGHT = 30
@@ -15,16 +16,22 @@ border: 1px ${GAME_COLORS.neutral} solid;
 `;
 
 const Text = styled.p`
-font-size: .8rem;
+font-size: clamp(8px, 2.5vw, 14px);
 `
 
 
 const HistoryList = observer(() => {
   console.log('HistoryList')
+
+  const historyList = appStore.historyList
+
+  const scrollRef = useAutoScroll(historyList, { smooth: true })
+
+
   return (
-    <History>
-      {appStore.historyList.map((list, key) => (
-        <Text key={key}>{`${list.from} - ${list.to} ${list.status ? list.status : ''}`}</Text>
+    <History ref={scrollRef}>
+      {historyList.map((list, key) => (
+        <Text key={list.id}>{`${list.id}. ${list.color === 'w' ? 'Б' : 'Ч'}: ${list.move} ${list.status ? list.status : ''}`}</Text>
       ))}
     </History>
   )
