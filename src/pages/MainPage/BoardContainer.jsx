@@ -8,11 +8,12 @@ import GameStatus from "../../widgets/GameStatus";
 import { FOOTER_HEIGHT, GAME_COLORS, HEADER_HEIGHT } from "../../constants/gameInitial";
 
 const Container = styled.div`
-	
+	// border: 1px blue solid;
 	aspect-ratio: 1 / 1;
-
 	grid-column: 1 / 9; 
   grid-row: 3 / 11;
+	width: ${props => props.$size}px;
+	height: ${props => props.$size}px;
 `;
 
 
@@ -20,7 +21,7 @@ const Container = styled.div`
 
 
 
-const BoardContainer = observer(({ windowSize }) => {
+const BoardContainer = observer(() => {
 	// const [containerRect, setContainerRect] = useState({ y: 0, x: 0, w: 0, h: 0 })
 	const ref = useRef(null)
 
@@ -32,30 +33,18 @@ const BoardContainer = observer(({ windowSize }) => {
 
 		console.log(boardContainerRect.x, boardContainerRect.y)
 
-		// 50 - высота Header
-		 // 12 - размер Grid
-		let cellSize = (windowSize.height > 500 ? (windowSize.height - HEADER_HEIGHT - FOOTER_HEIGHT) : 500) / 12
-
-		// if(windowSize.height < windowSize.width) {
-		// 	cellSize = windowSize.height / 12
-		// } else {
-		// 	cellSize = windowSize.width / 12
-		// }
-
-
-
-
 		appStore.setBoard({
-			cellSize,
-			borderSize: cellSize / 2.5,
 			x: boardContainerRect.x,
 			y: boardContainerRect.y
 		})
 
-	}, [windowSize.width, windowSize.height])
+	}, [appStore.board. cellSize])
 
 	return (
-		<Container ref={ref}>
+		<Container
+			ref={ref}
+			$size={appStore.board.cellSize * 8}
+		>
 			<ChessBoard />
 		</Container>
 	)

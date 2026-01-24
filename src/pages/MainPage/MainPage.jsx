@@ -1,10 +1,7 @@
-
-import { useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import appStore from "../../store/appStore";
 import useWindowResizeThrottle from "../../hooks/useWindowResizeThrottle";
-import Panel from "./Panel";
 import BoardContainer from "./BoardContainer";
 import Header from "./Header";
 import HistoryList from "../../widgets/HistoryList";
@@ -13,6 +10,7 @@ import Widget from "../../widgets/Widget";
 import CapturedArea from "../../widgets/CapturedArea";
 import { FOOTER_HEIGHT, GAME_COLORS, HEADER_HEIGHT } from "../../constants/gameInitial";
 import Footer from "./Footer";
+import { useEffect, useState } from "react";
 
 
 
@@ -31,7 +29,7 @@ height: calc(100% - ${HEADER_HEIGHT}px - ${FOOTER_HEIGHT}px);
 `;
 
 const Grid = styled.div`
-
+// border: 1px pink solid;
 display: grid;
 grid-template-columns: repeat(12, 1fr);
 grid-template-rows: repeat(12, 1fr);
@@ -71,13 +69,30 @@ grid-row: 11 / 12;
 `
 
 
-
-
 const MainPage = observer(() => {
 	console.log('MainPage')
 
-
+	const [cellSize, setCellSize] = useState(null)
 	const { width, height } = useWindowResizeThrottle(300)
+
+	useEffect(() => {
+
+		let cellSize
+
+		if ((height - HEADER_HEIGHT - FOOTER_HEIGHT) <= width) {
+			cellSize = (height - HEADER_HEIGHT - FOOTER_HEIGHT) / 12
+		} else {
+			cellSize = width / 12
+			console.log('h > w', cellSize, cellSize * 12)
+		}
+
+		setCellSize(cellSize)
+
+		appStore.setBoard({
+			cellSize,
+			width: cellSize * 8
+		})
+	}, [width, height])
 
 
 	/*
@@ -92,7 +107,7 @@ const MainPage = observer(() => {
 			<Header />
 			<PageWrapper>
 
-				<Grid $width={height > 500 ? (height - HEADER_HEIGHT - FOOTER_HEIGHT) : 500}>
+				{cellSize && <Grid size={cellSize * 12}>
 					<CapturedAreaBlack>
 						<CapturedArea player={appStore.whiteBottom ? 'w' : 'b'} />
 					</CapturedAreaBlack>
@@ -127,61 +142,11 @@ const MainPage = observer(() => {
 						</Widget>
 					</History>
 				</Grid>
+				}
 			</PageWrapper>
 			<Footer />
 		</PageContainer>
 	)
-
-
-
-	// return (
-	// 	<PageContainer>
-	// 		<Header HEADER_HEIGHT={HEADER_HEIGHT} />
-	// 		<PanelWrapper>
-	// 			<Panel>
-	// 				<Widget title={{
-	// 					title: 'Взятые фигуры',
-	// 					color: '#fff',
-	// 					background: GAME_COLORS.secondary
-	// 				}}>
-	// 					<CapturedArea player={appStore.whiteBottom ? 'w' : 'b'} />
-	// 				</Widget>
-	// 				<Widget title={{
-	// 					title: 'Взятые фигуры',
-	// 					color: '#fff',
-	// 					background: GAME_COLORS.secondary
-	// 				}}>
-	// 					<CapturedArea player={appStore.whiteBottom ? 'b' : 'w'} />
-	// 				</Widget>
-	// 			</Panel>
-	// 			<Panel grow={3}>
-	// 				<BoardContainer windowSize={{
-	// 					width,
-	// 					height
-	// 				}}
-	// 				/>
-	// 			</Panel>
-	// 			<Panel>
-	// 				<Widget title={{
-	// 					title: 'Статус игры',
-	// 					color: '#fff',
-	// 					background: GAME_COLORS.secondary
-	// 				}}
-	// 				>
-	// 					<GameStatus />
-	// 				</Widget>
-	// 				<Widget title={{
-	// 					title: 'История',
-	// 					color: '#fff',
-	// 					background: GAME_COLORS.secondary
-	// 				}}
-	// 				>
-	// 					<HistoryList />
-	// 				</Widget>
-	// 			</Panel>
-	// 		</PanelWrapper>
-	// 	</PageContainer>
-	// )
 })
 
 export default MainPage

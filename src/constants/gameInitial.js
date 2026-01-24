@@ -34,6 +34,22 @@ export const figure = {
 
 
 
+
+export const breakpoints = {
+  sm: '576px',
+  md: '768px',
+  lg: '1024px',
+  xl: '1200px',
+}
+
+export const media = {
+  sm: `(min-width: ${breakpoints.sm})`,
+  md: `(min-width: ${breakpoints.md})`,
+  lg: `(min-width: ${breakpoints.lg})`,
+  xl: `(min-width: ${breakpoints.xl})`,
+}
+
+
 /*
 export const boardMap = [
   ['rb', 'nb', 'bb', 'qb', 'kb', 'bb', 'nb', 'rb'],

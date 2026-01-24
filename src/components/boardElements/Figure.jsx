@@ -1,8 +1,6 @@
-import { memo, useEffect, useState } from "react"
 import { useLoadImage } from "../../hooks/useLoadImage"
 import styled from 'styled-components'
 import { observer } from "mobx-react-lite";
-import { toJS } from 'mobx';
 import appStore from "../../store/appStore";
 import { getCellPosition } from "../../utils/getCellPosition";
 import { getSquare } from "../../utils/getSquare";
@@ -22,14 +20,19 @@ const ImgWrapper = styled.div.attrs(props => ({
   display: flex;
   justify-content: center;
   align-items: center;
+	-webkit-user-drag: none;
+	user-select: none;
+  touch-action: none;
 `;
 
 const Img = styled.img`
   width: 75%;
   height: 75%;
   pointer-events: none;
+	-webkit-user-drag: none;
 	user-select: none;
   touch-action: none;
+	// border: 1px blue solid;
 `;
 
 const Figure = observer(({
@@ -37,14 +40,17 @@ const Figure = observer(({
 	top,
 	left,
 	id,
-	setActiveFigure,
-	activeFigure,
-	imgStyle
+	handlePointerDown,
+	setDraggedFigure,
+	setActiveFigure
 }) => {
 
-	
+
 	const { isLoading, isError, image } = useLoadImage(src)
 	const cellSize = appStore.board.cellSize
+
+
+
 
 
 	if (isLoading) {
@@ -57,30 +63,31 @@ const Figure = observer(({
 
 	if (!src) return
 
-	const handleFigureMouseDown = (id) => {
+	const onPointerDown = (e) => {
+		e.preventDefault()
+		if (e.button !== 0 && e.pointerType !== 'touch') return
+		if (appStore.chess.isGameOver()) return
+		setDraggedFigure({ image, id })
 		const [col, row] = getCellPosition(left, top, appStore)
 		const square = getSquare(appStore.whiteBottom, col, row)
-		setActiveFigure({id, square})
+		handlePointerDown(e, square)
 
-		console.log(id, square)
+		console.log(col, row, square)
 	}
+
+
 
 
 	return (
 		<ImgWrapper
-			$cursor={activeFigure === id ? 'grabbing' : 'grab'}
+			onPointerDown={onPointerDown}
+			$cursor={'grab'}
 			$width={cellSize}
 			$height={cellSize}
-			$zIndex={activeFigure === id ? imgStyle.zIndex : 100}
-			// $transition={imgStyle.transition}
 			$top={top}
 			$left={left}
-			onMouseDown={() => handleFigureMouseDown(id)}
-			// onMouseUp={() => setActiveFigure({square: null, id: null})}
 		>
-			<Img
-				src={image.src}
-			/>
+			<Img src={image.src} />
 		</ImgWrapper>
 	)
 })

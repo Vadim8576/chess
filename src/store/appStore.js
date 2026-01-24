@@ -30,7 +30,7 @@ class appStore {
 
   setBoard(board) {
     this.board = {...this.board, ...board}
-    // console.log('board = ', toJS(this.board))
+    console.log('board = ', toJS(this.board))
   }
 
   updateHistoryList(newHistoryList) {

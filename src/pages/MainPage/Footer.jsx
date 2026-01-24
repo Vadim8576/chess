@@ -9,7 +9,7 @@ justify-content: flex-start;
 align-items: center;
 width: 100%;
 height: ${props => props.$height}px;
-padding: 10px;
+// padding: 10px;
 // border: 1px #666 solid;
 background-color: ${GAME_COLORS.secondary};
 // margin-bottom: 20px;

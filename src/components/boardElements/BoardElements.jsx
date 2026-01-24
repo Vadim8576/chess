@@ -9,6 +9,7 @@ import appStore from "../../store/appStore";
 import useGameStatus from "../../hooks/useGameStatus";
 import { useFigureDrag } from "../../hooks/useFigureDrag";
 import PossibleMove from "./PossibleMove";
+import DraggableFigure from "./DraggableFigure";
 
 
 const ElementsWrapper = styled.div`
@@ -17,6 +18,19 @@ const ElementsWrapper = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
+
+`;
+
+
+const Indicator = styled.div`
+position: absolute;
+top: ${props => props.$top}px;
+left: ${props => props.$left}px;
+border: 3px solid yellow;
+z-index: 200;
+width: 30px;
+height: 30px;
+pointer-events: none;
 `;
 
 const BoardElements = observer(() => {
@@ -34,40 +48,31 @@ const BoardElements = observer(() => {
   const [lastMoves, setLastMoves] = useState([])
   const [figures, setFigures] = useState([])
   const [position, setPosition] = useState([])
-  const [imgStyle, setImgStyle] = useState({ zIndex: 100, transition: 'none' })
-  const [activeFigure, setActiveFigure] = useState({square: null, id: null})
 
-
+  const [draggedFigure, setDraggedFigure] = useState({ src: null, id: null })
 
   const getGameStatus = useGameStatus(appStore)
 
-
   const {
     isDragging,
-    handleMouseDown,
-    handleMouseMove,
-    handleMouseUp
+    setActiveFigure,
+    handlePointerDown,
+    handlePointerMove,
+    handlePointerUp,
+    handlePointerCancel
   } = useFigureDrag(
     appStore,
+    getGameStatus,
+    setDraggedFigure,
     setHighlightedCell,
     setPossibleMoves,
-    getGameStatus,
     setPosition,
-    setImgStyle,
-    activeFigure,
-    setFigures,
     setLastMoves
   )
 
-  // const board = appStore.chess.board()
-
   useEffect(() => {
-
-    console.log('BoardElements useEffect!!!!!!!!!!!!!!!!!!!!')
-    console.log(position && position.x, position && position.y)
-
+    // console.log('Перерисовка фигур')
     setFigures([])
-    // setPosition([])
     const board = appStore.chess.board()
     ranks.forEach((rank, y) => {
       return files.forEach((file, x) => {
@@ -81,35 +86,16 @@ const BoardElements = observer(() => {
         }
 
         setFigures(prev => [...prev, state])
-
-        // setPosition({})
-        
       })
     })
   }, [appStore.board.cellSize, appStore.whiteBottom, appStore.status])
-  // }, [appStore.board.cellSize, appStore.whiteBottom, appStore.status])
 
 
 
 
-  useEffect(() => {
-    console.log('activeFigure = ', activeFigure)
-  }, [activeFigure])
-
-
-
-
-  useEffect(() => {
-    if (isDragging) {
-      document.addEventListener('mousemove', handleMouseMove)
-      document.addEventListener('mouseup', handleMouseUp)
-    }
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('mouseup', handleMouseUp)
-    }
-  }, [isDragging])
+  // useEffect(() => {
+  //   console.log('activeFigure = ', activeFigure)
+  // }, [activeFigure])
 
 
   useEffect(() => {
@@ -117,8 +103,23 @@ const BoardElements = observer(() => {
   }, [appStore.whiteBottom])
 
 
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('pointermove', handlePointerMove)
+      document.addEventListener('pointerup', handlePointerUp)
+      document.addEventListener('pointercancel', handlePointerCancel)
+    }
+
+    return () => {
+      document.removeEventListener('pointermove', handlePointerMove)
+      document.removeEventListener('pointerup', handlePointerUp)
+      document.removeEventListener('pointercancel', handlePointerCancel)
+    }
+  }, [isDragging])
+
+
   return (
-    <ElementsWrapper onMouseDown={handleMouseDown}>
+    <ElementsWrapper>
       {possibleMoves.moves && possibleMoves.moves.map(possibleMove => (
         <PossibleMove
           key={possibleMove.id}
@@ -128,17 +129,6 @@ const BoardElements = observer(() => {
           }}
         />
       ))}
-      {/* {possibleMoves.moves && possibleMoves.moves.map(cell => (
-        <HighlightedCell
-          key={cell.id}
-          highlightedCell={{
-            ...cell,
-            color: possibleMoves.color,
-            visible: possibleMoves.visible
-          }}
-          type={'possibleMoves'}
-        />
-      ))} */}
 
       {highlightedCell.visible && (
         <HighlightedCell
@@ -147,38 +137,36 @@ const BoardElements = observer(() => {
       )}
 
       {figures.map(figure => {
-        if (activeFigure === figure.id) {
-
-          // console.log('figure!!!!!!!!!!!!!!!!!!!!!!!')
-          // console.log(activeFigure, figure.id, 'activeFigure === figure.id ', activeFigure === figure.id)
-          // console.log(position && position.x, position && position.y)
+        if (draggedFigure.id !== figure.id) {
+          return (
+            <Figure
+              key={figure.id}
+              src={figure.src}
+              top={figure.top}
+              left={figure.left}
+              id={figure.id}
+              handlePointerDown={handlePointerDown}
+              setDraggedFigure={setDraggedFigure}
+              setActiveFigure={setActiveFigure}
+            />
+          )
         }
-        return (
-          <Figure
-            key={figure.id}
-            src={figure.src}
-            top={figure.top}
-            left={figure.left}
-            // top={(activeFigure === figure.id && position) ? position.y : figure.top}
-            // left={(activeFigure === figure.id && position) ? position.x : figure.left}
-            id={figure.id}
-            setActiveFigure={setActiveFigure}
-            activeFigure={activeFigure}
-            imgStyle={imgStyle}
-          />)
       })}
-      {/* {figures.map(figure => (
-        <Figure
-          key={figure.id}
-          src={figure.src}
-          top={(activeFigure === figure.id && position) ? position.y : figure.top}
-          left={(activeFigure === figure.id && position) ? position.x : figure.left}
-          id={figure.id}
-          setActiveFigure={setActiveFigure}
-          activeFigure={activeFigure}
-          imgStyle={imgStyle}
+
+      {draggedFigure && (
+        <DraggableFigure
+          image={draggedFigure.image}
+          position={position}
         />
-      ))} */}
+      )}
+
+
+      {/* <Indicator
+        top={appStore.board.y}
+        left={appStore.board.x}
+      /> */}
+
+      
     </ElementsWrapper>
   )
 })

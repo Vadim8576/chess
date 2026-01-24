@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-function useWindowResizeThrottle(throttleMs = 300) {
+const useWindowResizeThrottle = (throttleMs = 300) => {
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
