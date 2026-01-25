@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import appStore from "../../store/appStore";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, memo } from "react";
 import { files, ranks } from "../../constants/gameInitial";
 
 const Container = styled.div.attrs(props => ({
@@ -24,7 +24,7 @@ const Cell = styled.div.attrs(props => ({
   position: absolute;
 `
 
-const Board = () => {
+const Board = memo(() => {
 	const board = useMemo(() => {
 		const cells = [];
 
@@ -61,6 +61,6 @@ const Board = () => {
 			))}
 		</Container>
 	)
-}
+})
 
 export default Board;

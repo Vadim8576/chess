@@ -1,11 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 import BoardElements from '../boardElements/BoardElements';
-import { observer } from 'mobx-react-lite';
-import BoardCanvas from './BoardCanvas';
 import appStore from '../../store/appStore';
-import BorderCanvas from './BorderCanvas';
 import Board from './Board';
+import { useFigureDrag } from '../../hooks/useFigureDrag';
+import { useGameStatus } from '../../hooks/useGameStatus';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import DraggableFigure from '../boardElements/DraggableFigure';
+import HighlightedCell from '../boardElements/backlightСells/HighlightedCell';
 
 
 
@@ -30,6 +32,59 @@ const BoardWrapper = styled.div`
 const ChessBoard = observer(() => {
   console.log('ChessBoard Render')
 
+  const [draggedFigure, setDraggedFigure] = useState({ src: null, id: null })
+  const getGameStatus = useGameStatus(appStore)
+
+
+  const {
+    isDragging,
+    position,
+    highlightedCell,
+    lastMoves,
+    possibleMoves,
+    handlePointerDown,
+    handlePointerMove,
+    handlePointerUp,
+    handlePointerCancel
+  } = useFigureDrag(
+    appStore,
+    getGameStatus,
+    setDraggedFigure
+  )
+
+
+
+  useEffect(() => {
+    getGameStatus()
+    appStore.updateHistoryList()
+  }, [appStore.whiteBottom])
+
+
+
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('pointermove', handlePointerMove)
+      document.addEventListener('pointerup', handlePointerUp)
+      document.addEventListener('pointercancel', handlePointerCancel)
+    }
+
+    return () => {
+      document.removeEventListener('pointermove', handlePointerMove)
+      document.removeEventListener('pointerup', handlePointerUp)
+      document.removeEventListener('pointercancel', handlePointerCancel)
+    }
+  }, [isDragging])
+
+
+  // const boardElementsProps = useMemo(
+  //   () => ({ setDraggedFigure, draggedFigure, highlightedCell, lastMoves, possibleMoves }),
+  //   [setDraggedFigure, draggedFigure, highlightedCell, lastMoves, possibleMoves]
+  // )
+
+
+  const handlePointerDownMemo = useCallback((e, square) => {
+    handlePointerDown(e, square)
+  }, [handlePointerDown])
 
   return (
     <BoardWrapper
@@ -37,7 +92,29 @@ const ChessBoard = observer(() => {
     >
       {/* <BoardCanvas /> */}
       <Board />
-      <BoardElements />
+
+      <BoardElements
+        // boardElementsProps={boardElementsProps}
+        handlePointerDown={handlePointerDownMemo}
+        setDraggedFigure={setDraggedFigure}
+        draggedFigure={draggedFigure}
+        // highlightedCell={highlightedCell}
+        lastMoves={lastMoves}
+        possibleMoves={possibleMoves}
+      />
+
+      {highlightedCell.visible && (
+        <HighlightedCell
+          highlightedCell={highlightedCell}
+        />
+      )}
+
+      {draggedFigure && (
+        <DraggableFigure
+          image={draggedFigure.image}
+          position={position}
+        />
+      )}
     </BoardWrapper>
   )
 })

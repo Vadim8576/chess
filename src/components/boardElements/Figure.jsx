@@ -4,6 +4,7 @@ import { observer } from "mobx-react-lite";
 import appStore from "../../store/appStore";
 import { getCellPosition } from "../../utils/getCellPosition";
 import { getSquare } from "../../utils/getSquare";
+import { memo, useEffect } from "react";
 
 
 const ImgWrapper = styled.div.attrs(props => ({
@@ -35,7 +36,7 @@ const Img = styled.img`
 	// border: 1px blue solid;
 `;
 
-const Figure = observer(({
+const Figure = memo(observer(({
 	src,
 	top,
 	left,
@@ -49,9 +50,6 @@ const Figure = observer(({
 	const cellSize = appStore.board.cellSize
 
 
-
-
-
 	if (isLoading) {
 		return
 	}
@@ -62,6 +60,8 @@ const Figure = observer(({
 
 	if (!src) return
 
+
+
 	const onPointerDown = (e) => {
 		e.preventDefault()
 		if (e.button !== 0 && e.pointerType !== 'touch') return
@@ -70,8 +70,6 @@ const Figure = observer(({
 		const [col, row] = getCellPosition(left, top, appStore)
 		const square = getSquare(appStore.whiteBottom, col, row)
 		handlePointerDown(e, square)
-
-		console.log(col, row, square)
 	}
 
 
@@ -89,7 +87,6 @@ const Figure = observer(({
 			<Img src={image.src} />
 		</ImgWrapper>
 	)
-})
-
+}))
 
 export default Figure

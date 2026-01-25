@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import appStore from "../../store/appStore";
 import { observer } from "mobx-react-lite";
+import appStore from "../../../store/appStore";
 
 
 const CellWrapper = styled.div`

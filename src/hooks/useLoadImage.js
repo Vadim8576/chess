@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 
 export const useLoadImage = (url) => {
     const [isLoading, setIsLoading] = useState(!!url) // true, если url задан
@@ -40,6 +40,9 @@ export const useLoadImage = (url) => {
         };
     }, [url])
 
-    return { isLoading, isError, image }
+    return useMemo(
+        () => ({ isLoading, isError, image }),
+        [isLoading, isError, image]
+    )
 }
 

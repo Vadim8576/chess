@@ -1,6 +1,6 @@
 import { toJS } from 'mobx';
 
-const useGameStatus = (appStore) => {
+export const useGameStatus = (appStore) => {
   const getGameStatus = () => {
     const player = appStore.chess.turn()
     // console.log('player = ', player)
@@ -45,17 +45,6 @@ const useGameStatus = (appStore) => {
     }
   }
 
-  const updateHistoryItem = (status) => {
-    const newHistoryList = [...appStore.historyList]
-    newHistoryList.pop()
-    const lastValue = { ...appStore.historyList[appStore.historyList.length - 1], status }
-    newHistoryList.push({ ...lastValue })
-    appStore.updateHistoryList(newHistoryList)
-  }
 
   return getGameStatus
 }
-
-
-
-export default useGameStatus

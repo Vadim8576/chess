@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
 import styled from "styled-components";
-import appStore from "../../store/appStore";
 import { observer } from "mobx-react-lite";
+import appStore from "../../../store/appStore";
 
 
 const CellWrapper = styled.div`
@@ -31,8 +30,6 @@ height: 100%;
 
 
 const LastMove = observer(({ cell }) => {
-
-  console.log(cell)
   
   const colTemp = cell.col
   const rowTemp = cell.row
