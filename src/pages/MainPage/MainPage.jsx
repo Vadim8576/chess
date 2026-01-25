@@ -98,7 +98,7 @@ const MainPage = observer(() => {
 
 	useEffect(() => {
 		// ['e2e4', 'e7e5', 'f1c4', 'd7d6'].forEach(move => appStore.chess.move(move))
-		
+
 		// appStore.chess.load('rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2')
 		// appStore.chess.load('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2')
 	}, [width, height])

@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import appStore from "../../store/appStore";
-import { useEffect, useState, useMemo, memo } from "react";
+import { useMemo, memo } from "react";
 import { files, ranks } from "../../constants/gameInitial";
+import { observer } from "mobx-react-lite";
 
 const Container = styled.div.attrs(props => ({
 	style: {
@@ -24,10 +25,26 @@ const Cell = styled.div.attrs(props => ({
   position: absolute;
 `
 
-const Board = memo(() => {
+const CellRank = styled.div`
+  position: absolute;
+    top: 2px;
+    left: 2px;
+    font-size: 1.5vmin;
+`
+const CellFile = styled.div`
+  position: absolute;
+    bottom: 2px;
+    right: 2px;
+    font-size: 1.5vmin;
+`
+
+
+const Board = memo(observer(() => {
+
+	console.log('Board')
+
 	const board = useMemo(() => {
 		const cells = [];
-
 		ranks.forEach((rank, y) => {
 			files.forEach((file, x) => {
 				const isBlack = (y + x) % 2 === 0
@@ -36,20 +53,20 @@ const Board = memo(() => {
 					color: isBlack ? '#f0d9b5' : '#b58863',
 					top: appStore.board.cellSize * y,
 					left: appStore.board.cellSize * x,
+					file: y == 7 ? file : null,
+					rank: x == 0 ? rank : null
 				})
 			})
 		})
+		console.log(cells)
 
 		return cells;
 	}, [appStore.board.cellSize, appStore.whiteBottom])
 
-	const containerSize = useMemo(
-		() => appStore.board.cellSize * 8,
-		[appStore.board.cellSize]
-	)
+
 
 	return (
-		<Container $size={containerSize}>
+		<Container $size={appStore.board.cellSize * 8}>
 			{board.map(cell => (
 				<Cell
 					key={cell.id}
@@ -57,10 +74,13 @@ const Board = memo(() => {
 					$top={cell.top}
 					$left={cell.left}
 					$cellSize={appStore.board.cellSize}
-				/>
+				>
+					<CellRank>{cell.rank && cell.rank}</CellRank>
+					<CellFile>{cell.file && cell.file}</CellFile>
+				</Cell>
 			))}
 		</Container>
 	)
-})
+}))
 
 export default Board;
