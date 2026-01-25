@@ -6,12 +6,12 @@ import appStore from "../../../store/appStore";
 
 const CellWrapper = styled.div`
 position: absolute;
-top: ${props => props.$top}px;
-left: ${props => props.$left}px;
+top: ${props => props.$top + 1}px;
+left: ${props => props.$left + 1}px;
 
 z-index: 99;
-width: ${props => props.$cellSize}px;
-height: ${props => props.$cellSize}px;
+width: ${props => props.$cellSize - 2}px;
+height: ${props => props.$cellSize - 2}px;
 display: flex;
 justify-content: center;
 align-items: center;
@@ -31,6 +31,8 @@ height: 100%;
 
 
 const HighlightedCell = observer(({ highlightedCell }) => {
+
+	console.log(highlightedCell)
 	
 	if (!highlightedCell.visible) return null
 

@@ -2,14 +2,39 @@ export const HEADER_HEIGHT = 50
 export const FOOTER_HEIGHT = 0
 export const GRID_MIN_HEIGHT = 500 // body {min-height: 500px;}
 
-export const GAME_COLORS = {
+// export const COLORS = {
+//   primary: '#283618',
+//   secondary: '#606c38',
+//   neutral: '#C2C5AA', // нейтральные оттенки (текст, границы, фоны)
+//   // surface: '#606c38', //цвета поверхностей (карточки, панели)
+//   background: '#fefae0'
+// }
+export const COLORS = {
   primary: '#283618',
   secondary: '#606c38',
   neutral: '#C2C5AA', // нейтральные оттенки (текст, границы, фоны)
   // surface: '#606c38', //цвета поверхностей (карточки, панели)
-  background: '#fefae0'
+  background: '#fefae0',
+  possibleCell: '#a3c095',
+  lastCell: '#eec970',
+  errorCell: '#d15050',
+  accessibleСell: '#606c38',
+  blackCell: '#b58863',
+  whiteCell: '#f0d9b5'
 }
 
+
+/*
+#f0d9b5 — светлый квадрат (основной);
+
+#b58863 — тёмный квадрат (основной);
+
+#d4bf8b — акцент для подсветки ходов;
+
+#8b5a2b — граница доски;
+
+#5f4830 — тень под фигурами.
+*/
 
 
 

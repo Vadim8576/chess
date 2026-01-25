@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import appStore from "../../store/appStore";
 import { useMemo, memo } from "react";
-import { files, ranks } from "../../constants/gameInitial";
+import { files, COLORS, ranks } from "../../constants/gameInitial";
 import { observer } from "mobx-react-lite";
 
 const Container = styled.div.attrs(props => ({
@@ -50,7 +50,8 @@ const Board = memo(observer(() => {
 				const isBlack = (y + x) % 2 === 0
 				cells.push({
 					id: `${file}${rank}`,
-					color: isBlack ? '#f0d9b5' : '#b58863',
+					color: isBlack ? COLORS.whiteCell : COLORS.blackCell,
+					// color: isBlack ? '#f0d9b5' : '#b58863',
 					top: appStore.board.cellSize * y,
 					left: appStore.board.cellSize * x,
 					file: y == 7 ? file : null,
@@ -58,7 +59,6 @@ const Board = memo(observer(() => {
 				})
 			})
 		})
-		console.log(cells)
 
 		return cells;
 	}, [appStore.board.cellSize, appStore.whiteBottom])

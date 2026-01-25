@@ -31,7 +31,7 @@ class appStore {
 
   setBoard(board) {
     this.board = { ...this.board, ...board }
-    console.log('board = ', toJS(this.board))
+    // console.log('board = ', toJS(this.board))
   }
 
 
@@ -66,7 +66,7 @@ class appStore {
 
   updateHistoryList() {
     const historyList = this.chess.history({ verbose: true })
-    console.log(historyList)
+    // console.log(historyList)
     if(historyList.length === 0) return
     const history = historyList[historyList.length - 1]
 

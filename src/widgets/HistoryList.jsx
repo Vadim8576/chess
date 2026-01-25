@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import appStore from "../store/appStore";
-import { GAME_COLORS } from "../constants/gameInitial";
+import { COLORS } from "../constants/gameInitial";
 import { useAutoScroll } from "../hooks/useAutoScroll";
 
 
@@ -12,11 +12,12 @@ height: calc(100% - 35px);
 overflow-y: auto;
 padding: 10px;
 // border-radius: 0 0 10px 10px;
-border: 1px ${GAME_COLORS.neutral} solid;
+border: 1px ${COLORS.neutral} solid;
 `;
 
 const Text = styled.p`
-font-size: clamp(8px, 2.5vw, 14px);
+// font-size: clamp(8px, 2.5vw, 14px);
+font-size: 2.2vmin;
 `
 
 

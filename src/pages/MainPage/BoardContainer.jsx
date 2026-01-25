@@ -5,7 +5,7 @@ import { observer } from "mobx-react-lite";
 import appStore from "../../store/appStore";
 import Widget from "../../widgets/Widget";
 import GameStatus from "../../widgets/GameStatus";
-import { FOOTER_HEIGHT, GAME_COLORS, HEADER_HEIGHT } from "../../constants/gameInitial";
+import { FOOTER_HEIGHT, COLORS, HEADER_HEIGHT } from "../../constants/gameInitial";
 
 const Container = styled.div`
 	// border: 1px blue solid;
@@ -15,9 +15,6 @@ const Container = styled.div`
 	width: ${props => props.$size}px;
 	height: ${props => props.$size}px;
 `;
-
-
-
 
 
 
@@ -33,9 +30,9 @@ const BoardContainer = observer(({windowSize}) => {
 
 		const boardContainerRect = ref.current.getBoundingClientRect()
 
-		console.log(boardContainerRect.x, boardContainerRect.y)
+		// console.log(boardContainerRect.x, boardContainerRect.y)
 
-		console.log('Поменяли координаты доски')
+		// console.log('Поменяли координаты доски')
 
 		appStore.setBoard({
 			x: boardContainerRect.x,

@@ -1,16 +1,17 @@
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 import appStore from "../../../store/appStore";
+import { COLORS } from "../../../constants/gameInitial";
 
 
 const CellWrapper = styled.div`
 position: absolute;
-top: ${props => props.$top}px;
-left: ${props => props.$left}px;
+top: ${props => props.$top + 1}px;
+left: ${props => props.$left + 1}px;
 
 z-index: 99;
-width: ${props => props.$cellSize}px;
-height: ${props => props.$cellSize}px;
+width: ${props => props.$cellSize - 2}px;
+height: ${props => props.$cellSize - 2}px;
 display: flex;
 justify-content: center;
 align-items: center;
@@ -20,7 +21,7 @@ align-items: center;
 
 const Cell = styled.div`
 // background-color: lightgreen;
-border: 3px solid yellow;
+border: 3px solid ${COLORS.lastCell};
 width: 100%;
 height: 100%;
 // transform: rotate(45deg);

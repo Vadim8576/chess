@@ -8,7 +8,7 @@ import HistoryList from "../../widgets/HistoryList";
 import GameStatus from "../../widgets/GameStatus";
 import Widget from "../../widgets/Widget";
 import CapturedArea from "../../widgets/CapturedArea";
-import { FOOTER_HEIGHT, GAME_COLORS, HEADER_HEIGHT } from "../../constants/gameInitial";
+import { FOOTER_HEIGHT, COLORS, HEADER_HEIGHT } from "../../constants/gameInitial";
 import Footer from "./Footer";
 import { useEffect, useState } from "react";
 
@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 const PageContainer = styled.div`
 width: 100%;
 height: 100%;
-background-color: ${GAME_COLORS.background};
+background-color: ${COLORS.background};
 `;
 
 const PageWrapper = styled.div`
@@ -86,6 +86,8 @@ const MainPage = observer(() => {
 			console.log('h > w', cellSize, cellSize * 12)
 		}
 
+		cellSize = Math.round(cellSize)
+
 		setCellSize(cellSize)
 
 		appStore.setBoard({
@@ -108,7 +110,6 @@ const MainPage = observer(() => {
 		<PageContainer>
 			<Header />
 			<PageWrapper>
-
 				{cellSize && <Grid $size={cellSize * 12}>
 					<CapturedAreaBlack>
 						<CapturedArea player={appStore.whiteBottom ? 'w' : 'b'} />
@@ -121,25 +122,23 @@ const MainPage = observer(() => {
 						<Widget title={{
 							title: 'Статус игры',
 							color: '#fff',
-							background: GAME_COLORS.secondary
+							background: COLORS.secondary
 						}}
 						>
 							<GameStatus />
 						</Widget>
 					</Status>
-
 					<History>
 						<Widget title={{
 							title: 'История',
 							color: '#fff',
-							background: GAME_COLORS.secondary
+							background: COLORS.secondary
 						}}
 						>
 							<HistoryList />
 						</Widget>
 					</History>
-				</Grid>
-				}
+				</Grid>}
 			</PageWrapper>
 			<Footer />
 		</PageContainer>

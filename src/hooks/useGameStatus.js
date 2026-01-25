@@ -1,15 +1,16 @@
 import { toJS } from 'mobx';
+import { squareToIndices } from '../utils/squareToIndices';
 
 export const useGameStatus = (appStore) => {
+
   const getGameStatus = () => {
     const player = appStore.chess.turn()
     // console.log('player = ', player)
     appStore.setGameStatus(`Ход ${player === 'w' ? 'белых' : 'чёрных'}!`)
+    
 
     if (appStore.chess.inCheck()) {
       appStore.setGameStatus(`Шах ${player === 'w' ? 'белым' : 'чёрным'}!`)
-
-      // updateHistoryItem('Шах!')
     }
 
     if (appStore.chess.isCheckmate()) {

@@ -11,15 +11,15 @@ import HighlightedCell from '../boardElements/backlightСells/HighlightedCell';
 
 
 
-const Cell = styled.div`
-position: absolute;
-background-color: red;
-width: 50px;
-height: 50px;
-top: ${props => props.$top}px;
-left: ${props => props.$left}px;
-border: none;
-`;
+// const Cell = styled.div`
+// position: absolute;
+// background-color: red;
+// width: 50px;
+// height: 50px;
+// top: ${props => props.$top}px;
+// left: ${props => props.$left}px;
+// border: none;
+// `;
 
 const BoardWrapper = styled.div`
   position: relative;
@@ -33,6 +33,7 @@ const ChessBoard = observer(() => {
   console.log('ChessBoard Render')
 
   const [draggedFigure, setDraggedFigure] = useState({ src: null, id: null })
+  
   const getGameStatus = useGameStatus(appStore)
 
 
@@ -42,6 +43,7 @@ const ChessBoard = observer(() => {
     highlightedCell,
     lastMoves,
     possibleMoves,
+    cellInCheck,
     handlePointerDown,
     handlePointerMove,
     handlePointerUp,
@@ -106,6 +108,12 @@ const ChessBoard = observer(() => {
       {highlightedCell.visible && (
         <HighlightedCell
           highlightedCell={highlightedCell}
+        />
+      )}
+
+      {cellInCheck.visible && (
+        <HighlightedCell
+          highlightedCell={cellInCheck}
         />
       )}
 

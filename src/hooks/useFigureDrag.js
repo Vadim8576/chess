@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 import { getCellPosition } from '../utils/getCellPosition'
 import { getSquare } from '../utils/getSquare'
 import { squareToIndices } from '../utils/squareToIndices'
+import { COLORS } from '../constants/gameInitial'
 
 
 
@@ -18,10 +19,13 @@ export const useFigureDrag = (
   const [highlightedCell, setHighlightedCell] = useState({
     col: 0,
     row: 0,
-    color: 'green',
     visible: false
   })
-
+  const [cellInCheck, setCellInCheck] = useState({
+    col: 0,
+    row: 0,
+    visible: false
+  })
 
 
   const handlePointerDown = useCallback((e, currentFigureSquare) => {
@@ -86,7 +90,7 @@ export const useFigureDrag = (
         row,
       },
       visible: true,
-      color: 'green'
+      color: COLORS.accessibleСell
     })
     setIsDragging(true)
   }, [
@@ -132,7 +136,7 @@ export const useFigureDrag = (
           return {
             ...prev,
             cell: { col, row },
-            color: 'red'
+            color: COLORS.errorCell
           }
         })
         return
@@ -141,7 +145,7 @@ export const useFigureDrag = (
       setHighlightedCell(state => ({
         ...state,
         cell: { col, row },
-        color: 'green'
+        color: COLORS.accessibleСell
       }))
 
     } else {
@@ -151,7 +155,7 @@ export const useFigureDrag = (
           col: grabCell.col,
           row: grabCell.row,
         },
-        color: 'green',
+        color: COLORS.accessibleСell,
         visible: true
       })
     }
@@ -224,6 +228,18 @@ export const useFigureDrag = (
     appStore.updateHistoryMoves(`${grabCell.square}${square}`)
     appStore.updateHistoryList()
     getGameStatus()
+
+
+    if (appStore.chess.inCheck() || appStore.chess.isCheckmate()) {
+      const player = appStore.chess.turn() // чей сейчас ход
+      const squareArr = appStore.chess.findPiece({ type: 'k', color: player }) // ищем клетку на котором король
+
+      if (squareArr.length !== 1) return
+      const cellIndices = squareToIndices(squareArr[0])
+      console.log('король на: ', cellIndices)
+      setCellInCheck({ cell: {...cellIndices}, color: COLORS.errorCell, visible: true })
+    }
+
   }
 
   const handlePointerCancel = () => {
@@ -238,6 +254,11 @@ export const useFigureDrag = (
       ...state,
       visible: false
     }))
+    setCellInCheck({
+      col: 0,
+      row: 0,
+      visible: false
+    })
     setPossibleMoves([])
     setLastMoves([])
   }
@@ -248,6 +269,7 @@ export const useFigureDrag = (
     highlightedCell,
     lastMoves,
     possibleMoves,
+    cellInCheck,
     handlePointerDown,
     handlePointerMove,
     handlePointerUp,

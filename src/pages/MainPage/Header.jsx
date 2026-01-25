@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
-import { GAME_COLORS, HEADER_HEIGHT } from "../../constants/gameInitial";
+import { COLORS, HEADER_HEIGHT } from "../../constants/gameInitial";
 
 
 const HeaderLine = styled.div`
@@ -11,7 +11,7 @@ width: 100%;
 height: ${props => props.$height}px;
 padding: 10px;
 // border: 1px #666 solid;
-background-color: ${GAME_COLORS.primary};
+background-color: ${COLORS.primary};
 // margin-bottom: 20px;
 `;
 

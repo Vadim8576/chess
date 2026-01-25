@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
-import { GAME_COLORS } from "../constants/gameInitial";
+import { COLORS } from "../constants/gameInitial";
 
 
 
@@ -13,7 +13,7 @@ import { GAME_COLORS } from "../constants/gameInitial";
 // border: 1px #666 solid;
 // `;
 
-const HEADER_HEIGHT = 35
+const HEADER_HEIGHT = 30
 
 const HeaderLine = styled.div`
 display: flex;
@@ -21,9 +21,10 @@ justify-content: center;
 align-items: center;
 width: 100%;
 height: ${HEADER_HEIGHT}px;
-font-size: clamp(8px, 2.5vw, 14px);
+// font-size: clamp(8px, 2.5vw, 14px);
+font-size: 2.2vmin;
 
-color: ${GAME_COLORS.neutral};
+color: ${COLORS.neutral};
 // color: ${props => props.color};
 background-color: ${props => props.$background};
 // border-radius: 10px 10px 0 0;

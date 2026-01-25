@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import appStore from "../store/appStore";
 import CapturedFigure from "../components/boardElements/CapturedFigure";
-import { figure, GAME_COLORS } from "../constants/gameInitial";
+import { figure, COLORS } from "../constants/gameInitial";
 import { toJS } from 'mobx';
 
 
@@ -29,7 +29,7 @@ justify-content: center;
 align-content: center;
 // padding: 10px;
 // border-radius: 0 0 10px 10px;
-// border: 1px ${GAME_COLORS.neutral} solid;
+// border: 1px ${COLORS.neutral} solid;
 
 `;
 
