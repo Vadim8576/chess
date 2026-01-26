@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 import appStore from "../../../store/appStore";
@@ -8,7 +7,7 @@ const CellWrapper = styled.div`
 position: absolute;
 top: ${props => props.$top + 1}px;
 left: ${props => props.$left + 1}px;
-
+pointer-events: none;
 z-index: 99;
 width: ${props => props.$cellSize - 2}px;
 height: ${props => props.$cellSize - 2}px;
@@ -17,22 +16,17 @@ justify-content: center;
 align-items: center;
 `
 
-
-
 const Cell = styled.div`
-// background-color: ${props => props.color};
 border: 3px solid ${props => props.color};
 width: 100%;
 height: 100%;
-// transform: rotate(${props => props.$type === 'possibleMoves' ? '45' : ''}deg);
-
-// opacity: .5;
-`;
+pointer-events: none;
+`
 
 
 const HighlightedCell = observer(({ highlightedCell }) => {
 
-	console.log(highlightedCell)
+	// console.log(highlightedCell)
 	
 	if (!highlightedCell.visible) return null
 
@@ -42,7 +36,6 @@ const HighlightedCell = observer(({ highlightedCell }) => {
 	const row = appStore.whiteBottom ? rowTemp : (7 - rowTemp)
 	const top = row * appStore.board.cellSize
 	const left = col * appStore.board.cellSize
-
 
 
 	return (

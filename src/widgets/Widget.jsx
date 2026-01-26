@@ -3,8 +3,8 @@ import Header from './Header';
 
 
 const WidgetWrapper = styled.div`
-// display: flex;
-// flex-direction: column;
+display: flex;
+flex-direction: column;
 // flex-grow: 1;
 // flex-shrink: 0;
 // flex-basis: 0;

@@ -82,7 +82,7 @@ const MainPage = observer(() => {
 		if ((height - HEADER_HEIGHT - FOOTER_HEIGHT) <= width) {
 			cellSize = (height - HEADER_HEIGHT - FOOTER_HEIGHT) / 12
 		} else {
-			cellSize = width / 12
+			cellSize = width / 14
 			console.log('h > w', cellSize, cellSize * 12)
 		}
 

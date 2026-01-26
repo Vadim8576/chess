@@ -8,7 +8,8 @@ import { useAutoScroll } from "../hooks/useAutoScroll";
 const HEADER_HEIGHT = 30
 
 const History = styled.div`
-height: calc(100% - 35px);
+// height: calc(100% - 35px);
+flex-grow: 1;
 overflow-y: auto;
 padding: 10px;
 // border-radius: 0 0 10px 10px;

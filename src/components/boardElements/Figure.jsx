@@ -1,10 +1,10 @@
-import { useLoadImage } from "../../hooks/useLoadImage"
-import styled from 'styled-components'
+import { memo } from "react";
 import { observer } from "mobx-react-lite";
+import styled from 'styled-components'
 import appStore from "../../store/appStore";
+import { useLoadImage } from "../../hooks/useLoadImage"
 import { getCellPosition } from "../../utils/getCellPosition";
 import { getSquare } from "../../utils/getSquare";
-import { memo, useEffect } from "react";
 
 
 const ImgWrapper = styled.div.attrs(props => ({
@@ -35,6 +35,14 @@ const Img = styled.img`
   touch-action: none;
 	// border: 1px blue solid;
 `;
+
+
+
+
+const ImgMemo = memo(({ image }) => {
+  return <Img src={image.src} />
+})
+
 
 const Figure = memo(observer(({
 	src,
@@ -72,9 +80,6 @@ const Figure = memo(observer(({
 		handlePointerDown(e, square)
 	}
 
-
-
-
 	return (
 		<ImgWrapper
 			onPointerDown={onPointerDown}
@@ -84,7 +89,7 @@ const Figure = memo(observer(({
 			$top={top}
 			$left={left}
 		>
-			<Img src={image.src} />
+			<ImgMemo image={image} />
 		</ImgWrapper>
 	)
 }))

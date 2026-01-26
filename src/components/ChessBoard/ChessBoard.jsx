@@ -8,6 +8,8 @@ import { useGameStatus } from '../../hooks/useGameStatus';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import DraggableFigure from '../boardElements/DraggableFigure';
 import HighlightedCell from '../boardElements/backlightСells/HighlightedCell';
+import BacklightСells from '../boardElements/backlightСells/BacklightСells';
+
 
 
 
@@ -33,7 +35,7 @@ const ChessBoard = observer(() => {
   console.log('ChessBoard Render')
 
   const [draggedFigure, setDraggedFigure] = useState({ src: null, id: null })
-  
+
   const getGameStatus = useGameStatus(appStore)
 
 
@@ -41,7 +43,7 @@ const ChessBoard = observer(() => {
     isDragging,
     position,
     highlightedCell,
-    lastMoves,
+    lastMoveCells,
     possibleMoves,
     cellInCheck,
     handlePointerDown,
@@ -79,8 +81,8 @@ const ChessBoard = observer(() => {
 
 
   // const boardElementsProps = useMemo(
-  //   () => ({ setDraggedFigure, draggedFigure, highlightedCell, lastMoves, possibleMoves }),
-  //   [setDraggedFigure, draggedFigure, highlightedCell, lastMoves, possibleMoves]
+  //   () => ({ setDraggedFigure, draggedFigure, highlightedCell, lastMoveCells, possibleMoves }),
+  //   [setDraggedFigure, draggedFigure, highlightedCell, lastMoveCells, possibleMoves]
   // )
 
 
@@ -89,20 +91,12 @@ const ChessBoard = observer(() => {
   }, [handlePointerDown])
 
   return (
-    <BoardWrapper
-      $size={appStore.board.cellSize * 8}
-    >
-      {/* <BoardCanvas /> */}
+    <BoardWrapper $size={appStore.board.cellSize * 8}>
       <Board />
-
-      <BoardElements
-        // boardElementsProps={boardElementsProps}
-        handlePointerDown={handlePointerDownMemo}
-        setDraggedFigure={setDraggedFigure}
-        draggedFigure={draggedFigure}
-        // highlightedCell={highlightedCell}
-        lastMoves={lastMoves}
+      
+      <BacklightСells
         possibleMoves={possibleMoves}
+        lastMoveCells={lastMoveCells}
       />
 
       {highlightedCell.visible && (
@@ -116,6 +110,12 @@ const ChessBoard = observer(() => {
           highlightedCell={cellInCheck}
         />
       )}
+     
+      <BoardElements
+        handlePointerDown={handlePointerDownMemo}
+        setDraggedFigure={setDraggedFigure}
+        draggedFigure={draggedFigure}
+      />
 
       {draggedFigure && (
         <DraggableFigure

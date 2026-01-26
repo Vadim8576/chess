@@ -5,23 +5,14 @@ import appStore from "../store/appStore";
 import { COLORS } from "../constants/gameInitial";
 
 
-// const Wrapper = styled.div`
-// width: 100%;
-// height: 50%;
-// border: 1px #666 solid;
-// `;
-
 const Status = styled.div`
 text-align: center;
 display: flex;
 justify-content: center;
 align-items: center;
-// height: 60px;
-// flex-grow: 1;
+flex-grow: 1;
 height: calc(100% - 35px);
-// overflow-y: auto;
 color: #000;
-// font-size: clamp(8px, 2.5vw, 14px);
 font-size: 2.2vmin;
 font-weight: bold;
 // background-color: #414833;

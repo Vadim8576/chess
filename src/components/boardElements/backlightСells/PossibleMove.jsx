@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 import appStore from "../../../store/appStore";
@@ -9,7 +8,7 @@ const CellWrapper = styled.div`
 position: absolute;
 top: ${props => props.$top + 1}px;
 left: ${props => props.$left + 1}px;
-
+pointer-events: none;
 z-index: 99;
 width: ${props => props.$cellSize - 2}px;
 height: ${props => props.$cellSize - 2}px;
@@ -21,13 +20,10 @@ align-items: center;
 
 
 const Cell = styled.div`
-// background-color: lightgreen;
 border: 3px solid ${COLORS.possibleCell};
 width: 100%;
 height: 100%;
-// transform: rotate(45deg);
-
-// opacity: .5;
+pointer-events: none;
 `;
 
 

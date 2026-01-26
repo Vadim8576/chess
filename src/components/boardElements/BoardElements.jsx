@@ -5,7 +5,7 @@ import { files, ranks } from "../../constants/gameInitial";
 import Figure from "./Figure"
 import { getSrc } from "../../utils/getSrc";
 import appStore from "../../store/appStore";
-import BacklightСells from "./backlightСells/BacklightСells";
+
 
 
 
@@ -33,9 +33,6 @@ pointer-events: none;
 const BoardElements = memo(observer(({
   setDraggedFigure,
   draggedFigure,
-  // highlightedCell,
-  lastMoves,
-  possibleMoves,
   handlePointerDown
 }) => {
 
@@ -65,13 +62,6 @@ const BoardElements = memo(observer(({
 
   return (
     <ElementsWrapper>
-
-      <BacklightСells
-        possibleMoves={possibleMoves}
-        lastMoves={lastMoves}
-      />
-     
-
       {figures.map(figure => {
         if (draggedFigure.id !== figure.id) {
           return (
@@ -88,14 +78,10 @@ const BoardElements = memo(observer(({
         }
       })}
 
-
-
-
       {/* <Indicator
         top={appStore.board.y}
         left={appStore.board.x}
       /> */}
-
 
     </ElementsWrapper>
   )

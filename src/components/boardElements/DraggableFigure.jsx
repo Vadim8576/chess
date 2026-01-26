@@ -1,5 +1,6 @@
-import styled from 'styled-components'
+import { memo } from 'react';
 import { observer } from "mobx-react-lite";
+import styled from 'styled-components'
 import appStore from "../../store/appStore";
 
 
@@ -21,8 +22,7 @@ const ImgWrapper = styled.div.attrs(props => ({
   user-select: none;
   touch-action: none;
   -webkit-user-drag: none;
-  // border: 1px red solid;
-`;
+`
 
 const Img = styled.img`
   width: 75%;
@@ -31,7 +31,11 @@ const Img = styled.img`
   -webkit-user-drag: none;
 	user-select: none;
   touch-action: none;
-`;
+`
+
+const ImgMemo = memo(({ image }) => {
+  return <Img src={image.src} />
+})
 
 const DraggableFigure = observer(({ image, position }) => {
 
@@ -46,7 +50,8 @@ const DraggableFigure = observer(({ image, position }) => {
       $top={position.y}
       $left={position.x}
     >
-      <Img src={image.src} />
+      <ImgMemo image={image} />
+      {/* <Img src={image.src} /> */}
     </ImgWrapper>
   )
 })
