@@ -29,6 +29,18 @@ class appStore {
   }
 
 
+  initVariables() {
+    this.historyMoves = []
+    this.historyList = []
+    this.whiteBottom = true // true | false
+    this.status = ''
+    this.capturedFigures = {
+      'w': [],
+      'b': []
+    }
+  }
+
+
 
   saveToLocalStorage() {
     const fen = this.chess.fen()
@@ -50,6 +62,7 @@ class appStore {
     try {
       localStorage.removeItem('ChessFen')
       this.chess = new Chess()
+      this.initVariables()
     } catch (e) {
       console.log('Не удалось удалить fen из localStorage: ', e)
     }
@@ -103,8 +116,7 @@ class appStore {
 
     const historyMove = {
       move: `${history.from}-${history.to}`,
-      color: history.color,
-      id: historyList.length
+      color: history.color
     }
 
     this.historyList = [...this.historyList, historyMove]
@@ -114,10 +126,9 @@ class appStore {
 
 
 
-  // setChecked = () => {
-  //   this.checked = !this.checked
-  //   this.whiteBottom = this.checked
-  // }
+  rotateBoard = () => {
+    this.whiteBottom = !this.whiteBottom
+  }
 
 }
 

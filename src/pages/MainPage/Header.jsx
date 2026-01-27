@@ -20,11 +20,13 @@ const RestartButton = styled.button`
   padding: 8px;
   border: 1px #999 solid;
   border-radius: 5px;
-  background-color: #fff;
-  color: #000;
+  background-color: ${props => props.color};
+  color: #fff;
   text-transform: uppercase;
   opacity: .7;
   cursor: pointer;
+  margin-left: 10px;
+  font-weight: bold;
 `
 
 
@@ -33,17 +35,32 @@ const restartGame = () => {
   appStore.restartGame()
 }
 
+const rotateBoard = () => {
+  console.log('rotateBoard')
+  appStore.rotateBoard()
+}
+
 
 
 const Header = observer(() => {
   return (
     <HeaderLine $height={HEADER_HEIGHT}>
-      <h1 style={{color: '#fff'}}>Chess</h1>
-      <RestartButton
-        onMouseDown={() => restartGame()}
-      >
-        Начать новую игру
-      </RestartButton>
+      <h1 style={{ color: '#fff' }}>Chess</h1>
+      <div>
+        <RestartButton
+          color={'green'}
+          onMouseDown={() => restartGame()}
+        >
+          Начать новую игру
+        </RestartButton>
+        <RestartButton
+          color={'blue'}
+          onMouseDown={rotateBoard}
+        >
+          Перевернуть доску
+        </RestartButton>
+      </div>
+
     </HeaderLine>
   )
 })

@@ -17,7 +17,7 @@ const BacklightСells = memo(({
     <>
       {possibleMoves && possibleMoves.map(possibleMove => (
         <PossibleMove
-          key={possibleMove.id}
+          key={crypto.randomUUID()}
           cell={possibleMove.cell}
           fugureMove={fugureMove}
           grabCell={grabCell}
@@ -26,7 +26,7 @@ const BacklightСells = memo(({
 
       {lastMoveCells && lastMoveCells.map(lastMove => (
         <LastMove
-          key={lastMove.id}
+          key={crypto.randomUUID()}
           cell={lastMove.cell}
         />
       ))}

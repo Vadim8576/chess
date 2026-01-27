@@ -50,11 +50,22 @@ const Board = memo(observer(() => {
 
 	const board = useMemo(() => {
 		const cells = [];
-		ranks.forEach((rank, y) => {
-			files.forEach((file, x) => {
+
+		let currentRanks
+		let currentFiles
+		if (appStore.whiteBottom) {
+      currentRanks = ranks.slice()
+      currentFiles = files.slice()
+    } else {
+      currentRanks = ranks.slice().reverse()
+      currentFiles = files.slice().reverse()
+    }
+
+		currentRanks.forEach((rank, y) => {
+			currentFiles.forEach((file, x) => {
 				const isBlack = (y + x) % 2 === 0
 				cells.push({
-					id: `${file}${rank}`,
+					id: `${file}_${rank}`,
 					color: isBlack ? COLORS.whiteCell : COLORS.blackCell,
 					// color: isBlack ? '#f0d9b5' : '#b58863',
 					top: appStore.board.cellSize * y,
@@ -65,7 +76,9 @@ const Board = memo(observer(() => {
 			})
 		})
 
-		return cells;
+
+
+		return cells
 	}, [cellSize, appStore.whiteBottom])
 
 

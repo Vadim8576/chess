@@ -68,13 +68,16 @@ export const useFigureDrag = (
     }
 
 
+
+    const attack = appStore.chess.attackers(grabFigure.square)
+    console.log(`Атака `, attack)
+
+
     const pm = getPossibleMoves(appStore, grabFigure.square)
     setPossibleMoves([...pm])
     setGrabCell({ col, row })
     setLastMoveCells(prev => {
-
       const id = (!prev || prev.length === 0) ? 1 : 2
-      console.log(prev, id)
       return [{
         cell: {
           col: col,
@@ -88,7 +91,7 @@ export const useFigureDrag = (
         col,
         row,
       },
-      visible: false,
+      visible: true,
       color: COLORS.accessibleСell
     })
     setIsDragging(true)

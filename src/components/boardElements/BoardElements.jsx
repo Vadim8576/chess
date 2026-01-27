@@ -38,17 +38,19 @@ const BoardElements = memo(observer(({
 
 
   const figures = useMemo(() => {
-    const turn = appStore.chess.turn()
     const figure = []
+    const turn = appStore.chess.turn()
     const board = appStore.chess.board()
     ranks.forEach((rank, y) => {
       return files.forEach((file, x) => {
         const src = getSrc(appStore.whiteBottom, board, x, y)
-        if (!src) return
-        const currentFigure = appStore.chess.board()[y][x]
+        const yy = appStore.whiteBottom ? y : (7 - y)
+        const xx = appStore.whiteBottom ? x : (7 - x)
+        const currentFigure = appStore.chess.board()[yy][xx]
+        if (!src || !currentFigure) return
         const state = {
           src,
-          id: `${file}${rank}`,
+          id: `${file}_${rank}`,
           top: appStore.board.cellSize * y,
           left: appStore.board.cellSize * x,
           pointerEvents: (currentFigure.color !== turn) ? 'none' : 'auto'

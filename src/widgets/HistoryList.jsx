@@ -33,7 +33,7 @@ const HistoryList = observer(() => {
   return (
     <History ref={scrollRef}>
       {historyList.map((list, key) => (
-        <Text key={list.id}>{`${list.id}. ${list.color === 'w' ? 'Б' : 'Ч'}: ${list.move} ${list.status ? list.status : ''}`}</Text>
+        <Text key={crypto.randomUUID()}>{`${key + 1}) ${list.color === 'w' ? 'Б' : 'Ч'}: ${list.move} ${list.status ? list.status : ''}`}</Text>
       ))}
     </History>
   )
