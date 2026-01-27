@@ -15,6 +15,7 @@ const ImgWrapper = styled.div.attrs(props => ({
 		height: `${props.$height}px`,
 		cursor: props.$cursor,
 		zIndex: props.$zIndex,
+		pointerEvents: `${props.$pointerEvents}`
 	},
 }))`
   position: absolute;
@@ -24,6 +25,7 @@ const ImgWrapper = styled.div.attrs(props => ({
 	-webkit-user-drag: none;
 	user-select: none;
   touch-action: none;
+	z-index: 101;
 `;
 
 const Img = styled.img`
@@ -40,7 +42,7 @@ const Img = styled.img`
 
 
 const ImgMemo = memo(({ image }) => {
-  return <Img src={image.src} />
+	return <Img src={image.src} />
 })
 
 
@@ -50,7 +52,8 @@ const Figure = memo(observer(({
 	left,
 	id,
 	handlePointerDown,
-	setDraggedFigure
+	setDraggedFigure,
+	pointerEvents
 }) => {
 
 
@@ -77,11 +80,13 @@ const Figure = memo(observer(({
 		setDraggedFigure({ image, id })
 		const [col, row] = getCellPosition(left, top, appStore)
 		const square = getSquare(appStore.whiteBottom, col, row)
+
 		handlePointerDown(e, square)
 	}
 
 	return (
 		<ImgWrapper
+			$pointerEvents={pointerEvents}
 			onPointerDown={onPointerDown}
 			$cursor={'grab'}
 			$width={cellSize}

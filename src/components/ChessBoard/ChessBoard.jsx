@@ -4,11 +4,11 @@ import BoardElements from '../boardElements/BoardElements';
 import appStore from '../../store/appStore';
 import Board from './Board';
 import { useFigureDrag } from '../../hooks/useFigureDrag';
-import { useGameStatus } from '../../hooks/useGameStatus';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import DraggableFigure from '../boardElements/DraggableFigure';
 import HighlightedCell from '../boardElements/backlightСells/HighlightedCell';
 import BacklightСells from '../boardElements/backlightСells/BacklightСells';
+import { gameStatus } from '../../utils/gameStatus';
 
 
 
@@ -34,35 +34,36 @@ const BoardWrapper = styled.div`
 const ChessBoard = observer(() => {
   console.log('ChessBoard Render')
 
-  const [draggedFigure, setDraggedFigure] = useState({ src: null, id: null })
+  const size = appStore.board.cellSize * 8
 
-  const getGameStatus = useGameStatus(appStore)
-
+  const [draggedFigure, setDraggedFigure] = useState(null)
+  const [isMoving, setIsMoving] = useState(false)
+  // const getGameStatus = useGameStatus(appStore)
 
   const {
     isDragging,
     position,
+    grabCell,
     highlightedCell,
     lastMoveCells,
     possibleMoves,
     cellInCheck,
+    fugureMove,
     handlePointerDown,
     handlePointerMove,
     handlePointerUp,
     handlePointerCancel
   } = useFigureDrag(
     appStore,
-    getGameStatus,
-    setDraggedFigure
+    setDraggedFigure,
+    setIsMoving,
   )
 
 
-
   useEffect(() => {
-    getGameStatus()
+    gameStatus(appStore)
     appStore.updateHistoryList()
   }, [appStore.whiteBottom])
-
 
 
   useEffect(() => {
@@ -90,11 +91,19 @@ const ChessBoard = observer(() => {
     handlePointerDown(e, square)
   }, [handlePointerDown])
 
+
+  const fugureMoveMemo = useCallback((startCell, finishCell) => {
+    fugureMove(startCell, finishCell)
+  }, [handlePointerDown])
+
+
   return (
-    <BoardWrapper $size={appStore.board.cellSize * 8}>
+    <BoardWrapper $size={size}>
       <Board />
-      
+
       <BacklightСells
+        fugureMove={fugureMoveMemo}
+        grabCell={grabCell}
         possibleMoves={possibleMoves}
         lastMoveCells={lastMoveCells}
       />
@@ -110,11 +119,12 @@ const ChessBoard = observer(() => {
           highlightedCell={cellInCheck}
         />
       )}
-     
+
       <BoardElements
         handlePointerDown={handlePointerDownMemo}
         setDraggedFigure={setDraggedFigure}
         draggedFigure={draggedFigure}
+        isMoving={isMoving}
       />
 
       {draggedFigure && (
@@ -123,6 +133,7 @@ const ChessBoard = observer(() => {
           position={position}
         />
       )}
+
     </BoardWrapper>
   )
 })

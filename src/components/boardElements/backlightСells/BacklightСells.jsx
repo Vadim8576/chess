@@ -4,20 +4,27 @@ import { memo } from "react";
 
 
 
-const BacklightСells = memo(({ possibleMoves, lastMoveCells }) => {
+const BacklightСells = memo(({
+  fugureMove,
+  grabCell,
+  possibleMoves,
+  lastMoveCells
+}) => {
 
   console.log('lastMoveCells = ', lastMoveCells)
 
   return (
     <>
-      {possibleMoves.map(possibleMove => (
+      {possibleMoves && possibleMoves.map(possibleMove => (
         <PossibleMove
-          key={possibleMove.square}
+          key={possibleMove.id}
           cell={possibleMove.cell}
+          fugureMove={fugureMove}
+          grabCell={grabCell}
         />
       ))}
 
-      {lastMoveCells.map(lastMove => (
+      {lastMoveCells && lastMoveCells.map(lastMove => (
         <LastMove
           key={lastMove.id}
           cell={lastMove.cell}

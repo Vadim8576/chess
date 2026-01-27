@@ -3,17 +3,19 @@ import { getCellPosition } from '../utils/getCellPosition'
 import { getSquare } from '../utils/getSquare'
 import { squareToIndices } from '../utils/squareToIndices'
 import { COLORS } from '../constants/gameInitial'
+import { gameStatus } from '../utils/gameStatus'
+import { getPossibleMoves } from '../utils/getPossibleMoves'
 
 
 
 export const useFigureDrag = (
   appStore,
-  getGameStatus,
-  setDraggedFigure
+  setDraggedFigure,
+  setIsMoving
 ) => {
   const [isDragging, setIsDragging] = useState(false)
-  const [grabCell, setGrabCell] = useState({ col: 0, row: 0 })
-  const [position, setPosition] = useState([])
+  const [grabCell, setGrabCell] = useState(null)
+  const [position, setPosition] = useState(null)
   const [lastMoveCells, setLastMoveCells] = useState([])
   const [possibleMoves, setPossibleMoves] = useState([])
   const [highlightedCell, setHighlightedCell] = useState({
@@ -30,101 +32,74 @@ export const useFigureDrag = (
 
   const handlePointerDown = useCallback((e, currentFigureSquare) => {
 
-    
-    
-
-    
     const startX = appStore.board.x
     const startY = appStore.board.y
     const x = e.clientX - startX
     const y = e.clientY - startY
-    const xc = x - appStore.board.cellSize / 2
-    const yc = y - appStore.board.cellSize / 2
+    // const xc = x - appStore.board.cellSize / 2
+    // const yc = y - appStore.board.cellSize / 2
     const [col, row] = getCellPosition(x, y, appStore)
-
-
-    // console.log('Координаты доски', startX, startY)
-    // console.log(x, y)
-    // console.log(col, row)
-
     const grabFigure = appStore.chess.board()[row][col]
 
     if (!grabFigure) return
 
+    console.log('!!!!!', 'физически ', currentFigureSquare, 'по расчету ', grabFigure.square)
+
 
     const isCurrentPlayer = grabFigure.color === appStore.chess.turn()
 
-    if (!isCurrentPlayer) {
-      console.log('Сейчас ход другого игрока!')
-      setDraggedFigure({ src: null, id: null })
-      return
-    }
 
-
-    console.log(lastMoveCells, lastMoveCells.length, '!==', isCurrentPlayer, lastMoveCells.length !== 0 && isCurrentPlayer)
-
-
-    if(lastMoveCells.length !== 0 && isCurrentPlayer) {
-      setLastMoveCells([])
-
-      console.log('Взял свою же фигуру')
-    }
-
-
-    setPosition({ x: xc, y: yc })
-
-
-    console.log('!!!!!', 'физически ', currentFigureSquare, 'по расчету ', grabFigure.square)
+    // if (!isCurrentPlayer) {
+    //   console.log('Сейчас ход другого игрока!')
+    //   setDraggedFigure(null)
+    //   return
+    // }
 
 
     if (currentFigureSquare !== grabFigure.square) {
       console.log('Взял одну фигуру, а по расчетам другая')
-      setDraggedFigure({ src: null, id: null })
+      setDraggedFigure(null)
       return
     }
 
-  
-
-    const square = getSquare(appStore.whiteBottom, col, row)
-    // movesTemp - массив допустимых ходов для данной фигуры grabFigure. verbose: true - возвращает объект
-    const movesTemp = appStore.chess.moves({ square: grabFigure.square, verbose: true }).map(m => m.to)
-    if (movesTemp.length <= 0) {
-      console.log('Нет доступного хода для этой фигуры!')
-      // return
+    if (isCurrentPlayer) {
+      setLastMoveCells([])
+      console.log('Взял свою же фигуру')
     }
-    const moves = [...movesTemp, square] // Добавляем клетку, с которой взяли фигуру, для ее подсветки
 
-    console.log('Взята: ', grabFigure, ' Доступные ходы: ', moves)
 
-    // Массив с доступными ходами в виде индексов [cell: {0, 5}, id, cell: {...}, square...] -  координаты клетки в массиве доски
-    const moveIndices = moves.map(square => ({ cell: squareToIndices(square), square }))
-    setPossibleMoves([...moveIndices])
+    const pm = getPossibleMoves(appStore, grabFigure.square)
+    setPossibleMoves([...pm])
+    setGrabCell({ col, row })
+    setLastMoveCells(prev => {
 
-    // console.log(moveIndices)
-
-    setGrabCell({ col, row, square: grabFigure.square })
+      const id = (!prev || prev.length === 0) ? 1 : 2
+      console.log(prev, id)
+      return [{
+        cell: {
+          col: col,
+          row: row
+        },
+        id
+      }]
+    })
     setHighlightedCell({
       cell: {
         col,
         row,
       },
-      visible: true,
+      visible: false,
       color: COLORS.accessibleСell
     })
     setIsDragging(true)
   }, [
     appStore,
     setLastMoveCells,
-    lastMoveCells,
-    setPosition,
     setPossibleMoves,
-    setCellInCheck,
     setGrabCell,
     setHighlightedCell,
     setIsDragging,
-    getCellPosition,
-    getSquare,
-    squareToIndices
+    setDraggedFigure
   ])
 
 
@@ -146,18 +121,26 @@ export const useFigureDrag = (
 
     setPosition({ x: xc, y: yc })
 
+    
+    setIsMoving(prev => {
+      if (prev !== false) return prev
+      return true
+    })
+
 
     // Если фигура перемещается в пределах доски
     if (col >= 0 && col <= 7 && row >= 0 && row <= 7) {
       // Подсвечиваем красным, если ход сюда не доступен   
-      const condition = possibleMoves.filter(m => m.square === square).length === 0 // true, если ход не доступен в клетку square
+      const condition = possibleMoves.filter(m => m.id === square).length === 0 // true, если ход не доступен в клетку square
+      console.log(possibleMoves, square, condition)
       if (condition) {
         setHighlightedCell(prev => {
           if (prev.cell.col === col && prev.cell.row === row) return prev
           return {
             ...prev,
             cell: { col, row },
-            color: COLORS.errorCell
+            color: COLORS.errorCell,
+            visible: true
           }
         })
         return
@@ -168,20 +151,24 @@ export const useFigureDrag = (
         return {
           ...prev,
           cell: { col, row },
-          color: COLORS.accessibleСell
+          color: COLORS.accessibleСell,
+          visible: true
         }
       })
 
     } else {
 
       setHighlightedCell(prev => {
+        if (!grabCell) return
         if (prev.cell.col === grabCell.col && prev.cell.row === grabCell.row) return prev
         return {
           ...prev,
           cell: { col: grabCell.col, row: grabCell.row },
-          color: COLORS.accessibleСell
+          color: COLORS.accessibleСell,
+          visible: false
         }
       })
+
     }
   }
 
@@ -191,6 +178,8 @@ export const useFigureDrag = (
 
     resetMove()
 
+    setIsMoving(false)
+
     const startX = appStore.board.x
     const startY = appStore.board.y
     const x = e.clientX - startX
@@ -198,52 +187,77 @@ export const useFigureDrag = (
     const [col, row] = getCellPosition(x, y, appStore)
     const square = getSquare(appStore.whiteBottom, col, row) // Получаем адрес текущей клетки, например, A7
     // console.log('Отпущено на:', square)
+    const startCell = { ...grabCell }
+    const finishCell = { col, row }
+    fugureMove(startCell, finishCell, 'drop')
 
-    if (col === grabCell.col && row === grabCell.row) {
+  }
+
+
+
+  const handlePointerCancel = () => {
+    resetMove()
+  }
+
+
+
+
+
+// type - drop, если фигура поставлена перетаскиванием
+// type - doubleClick, если фигура перемещается сначало выбором фигуры, потом клетки, куда ее поставить
+
+  const fugureMove = useCallback((startCell, finishCell, type) => { 
+
+    console.log('fugureMove!!!!!!!!!!!!!!!!!')
+    console.log(startCell, finishCell)
+
+    const col = finishCell.col
+    const row = finishCell.row
+    const startSquare = getSquare(appStore.whiteBottom, startCell.col, startCell.row)
+    const finishSquare = getSquare(appStore.whiteBottom, col, row) // square - конечной клетки
+
+    if (startSquare === finishSquare) {
       console.log('Поставил туда же, где взял!')
+      return
+    }
 
-
-      setLastMoveCells([{
+    setLastMoveCells(prev => {
+      const id = (!prev || prev.length === 0) ? 1 : 2
+      console.log(prev, id)
+      return [{
         cell: {
-          col: grabCell.col,
-          row: grabCell.row
+          col: startCell.col,
+          row: startCell.row
         },
-        id: 1
-      }])
-      return
+        id
+      }]
+    })
+
+
+    if (type === 'drop') {
+      // const pm = getPossibleMoves(appStore, square)
+      const condition = possibleMoves.filter(m => m.id === finishSquare).length === 0 // true, если ход не доступен в клетку square
+
+      console.log(possibleMoves, finishSquare, condition)
+
+      if (col < 0 || col > 7 || row < 0 || row > 7 || condition) {
+        console.log('Фигура вне доски или недопустимый ход')
+        setPossibleMoves([])
+        setLastMoveCells([])
+        return
+      }
     }
-    const condition = possibleMoves.filter(m => m.square === square).length === 0 // true, если ход не доступен в клетку square
-    if (col < 0 || col > 7 || row < 0 || row > 7 || condition || grabCell.square === square) {
-      console.log('Фигура вне доски или недопустимый ход')
-      return
-    }
-
-
-
     // Успешный ход------------------------------------------------------
-    setLastMoveCells([])
-    setPossibleMoves([])
 
+    const moveSquares = `${startSquare}${finishSquare}`
 
-    setLastMoveCells([{
-      cell: {
-        col: grabCell.col,
-        row: grabCell.row
-      },
-      id: 1
-    },
-    {
-      cell: {
-        col: col,
-        row: row
-      },
-      id: 2
-    }])
+    // console.log(moveSquares)
 
+    let capturedFigure = appStore.chess.board()[row][col] // фигура на клетке
 
+    // console.log(capturedFigure)
 
-    let capturedFigure = appStore.chess.board()[row][col] // Съеденная фигура
-    const move = appStore.chess.move(`${grabCell.square}${square}`) // Сделать ход
+    const move = appStore.chess.move(moveSquares) // Сделать ход
 
     // если присутствует flags 'e', произошло взятие на проходе
     if (move && move.flags.includes('e')) {
@@ -258,12 +272,10 @@ export const useFigureDrag = (
       appStore.addCapturedFigures(capturedFigure.color, `${capturedFigure.type}${capturedFigure.color}`)
     }
 
-
-
-    appStore.updateHistoryMoves(`${grabCell.square}${square}`)
+    appStore.updateHistoryMoves(moveSquares)
     appStore.updateHistoryList()
-    getGameStatus()
 
+    gameStatus(appStore)
 
     if (appStore.chess.inCheck() || appStore.chess.isCheckmate()) {
       const player = appStore.chess.turn() // чей сейчас ход
@@ -273,38 +285,58 @@ export const useFigureDrag = (
       const cellIndices = squareToIndices(squareArr[0])
       console.log('король на: ', cellIndices)
       setCellInCheck({ cell: { ...cellIndices }, color: COLORS.errorCell, visible: true })
+    } else {
+      setCellInCheck(state => ({ ...state, visible: false }))
     }
 
-  }
+    setPossibleMoves([])
 
-  const handlePointerCancel = () => {
-    resetMove()
-  }
+    setLastMoveCells([{
+      cell: {
+        col: startCell.col,
+        row: startCell.row
+      },
+      id: 1
+    },
+    {
+      cell: {
+        col: col,
+        row: row
+      },
+      id: 2
+    }])
+
+  }, [
+    appStore,
+    setLastMoveCells,
+    setPossibleMoves,
+    possibleMoves,
+    setCellInCheck,
+    grabCell
+  ])
+
+
 
 
   function resetMove() {
     setIsDragging(false)
-    setDraggedFigure({ src: null, id: null })
+    setDraggedFigure(null)
     setHighlightedCell((state) => ({
       ...state,
       visible: false
     }))
-    setCellInCheck({
-      col: 0,
-      row: 0,
-      visible: false
-    })
-    // setPossibleMoves([])
-    // setLastMoveCells([])
+    setPosition(null)
   }
 
   return {
     isDragging,
     position,
+    grabCell,
     highlightedCell,
     lastMoveCells,
     possibleMoves,
     cellInCheck,
+    fugureMove,
     handlePointerDown,
     handlePointerMove,
     handlePointerUp,

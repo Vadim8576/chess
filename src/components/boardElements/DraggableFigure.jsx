@@ -17,7 +17,7 @@ const ImgWrapper = styled.div.attrs(props => ({
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 101;
+  z-index: 102;
   cursor: grabbing;
   user-select: none;
   touch-action: none;
@@ -38,6 +38,8 @@ const ImgMemo = memo(({ image }) => {
 })
 
 const DraggableFigure = observer(({ image, position }) => {
+
+  if(!position) return null
 
   const cellSize = appStore.board.cellSize
 

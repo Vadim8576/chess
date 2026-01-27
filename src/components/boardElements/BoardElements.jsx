@@ -1,12 +1,10 @@
 import { useMemo, memo } from "react";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components"
-import { files, ranks } from "../../constants/gameInitial";
+import appStore from "../../store/appStore";
 import Figure from "./Figure"
 import { getSrc } from "../../utils/getSrc";
-import appStore from "../../store/appStore";
-
-
+import { files, ranks } from "../../constants/gameInitial";
 
 
 const ElementsWrapper = styled.div`
@@ -17,7 +15,6 @@ const ElementsWrapper = styled.div`
   height: 100%;
 
 `;
-
 
 const Indicator = styled.div`
 position: absolute;
@@ -33,25 +30,28 @@ pointer-events: none;
 const BoardElements = memo(observer(({
   setDraggedFigure,
   draggedFigure,
-  handlePointerDown
+  handlePointerDown,
+  isMoving
 }) => {
 
-  console.log('BoardElements')
+  console.log('BoardElements', appStore.status)
 
 
   const figures = useMemo(() => {
-    console.log('Перерисовка фигур')
+    const turn = appStore.chess.turn()
     const figure = []
     const board = appStore.chess.board()
     ranks.forEach((rank, y) => {
       return files.forEach((file, x) => {
         const src = getSrc(appStore.whiteBottom, board, x, y)
         if (!src) return
+        const currentFigure = appStore.chess.board()[y][x]
         const state = {
           src,
           id: `${file}${rank}`,
           top: appStore.board.cellSize * y,
-          left: appStore.board.cellSize * x
+          left: appStore.board.cellSize * x,
+          pointerEvents: (currentFigure.color !== turn) ? 'none' : 'auto'
         }
         figure.push(state)
       })
@@ -63,18 +63,22 @@ const BoardElements = memo(observer(({
   return (
     <ElementsWrapper>
       {figures.map(figure => {
-        if (draggedFigure.id !== figure.id) {
-          return (
-            <Figure
-              key={figure.id}
-              src={figure.src}
-              top={figure.top}
-              left={figure.left}
-              id={figure.id}
-              handlePointerDown={handlePointerDown}
-              setDraggedFigure={setDraggedFigure}
-            />
-          )
+        if (true) {
+          // if (draggedFigure?.id !== figure.id) {
+          if (!isMoving || draggedFigure?.id !== figure.id) {
+            return (
+              <Figure
+                key={figure.id}
+                src={figure.src}
+                top={figure.top}
+                left={figure.left}
+                id={figure.id}
+                handlePointerDown={handlePointerDown}
+                setDraggedFigure={setDraggedFigure}
+                pointerEvents={figure.pointerEvents}
+              />
+            )
+          }
         }
       })}
 

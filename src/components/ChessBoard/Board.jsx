@@ -23,6 +23,7 @@ const Cell = styled.div.attrs(props => ({
 	},
 }))`
   position: absolute;
+	cursor: no-drop;
 `
 
 const CellRank = styled.div`
@@ -43,6 +44,8 @@ const Board = memo(observer(() => {
 
 	console.log('Board')
 
+	const cellSize = appStore.board.cellSize
+
 	const board = useMemo(() => {
 		const cells = [];
 		ranks.forEach((rank, y) => {
@@ -61,22 +64,22 @@ const Board = memo(observer(() => {
 		})
 
 		return cells;
-	}, [appStore.board.cellSize, appStore.whiteBottom])
+	}, [cellSize, appStore.whiteBottom])
 
 
 
 	return (
-		<Container $size={appStore.board.cellSize * 8}>
+		<Container $size={cellSize * 8}>
 			{board.map(cell => (
 				<Cell
 					key={cell.id}
 					color={cell.color}
 					$top={cell.top}
 					$left={cell.left}
-					$cellSize={appStore.board.cellSize}
+					$cellSize={cellSize}
 				>
-					<CellRank>{cell.rank && cell.rank}</CellRank>
-					<CellFile>{cell.file && cell.file}</CellFile>
+					{cell.rank && <CellRank>{cell.rank}</CellRank>}
+					{cell.file && <CellFile>{cell.file}</CellFile>}
 				</Cell>
 			))}
 		</Container>
