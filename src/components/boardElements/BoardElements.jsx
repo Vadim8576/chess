@@ -57,7 +57,7 @@ const BoardElements = memo(observer(({
       })
     })
     return figure
-  }, [appStore.board.cellSize, appStore.whiteBottom, appStore.status])
+  }, [appStore.board.cellSize, appStore.whiteBottom, appStore.status, appStore.chess])
 
 
   return (

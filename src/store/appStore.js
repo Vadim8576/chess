@@ -5,9 +5,12 @@ import { Chess } from "chess.js";
 
 
 class appStore {
-
-  // checked = true
   chess = new Chess()
+
+  // Сверять hash по сети
+  // hash = chess.hash()
+  // -> '3436f01fd716346e'
+
   board = {
     cellSize: 0,
     borderSize: 0
@@ -22,8 +25,36 @@ class appStore {
   }
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this)
   }
+
+
+
+  saveToLocalStorage() {
+    const fen = this.chess.fen()
+    try {
+      localStorage.setItem('ChessFen', fen)
+    } catch (e) {
+      console.log('Не удалось сохранить fen в localStorage: ', e)
+    }
+  }
+
+  loadFromLocalStorage() {
+    const fen = localStorage.getItem('ChessFen')
+    if (fen) this.chess.load(fen)
+  }
+
+
+  restartGame() {
+    console.log('Restart в Store')
+    try {
+      localStorage.removeItem('ChessFen')
+      this.chess = new Chess()
+    } catch (e) {
+      console.log('Не удалось удалить fen из localStorage: ', e)
+    }
+  }
+
 
   // get whiteBottom() {
   //   return this.whiteBottom
@@ -67,7 +98,7 @@ class appStore {
   updateHistoryList() {
     const historyList = this.chess.history({ verbose: true })
     // console.log(historyList)
-    if(historyList.length === 0) return
+    if (historyList.length === 0) return
     const history = historyList[historyList.length - 1]
 
     const historyMove = {

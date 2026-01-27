@@ -61,6 +61,14 @@ const ChessBoard = observer(() => {
 
 
   useEffect(() => {
+    const chessFen = localStorage.getItem('ChessFen')
+    if (chessFen) {
+      appStore.loadFromLocalStorage()
+    }
+  }, []);
+
+
+  useEffect(() => {
     gameStatus(appStore)
     appStore.updateHistoryList()
   }, [appStore.whiteBottom])

@@ -306,6 +306,9 @@ export const useFigureDrag = (
       id: 2
     }])
 
+
+   appStore.saveToLocalStorage()
+
   }, [
     appStore,
     setLastMoveCells,

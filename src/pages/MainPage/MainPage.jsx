@@ -80,10 +80,11 @@ const MainPage = observer(() => {
 		let cellSize
 
 		if ((height - HEADER_HEIGHT - FOOTER_HEIGHT) <= width) {
-			cellSize = (height - HEADER_HEIGHT - FOOTER_HEIGHT) / 12
+			cellSize = (height - HEADER_HEIGHT - FOOTER_HEIGHT) / 14
+			console.log('h < w', cellSize, width, cellSize * 12)
 		} else {
 			cellSize = width / 14
-			console.log('h > w', cellSize, cellSize * 12)
+			console.log('h > w', cellSize, width, cellSize * 12)
 		}
 
 		cellSize = Math.round(cellSize)
@@ -105,6 +106,7 @@ const MainPage = observer(() => {
 		// appStore.chess.load('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2')
 	}, [width, height])
 
+	
 
 	return (
 		<PageContainer>

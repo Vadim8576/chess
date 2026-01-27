@@ -28,15 +28,17 @@ const Cell = styled.div.attrs(props => ({
 
 const CellRank = styled.div`
   position: absolute;
-    top: 2px;
-    left: 2px;
-    font-size: 1.5vmin;
+  top: 2px;
+  left: 4px;
+  font-size: 1.5vmin;
+	color: ${COLORS.neutral};
 `
 const CellFile = styled.div`
   position: absolute;
-    bottom: 2px;
-    right: 2px;
-    font-size: 1.5vmin;
+  bottom: 2px;
+  right: 4px;
+  font-size: 1.5vmin;
+	color: ${COLORS.neutral};
 `
 
 
