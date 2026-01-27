@@ -9,6 +9,7 @@ import DraggableFigure from '../boardElements/DraggableFigure';
 import HighlightedCell from '../boardElements/backlightСells/HighlightedCell';
 import BacklightСells from '../boardElements/backlightСells/BacklightСells';
 import { gameStatus } from '../../utils/gameStatus';
+import { getLastMove } from '../../utils/getLastMove';
 
 
 
@@ -49,6 +50,8 @@ const ChessBoard = observer(() => {
     possibleMoves,
     cellInCheck,
     fugureMove,
+    updateKingCheckHighlight,
+    clearCells,
     handlePointerDown,
     handlePointerMove,
     handlePointerUp,
@@ -64,6 +67,9 @@ const ChessBoard = observer(() => {
     const chessFen = localStorage.getItem('ChessFen')
     if (chessFen) {
       appStore.loadFromLocalStorage()
+      updateKingCheckHighlight()
+      clearCells()
+      getLastMove(appStore)
     }
   }, []);
 

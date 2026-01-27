@@ -49,7 +49,7 @@ const Header = observer(() => {
       <div>
         <RestartButton
           color={'green'}
-          onMouseDown={() => restartGame()}
+          onMouseDown={restartGame}
         >
           Начать новую игру
         </RestartButton>

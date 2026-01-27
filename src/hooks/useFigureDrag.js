@@ -18,16 +18,8 @@ export const useFigureDrag = (
   const [position, setPosition] = useState(null)
   const [lastMoveCells, setLastMoveCells] = useState([])
   const [possibleMoves, setPossibleMoves] = useState([])
-  const [highlightedCell, setHighlightedCell] = useState({
-    col: 0,
-    row: 0,
-    visible: false
-  })
-  const [cellInCheck, setCellInCheck] = useState({
-    col: 0,
-    row: 0,
-    visible: false
-  })
+  const [highlightedCell, setHighlightedCell] = useState({})
+  const [cellInCheck, setCellInCheck] = useState({})
 
 
   const handlePointerDown = useCallback((e, currentFigureSquare) => {
@@ -280,17 +272,21 @@ export const useFigureDrag = (
 
     gameStatus(appStore)
 
-    if (appStore.chess.inCheck() || appStore.chess.isCheckmate()) {
-      const player = appStore.chess.turn() // чей сейчас ход
-      const squareArr = appStore.chess.findPiece({ type: 'k', color: player }) // ищем клетку на котором король
+    updateKingCheckHighlight()
 
-      if (squareArr.length !== 1) return
-      const cellIndices = squareToIndices(squareArr[0])
-      console.log('король на: ', cellIndices)
-      setCellInCheck({ cell: { ...cellIndices }, color: COLORS.errorCell, visible: true })
-    } else {
-      setCellInCheck(state => ({ ...state, visible: false }))
-    }
+
+
+    // if (appStore.chess.inCheck() || appStore.chess.isCheckmate()) {
+    //   const player = appStore.chess.turn() // чей сейчас ход
+    //   const squareArr = appStore.chess.findPiece({ type: 'k', color: player }) // ищем клетку на котором король
+
+    //   if (squareArr.length !== 1) return
+    //   const cellIndices = squareToIndices(squareArr[0])
+    //   console.log('король на: ', cellIndices)
+    //   setCellInCheck({ cell: { ...cellIndices }, color: COLORS.errorCell, visible: true })
+    // } else {
+    //   setCellInCheck(state => ({ ...state, visible: false }))
+    // }
 
     setPossibleMoves([])
 
@@ -322,6 +318,20 @@ export const useFigureDrag = (
   ])
 
 
+  function updateKingCheckHighlight() {
+    if (appStore.chess.inCheck() || appStore.chess.isCheckmate()) {
+      const player = appStore.chess.turn() // чей сейчас ход
+      const squareArr = appStore.chess.findPiece({ type: 'k', color: player }) // ищем клетку на котором король
+
+      if (squareArr.length !== 1) return
+      const cellIndices = squareToIndices(squareArr[0])
+      console.log('король на: ', cellIndices)
+      setCellInCheck({ cell: { ...cellIndices }, color: COLORS.errorCell, visible: true })
+    } else {
+      setCellInCheck(state => ({ ...state, visible: false }))
+    }
+  }
+
 
 
   function resetMove() {
@@ -332,6 +342,13 @@ export const useFigureDrag = (
       visible: false
     }))
     setPosition(null)
+    
+  }
+
+
+  function clearCells() {
+    // setCellInCheck({})
+    setLastMoveCells([])
   }
 
   return {
@@ -343,6 +360,8 @@ export const useFigureDrag = (
     possibleMoves,
     cellInCheck,
     fugureMove,
+    updateKingCheckHighlight,
+    clearCells,
     handlePointerDown,
     handlePointerMove,
     handlePointerUp,
