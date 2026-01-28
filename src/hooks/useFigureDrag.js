@@ -325,7 +325,7 @@ export const useFigureDrag = (
     }])
 
 
-    appStore.saveToLocalStorage()
+    appStore.saveGameToLocalStorage()
 
   }, [
     appStore,

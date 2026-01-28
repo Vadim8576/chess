@@ -2,8 +2,6 @@ import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 import appStore from "../../../store/appStore";
 import { COLORS } from "../../../constants/gameInitial";
-import { getSquare } from "../../../utils/getSquare";
-import { getPossibleMoves } from "../../../utils/getPossibleMoves";
 
 
 const CellWrapper = styled.div`
@@ -35,6 +33,10 @@ const PossibleMove = observer(({ cell, fugureMove, grabCell }) => {
   const row = appStore.whiteBottom ? rowTemp : (7 - rowTemp)
   const top = row * appStore.board.cellSize
   const left = col * appStore.board.cellSize
+  // const col = appStore.whiteBottom ? colTemp : (7 - colTemp)
+  // const row = appStore.whiteBottom ? rowTemp : (7 - rowTemp)
+  // const top = row * appStore.board.cellSize
+  // const left = col * appStore.board.cellSize
 
   const onPointerDown = (col, row) => {
 
@@ -51,7 +53,7 @@ const PossibleMove = observer(({ cell, fugureMove, grabCell }) => {
       $left={left}
       $cellSize={appStore.board.cellSize}
     >
-      <Cell onPointerDown={() => onPointerDown(col, row)} />
+      <Cell onPointerDown={() => onPointerDown(colTemp, rowTemp)} />
     </CellWrapper>
   )
 })

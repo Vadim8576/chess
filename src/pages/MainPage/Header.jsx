@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import { COLORS, HEADER_HEIGHT } from "../../constants/gameInitial";
 import appStore from "../../store/appStore";
+import { gameStatus } from "../../utils/gameStatus";
 
 
 const HeaderLine = styled.div`
@@ -35,6 +36,7 @@ const restartGame = () => {
   console.log('Restart')
   appStore.restartGame()
   appStore.removeHightLightCells()
+  gameStatus(appStore)
 }
 
 const rotateBoard = () => {

@@ -33,22 +33,13 @@ class appStore {
   }
 
 
-  initVariables() {
-    this.historyMoves = []
-    this.historyList = []
-    this.whiteBottom = true // true | false
-    this.status = ''
-    this.capturedFigures = {
-      'w': [],
-      'b': []
-    }
-  }
+  
 
   setLastMoveCells(cells) {
     this.lastMoveCells = cells
     console.log(toJS(this.lastMoveCells))
   }
-  
+
   setPossibleMoves(cells) {
     this.possibleMoves = cells
     console.log(toJS(this.possibleMoves))
@@ -66,7 +57,7 @@ class appStore {
   }
 
 
-  saveToLocalStorage() {
+  saveGameToLocalStorage() {
     const fen = this.chess.fen()
     try {
       localStorage.setItem('ChessFen', fen)
@@ -75,11 +66,56 @@ class appStore {
     }
   }
 
-  loadFromLocalStorage() {
+  loadGameFromLocalStorage() {
     const fen = localStorage.getItem('ChessFen')
     if (fen) this.chess.load(fen)
   }
 
+
+
+  saveSettingToLocalStorage(setting) {
+    const oldSetting = localStorage.getItem('Setting') || {}
+
+   console.log(oldSetting)
+   console.log(JSON.parse(oldSetting))
+    const newSetting = { ...JSON.parse(oldSetting), ...setting }
+
+    console.log(newSetting)
+
+    try {
+      localStorage.setItem('Setting', JSON.stringify(newSetting))
+    } catch (e) {
+      console.log('Не удалось сохранить настройки в localStorage: ', e)
+    }
+  }
+
+  setSettingFromLocalStorage() {
+    const setting = localStorage.getItem('Setting')
+    if (!setting) return
+    const parseSetting = JSON.parse(setting)
+    console.log('parseSetting = ', parseSetting)
+    if ('whiteBottom' in parseSetting) {
+      this.whiteBottom = setting.whiteBottom
+    }
+
+    console.log(this.whiteBottom)
+  }
+
+  rotateBoard() {
+    this.whiteBottom = !this.whiteBottom
+    this.saveSettingToLocalStorage({ whiteBottom: this.whiteBottom })
+  }
+
+  initVariables() {
+    this.historyMoves = []
+    this.historyList = []
+    // this.whiteBottom = true // true | false
+    this.status = ''
+    this.capturedFigures = {
+      'w': [],
+      'b': []
+    }
+  }
 
   restartGame() {
     console.log('Restart в Store')
@@ -131,9 +167,7 @@ class appStore {
     this.historyList = [...this.historyList, historyMove]
   }
 
-  rotateBoard() {
-    this.whiteBottom = !this.whiteBottom
-  }
+
 
 }
 
