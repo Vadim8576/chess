@@ -123,7 +123,7 @@ export const useFigureDrag = (
     if (col >= 0 && col <= 7 && row >= 0 && row <= 7) {
       // Подсвечиваем красным, если ход сюда не доступен   
       const condition = appStore.possibleMoves.filter(m => m.id === square).length === 0 // true, если ход не доступен в клетку square
-      console.log(appStore.possibleMoves, square, condition)
+      // console.log(appStore.possibleMoves, square, condition)
       if (condition) {
         setHighlightedCell(prev => {
           if (prev.cell.col === col && prev.cell.row === row) return prev
@@ -199,7 +199,7 @@ export const useFigureDrag = (
 
   const fugureMove = useCallback((startCell, finishCell, type) => {
 
-    console.log('fugureMove!!!!!!!!!!!!!!!!!')
+    // console.log('fugureMove!!!!!!!!!!!!!!!!!')
     console.log(startCell, finishCell)
 
     const col = finishCell.col
@@ -236,7 +236,7 @@ export const useFigureDrag = (
       // const pm = getPossibleMoves(appStore, square)
       const condition = appStore.possibleMoves.filter(m => m.id === finishSquare).length === 0 // true, если ход не доступен в клетку square
 
-      console.log(appStore.possibleMoves, finishSquare, condition)
+      console.log(finishSquare, condition)
 
       if (col < 0 || col > 7 || row < 0 || row > 7 || condition) {
         console.log('Фигура вне доски или недопустимый ход')

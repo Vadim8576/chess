@@ -37,17 +37,17 @@ class appStore {
 
   setLastMoveCells(cells) {
     this.lastMoveCells = cells
-    console.log(toJS(this.lastMoveCells))
+    // console.log(toJS(this.lastMoveCells))
   }
 
   setPossibleMoves(cells) {
     this.possibleMoves = cells
-    console.log(toJS(this.possibleMoves))
+    // console.log(toJS(this.possibleMoves))
   }
 
   setCellInCheck(cell) {
     this.cellInCheck = cell
-    console.log(toJS(this.cellInCheck))
+    // console.log(toJS(this.cellInCheck))
   }
 
   removeHightLightCells() {
@@ -80,7 +80,7 @@ class appStore {
    console.log(JSON.parse(oldSetting))
     const newSetting = { ...JSON.parse(oldSetting), ...setting }
 
-    console.log(newSetting)
+    // console.log(newSetting)
 
     try {
       localStorage.setItem('Setting', JSON.stringify(newSetting))
@@ -93,12 +93,12 @@ class appStore {
     const setting = localStorage.getItem('Setting')
     if (!setting) return
     const parseSetting = JSON.parse(setting)
-    console.log('parseSetting = ', parseSetting)
+    // console.log('parseSetting = ', parseSetting)
     if ('whiteBottom' in parseSetting) {
       this.whiteBottom = parseSetting.whiteBottom
     }
 
-    console.log(this.whiteBottom)
+    // console.log(this.whiteBottom)
   }
 
   rotateBoard() {
