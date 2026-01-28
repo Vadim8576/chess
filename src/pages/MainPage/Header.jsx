@@ -27,12 +27,14 @@ const RestartButton = styled.button`
   cursor: pointer;
   margin-left: 10px;
   font-weight: bold;
+  font-size: 2.2vmin;
 `
 
 
 const restartGame = () => {
   console.log('Restart')
   appStore.restartGame()
+  appStore.removeHightLightCells()
 }
 
 const rotateBoard = () => {

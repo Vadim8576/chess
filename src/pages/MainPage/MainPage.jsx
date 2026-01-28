@@ -106,7 +106,12 @@ const MainPage = observer(() => {
 		// appStore.chess.load('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2')
 	}, [width, height])
 
-	
+
+
+	const testFN = (cl) => {
+		cl()
+	}
+
 
 	return (
 		<PageContainer>

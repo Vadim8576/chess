@@ -1,11 +1,8 @@
 import styled from "styled-components";
 import ChessBoard from "../../components/ChessBoard/ChessBoard";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { observer } from "mobx-react-lite";
 import appStore from "../../store/appStore";
-import Widget from "../../widgets/Widget";
-import GameStatus from "../../widgets/GameStatus";
-import { FOOTER_HEIGHT, COLORS, HEADER_HEIGHT } from "../../constants/gameInitial";
 
 const Container = styled.div`
 	// border: 1px blue solid;
@@ -29,10 +26,6 @@ const BoardContainer = observer(({windowSize}) => {
 		if (!ref.current) return
 
 		const boardContainerRect = ref.current.getBoundingClientRect()
-
-		// console.log(boardContainerRect.x, boardContainerRect.y)
-
-		// console.log('Поменяли координаты доски')
 
 		appStore.setBoard({
 			x: boardContainerRect.x,

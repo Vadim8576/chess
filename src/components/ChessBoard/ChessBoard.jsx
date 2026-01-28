@@ -9,20 +9,7 @@ import DraggableFigure from '../boardElements/DraggableFigure';
 import HighlightedCell from '../boardElements/backlightСells/HighlightedCell';
 import BacklightСells from '../boardElements/backlightСells/BacklightСells';
 import { gameStatus } from '../../utils/gameStatus';
-import { getLastMove } from '../../utils/getLastMove';
 
-
-
-
-// const Cell = styled.div`
-// position: absolute;
-// background-color: red;
-// width: 50px;
-// height: 50px;
-// top: ${props => props.$top}px;
-// left: ${props => props.$left}px;
-// border: none;
-// `;
 
 const BoardWrapper = styled.div`
   position: relative;
@@ -39,19 +26,14 @@ const ChessBoard = observer(() => {
 
   const [draggedFigure, setDraggedFigure] = useState(null)
   const [isMoving, setIsMoving] = useState(false)
-  // const getGameStatus = useGameStatus(appStore)
 
   const {
     isDragging,
     position,
     grabCell,
     highlightedCell,
-    lastMoveCells,
-    possibleMoves,
-    cellInCheck,
     fugureMove,
     updateKingCheckHighlight,
-    clearCells,
     handlePointerDown,
     handlePointerMove,
     handlePointerUp,
@@ -68,8 +50,6 @@ const ChessBoard = observer(() => {
     if (chessFen) {
       appStore.loadFromLocalStorage()
       updateKingCheckHighlight()
-      clearCells()
-      getLastMove(appStore)
     }
   }, []);
 
@@ -95,11 +75,6 @@ const ChessBoard = observer(() => {
   }, [isDragging])
 
 
-  // const boardElementsProps = useMemo(
-  //   () => ({ setDraggedFigure, draggedFigure, highlightedCell, lastMoveCells, possibleMoves }),
-  //   [setDraggedFigure, draggedFigure, highlightedCell, lastMoveCells, possibleMoves]
-  // )
-
 
   const handlePointerDownMemo = useCallback((e, square) => {
     handlePointerDown(e, square)
@@ -118,8 +93,6 @@ const ChessBoard = observer(() => {
       <BacklightСells
         fugureMove={fugureMoveMemo}
         grabCell={grabCell}
-        possibleMoves={possibleMoves}
-        lastMoveCells={lastMoveCells}
       />
 
       {highlightedCell.visible && (
@@ -128,9 +101,9 @@ const ChessBoard = observer(() => {
         />
       )}
 
-      {cellInCheck.visible && (
+      {appStore.cellInCheck.visible && (
         <HighlightedCell
-          highlightedCell={cellInCheck}
+          highlightedCell={appStore.cellInCheck}
         />
       )}
 

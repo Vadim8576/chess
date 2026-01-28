@@ -15,14 +15,18 @@ class appStore {
     cellSize: 0,
     borderSize: 0
   }
-  historyMoves = []
-  historyList = []
-  whiteBottom = true // true | false
-  status = ''
   capturedFigures = {
     'w': [],
     'b': []
   }
+  historyMoves = []
+  historyList = []
+  whiteBottom = true // true | false
+  status = ''
+
+  lastMoveCells = []
+  possibleMoves = []
+  cellInCheck = {}
 
   constructor() {
     makeAutoObservable(this)
@@ -40,6 +44,26 @@ class appStore {
     }
   }
 
+  setLastMoveCells(cells) {
+    this.lastMoveCells = cells
+    console.log(toJS(this.lastMoveCells))
+  }
+  
+  setPossibleMoves(cells) {
+    this.possibleMoves = cells
+    console.log(toJS(this.possibleMoves))
+  }
+
+  setCellInCheck(cell) {
+    this.cellInCheck = cell
+    console.log(toJS(this.cellInCheck))
+  }
+
+  removeHightLightCells() {
+    this.setLastMoveCells([])
+    this.setPossibleMoves([])
+    this.setCellInCheck({})
+  }
 
 
   saveToLocalStorage() {
@@ -68,17 +92,10 @@ class appStore {
     }
   }
 
-
-  // get whiteBottom() {
-  //   return this.whiteBottom
-  // }
-
   setBoard(board) {
     this.board = { ...this.board, ...board }
     // console.log('board = ', toJS(this.board))
   }
-
-
 
   setGameStatus(status) {
     this.status = status
@@ -94,19 +111,11 @@ class appStore {
     console.log(toJS(this.capturedFigures))
   }
 
-
-
-
   updateHistoryMoves(newHistoryMove) {
     this.historyMoves = [...this.historyMoves, newHistoryMove]
     console.log(toJS(this.historyMoves))
   }
 
-
-
-  // updateHistoryList(newHistoryMoive) {
-  //   this.historyList = [...this.historyList, newHistoryMoive]
-  // }
 
   updateHistoryList() {
     const historyList = this.chess.history({ verbose: true })
@@ -122,11 +131,7 @@ class appStore {
     this.historyList = [...this.historyList, historyMove]
   }
 
-
-
-
-
-  rotateBoard = () => {
+  rotateBoard() {
     this.whiteBottom = !this.whiteBottom
   }
 

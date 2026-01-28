@@ -16,11 +16,9 @@ export const useFigureDrag = (
   const [isDragging, setIsDragging] = useState(false)
   const [grabCell, setGrabCell] = useState(null)
   const [position, setPosition] = useState(null)
-  const [lastMoveCells, setLastMoveCells] = useState([])
-  const [possibleMoves, setPossibleMoves] = useState([])
   const [highlightedCell, setHighlightedCell] = useState({})
-  const [cellInCheck, setCellInCheck] = useState({})
 
+  // const [cellInCheck, setCellInCheck] = useState({})
 
   const handlePointerDown = useCallback((e, currentFigureSquare) => {
 
@@ -55,7 +53,7 @@ export const useFigureDrag = (
     }
 
     if (isCurrentPlayer) {
-      setLastMoveCells([])
+      appStore.setLastMoveCells([])
       console.log('Взял свою же фигуру')
     }
 
@@ -66,18 +64,18 @@ export const useFigureDrag = (
 
 
     const pm = getPossibleMoves(appStore, grabFigure.square)
-    setPossibleMoves([...pm])
+    appStore.setPossibleMoves([...pm])
+
     setGrabCell({ col, row })
-    setLastMoveCells(prev => {
-      const id = (!prev || prev.length === 0) ? 1 : 2
-      return [{
-        cell: {
-          col: col,
-          row: row
-        },
-        id
-      }]
-    })
+
+    appStore.setLastMoveCells([{
+      cell: {
+        col: col,
+        row: row
+      }
+    }])
+
+
     setHighlightedCell({
       cell: {
         col,
@@ -89,8 +87,6 @@ export const useFigureDrag = (
     setIsDragging(true)
   }, [
     appStore,
-    setLastMoveCells,
-    setPossibleMoves,
     setGrabCell,
     setHighlightedCell,
     setIsDragging,
@@ -116,7 +112,7 @@ export const useFigureDrag = (
 
     setPosition({ x: xc, y: yc })
 
-    
+
     setIsMoving(prev => {
       if (prev !== false) return prev
       return true
@@ -126,8 +122,8 @@ export const useFigureDrag = (
     // Если фигура перемещается в пределах доски
     if (col >= 0 && col <= 7 && row >= 0 && row <= 7) {
       // Подсвечиваем красным, если ход сюда не доступен   
-      const condition = possibleMoves.filter(m => m.id === square).length === 0 // true, если ход не доступен в клетку square
-      console.log(possibleMoves, square, condition)
+      const condition = appStore.possibleMoves.filter(m => m.id === square).length === 0 // true, если ход не доступен в клетку square
+      console.log(appStore.possibleMoves, square, condition)
       if (condition) {
         setHighlightedCell(prev => {
           if (prev.cell.col === col && prev.cell.row === row) return prev
@@ -198,10 +194,10 @@ export const useFigureDrag = (
 
 
 
-// type - drop, если фигура поставлена перетаскиванием
-// type - doubleClick, если фигура перемещается сначало выбором фигуры, потом клетки, куда ее поставить
+  // type - drop, если фигура поставлена перетаскиванием
+  // type - doubleClick, если фигура перемещается сначало выбором фигуры, потом клетки, куда ее поставить
 
-  const fugureMove = useCallback((startCell, finishCell, type) => { 
+  const fugureMove = useCallback((startCell, finishCell, type) => {
 
     console.log('fugureMove!!!!!!!!!!!!!!!!!')
     console.log(startCell, finishCell)
@@ -216,29 +212,38 @@ export const useFigureDrag = (
       return
     }
 
-    setLastMoveCells(prev => {
-      const id = (!prev || prev.length === 0) ? 1 : 2
-      console.log(prev, id)
-      return [{
-        cell: {
-          col: startCell.col,
-          row: startCell.row
-        },
-        id
-      }]
-    })
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // setLastMoveCells(prev => {
+    //   const id = (!prev || prev.length === 0) ? 1 : 2
+    //   console.log(prev, id)
+    //   return [{
+    //     cell: {
+    //       col: startCell.col,
+    //       row: startCell.row
+    //     },
+    //     id
+    //   }]
+    // })
+    appStore.setLastMoveCells([{
+      cell: {
+        col: startCell.col,
+        row: startCell.row
+      }
+    }])
 
 
     if (type === 'drop') {
       // const pm = getPossibleMoves(appStore, square)
-      const condition = possibleMoves.filter(m => m.id === finishSquare).length === 0 // true, если ход не доступен в клетку square
+      const condition = appStore.possibleMoves.filter(m => m.id === finishSquare).length === 0 // true, если ход не доступен в клетку square
 
-      console.log(possibleMoves, finishSquare, condition)
+      console.log(appStore.possibleMoves, finishSquare, condition)
 
       if (col < 0 || col > 7 || row < 0 || row > 7 || condition) {
         console.log('Фигура вне доски или недопустимый ход')
-        setPossibleMoves([])
-        setLastMoveCells([])
+        appStore.setPossibleMoves([])
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // setLastMoveCells([])
+        appStore.setLastMoveCells([])
         return
       }
     }
@@ -288,32 +293,42 @@ export const useFigureDrag = (
     //   setCellInCheck(state => ({ ...state, visible: false }))
     // }
 
-    setPossibleMoves([])
+    appStore.setPossibleMoves([])
 
-    setLastMoveCells([{
+
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // setLastMoveCells([{
+    //   cell: {
+    //     col: startCell.col,
+    //     row: startCell.row
+    //   },
+    //   id: 1
+    // },
+    // {
+    //   cell: {
+    //     col: col,
+    //     row: row
+    //   },
+    //   id: 2
+    // }])
+    appStore.setLastMoveCells([{
       cell: {
         col: startCell.col,
         row: startCell.row
-      },
-      id: 1
+      }
     },
     {
       cell: {
         col: col,
         row: row
-      },
-      id: 2
+      }
     }])
 
 
-   appStore.saveToLocalStorage()
+    appStore.saveToLocalStorage()
 
   }, [
     appStore,
-    setLastMoveCells,
-    setPossibleMoves,
-    possibleMoves,
-    setCellInCheck,
     grabCell
   ])
 
@@ -326,9 +341,9 @@ export const useFigureDrag = (
       if (squareArr.length !== 1) return
       const cellIndices = squareToIndices(squareArr[0])
       console.log('король на: ', cellIndices)
-      setCellInCheck({ cell: { ...cellIndices }, color: COLORS.errorCell, visible: true })
+      appStore.setCellInCheck({ cell: { ...cellIndices }, color: COLORS.errorCell, visible: true })
     } else {
-      setCellInCheck(state => ({ ...state, visible: false }))
+      appStore.setCellInCheck(state => ({ ...state, visible: false }))
     }
   }
 
@@ -342,26 +357,17 @@ export const useFigureDrag = (
       visible: false
     }))
     setPosition(null)
-    
+
   }
 
-
-  function clearCells() {
-    // setCellInCheck({})
-    setLastMoveCells([])
-  }
 
   return {
     isDragging,
     position,
     grabCell,
     highlightedCell,
-    lastMoveCells,
-    possibleMoves,
-    cellInCheck,
     fugureMove,
     updateKingCheckHighlight,
-    clearCells,
     handlePointerDown,
     handlePointerMove,
     handlePointerUp,
