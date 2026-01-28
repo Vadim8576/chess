@@ -56,9 +56,9 @@ const ChessBoard = observer(() => {
   }, []);
 
 
-  useEffect(() => {  
-    appStore.updateHistoryList()
-  }, [appStore.whiteBottom])
+  // useEffect(() => {  
+    // appStore.updateHistoryList()
+  // }, [appStore.whiteBottom])
 
 
   useEffect(() => {

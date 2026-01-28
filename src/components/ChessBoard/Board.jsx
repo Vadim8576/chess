@@ -31,14 +31,14 @@ const CellRank = styled.div`
   top: 2px;
   left: 4px;
   font-size: 1.5vmin;
-	color: ${COLORS.neutral};
+	color: ${COLORS.primary};
 `
 const CellFile = styled.div`
   position: absolute;
   bottom: 2px;
   right: 4px;
   font-size: 1.5vmin;
-	color: ${COLORS.neutral};
+	color: ${COLORS.primary};
 `
 
 

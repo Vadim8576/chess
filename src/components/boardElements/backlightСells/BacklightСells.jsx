@@ -1,20 +1,20 @@
 import PossibleMove from "./PossibleMove";
 import LastMove from "./LastMove";
-import { memo } from "react";
+import { memo, useRef, useState } from "react";
 import appStore from "../../../store/appStore";
 import { observer } from "mobx-react-lite";
 
 
 
-const BacklightСells = memo(observer(({
+const BacklightCells = memo(observer(({
   fugureMove,
   grabCell
 }) => {
 
 
   return (
-    <>
-      {appStore.possibleMoves && appStore.possibleMoves.map(possibleMove => (
+    <div>
+      {appStore.possibleMoves.length > 0 && appStore.possibleMoves.map(possibleMove => (
         <PossibleMove
           key={crypto.randomUUID()}
           cell={possibleMove.cell}
@@ -23,14 +23,14 @@ const BacklightСells = memo(observer(({
         />
       ))}
 
-      {appStore.lastMoveCells && appStore.lastMoveCells.map(lastMove => (
+      {appStore.lastMoveCells.length > 0 && appStore.lastMoveCells.map(lastMove => (
         <LastMove
           key={crypto.randomUUID()}
           cell={lastMove.cell}
         />
       ))}
-    </>
-  )
-}))
+    </div>
+  );
+}));
 
-export default BacklightСells
+export default BacklightCells

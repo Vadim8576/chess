@@ -135,7 +135,7 @@ const MainPage = observer(() => {
 							<GameStatus />
 						</Widget>
 					</Status>
-					<History>
+					{/* <History>
 						<Widget title={{
 							title: 'История',
 							color: '#fff',
@@ -144,7 +144,7 @@ const MainPage = observer(() => {
 						>
 							<HistoryList />
 						</Widget>
-					</History>
+					</History> */}
 				</Grid>}
 			</PageWrapper>
 			<Footer />

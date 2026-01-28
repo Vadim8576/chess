@@ -95,7 +95,7 @@ class appStore {
     const parseSetting = JSON.parse(setting)
     console.log('parseSetting = ', parseSetting)
     if ('whiteBottom' in parseSetting) {
-      this.whiteBottom = setting.whiteBottom
+      this.whiteBottom = parseSetting.whiteBottom
     }
 
     console.log(this.whiteBottom)

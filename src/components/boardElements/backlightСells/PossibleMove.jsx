@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 import appStore from "../../../store/appStore";
 import { COLORS } from "../../../constants/gameInitial";
+import { useEffect, useRef, useState } from "react";
 
 
 const CellWrapper = styled.div`
@@ -26,26 +27,23 @@ cursor: pointer;
 `;
 
 const PossibleMove = observer(({ cell, fugureMove, grabCell }) => {
-
   const colTemp = cell.col
   const rowTemp = cell.row
   const col = appStore.whiteBottom ? colTemp : (7 - colTemp)
   const row = appStore.whiteBottom ? rowTemp : (7 - rowTemp)
   const top = row * appStore.board.cellSize
   const left = col * appStore.board.cellSize
-  // const col = appStore.whiteBottom ? colTemp : (7 - colTemp)
-  // const row = appStore.whiteBottom ? rowTemp : (7 - rowTemp)
-  // const top = row * appStore.board.cellSize
-  // const left = col * appStore.board.cellSize
 
-  const onPointerDown = (col, row) => {
-
-    const startCell = {...grabCell}
-    const finishCell = {col, row}
+  const onPointerDown = (e, col, row) => {
+    e.preventDefault()
+		if (e.button !== 0 && e.pointerType !== 'touch') return
+    const startCell = { ...grabCell }
+    const finishCell = { col, row }
     console.log(startCell, finishCell)
 
     fugureMove(startCell, finishCell, 'doubleClick')
   }
+
 
   return (
     <CellWrapper
@@ -53,7 +51,7 @@ const PossibleMove = observer(({ cell, fugureMove, grabCell }) => {
       $left={left}
       $cellSize={appStore.board.cellSize}
     >
-      <Cell onPointerDown={() => onPointerDown(colTemp, rowTemp)} />
+      <Cell onPointerDown={(e) => onPointerDown(e, colTemp, rowTemp)} />
     </CellWrapper>
   )
 })
