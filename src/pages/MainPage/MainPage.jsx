@@ -12,6 +12,8 @@ import Widget from "../../widgets/Widget";
 import CapturedArea from "../../widgets/CapturedArea";
 import Footer from "./Footer";
 import ChessClock from "../../components/boardElements/ChessClock";
+import Menu from "../../components/UI/Menu";
+import { CButton } from "@coreui/react";
 
 
 
@@ -145,6 +147,8 @@ const MainPage = observer(() => {
 						</Widget>
 					</History> */}
 				</Grid>}
+				{/* <Menu /> */}
+				<CButton color="primary">Primary</CButton>
 			</PageWrapper>
 			<Footer />
 		</PageContainer>

@@ -11,6 +11,7 @@ const Container = styled.div.attrs(props => ({
 	},
 }))`
 	position: relative;
+	overflow: hidden;
 `
 
 const Cell = styled.div.attrs(props => ({
@@ -50,7 +51,6 @@ const Board = memo(observer(() => {
 
 	const board = useMemo(() => {
 		const cells = [];
-
 		let currentRanks
 		let currentFiles
 		if (appStore.whiteBottom) {
@@ -67,20 +67,16 @@ const Board = memo(observer(() => {
 				cells.push({
 					id: `${file}_${rank}`,
 					color: isBlack ? COLORS.whiteCell : COLORS.blackCell,
-					// color: isBlack ? '#f0d9b5' : '#b58863',
-					top: appStore.board.cellSize * y,
-					left: appStore.board.cellSize * x,
+					top: cellSize * y,
+					left: cellSize * x,
 					file: y == 7 ? file : null,
 					rank: x == 0 ? rank : null
 				})
 			})
 		})
 
-
-
 		return cells
 	}, [cellSize, appStore.whiteBottom])
-
 
 
 	return (
