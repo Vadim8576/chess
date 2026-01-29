@@ -33,7 +33,46 @@ class appStore {
   }
 
 
-  
+  initVariables() {
+    this.historyMoves = []
+    this.historyList = []
+    this.status = ''
+    this.capturedFigures = {
+      'w': [],
+      'b': []
+    }
+  }
+
+  restartGame() {
+    try {
+      localStorage.removeItem('ChessFen')
+      this.chess = new Chess()
+      this.initVariables()
+    } catch (e) {
+      console.log('Не удалось удалить fen из localStorage: ', e)
+    }
+  }
+
+  setBoard(board) {
+    this.board = { ...this.board, ...board }
+    // console.log('board = ', toJS(this.board))
+  }
+
+  setGameStatus(status) {
+    this.status = status
+  }
+
+  //Взятые фигуры
+  addCapturedFigures(color, figure) {
+    this.capturedFigures = {
+      ...this.capturedFigures,
+      [color]: [...this.capturedFigures[color], figure]
+    }
+    console.log(toJS(this.capturedFigures))
+  }
+
+
+
 
   setLastMoveCells(cells) {
     this.lastMoveCells = cells
@@ -57,6 +96,10 @@ class appStore {
   }
 
 
+
+
+
+
   saveGameToLocalStorage() {
     const fen = this.chess.fen()
     try {
@@ -71,13 +114,11 @@ class appStore {
     if (fen) this.chess.load(fen)
   }
 
-
-
   saveSettingToLocalStorage(setting) {
     const oldSetting = localStorage.getItem('Setting') || {}
 
-   console.log(oldSetting)
-   console.log(JSON.parse(oldSetting))
+    console.log(oldSetting)
+    console.log(JSON.parse(oldSetting))
     const newSetting = { ...JSON.parse(oldSetting), ...setting }
 
     // console.log(newSetting)
@@ -106,52 +147,19 @@ class appStore {
     this.saveSettingToLocalStorage({ whiteBottom: this.whiteBottom })
   }
 
-  initVariables() {
-    this.historyMoves = []
-    this.historyList = []
-    // this.whiteBottom = true // true | false
-    this.status = ''
-    this.capturedFigures = {
-      'w': [],
-      'b': []
-    }
-  }
 
-  restartGame() {
-    console.log('Restart в Store')
-    try {
-      localStorage.removeItem('ChessFen')
-      this.chess = new Chess()
-      this.initVariables()
-    } catch (e) {
-      console.log('Не удалось удалить fen из localStorage: ', e)
-    }
-  }
 
-  setBoard(board) {
-    this.board = { ...this.board, ...board }
-    // console.log('board = ', toJS(this.board))
-  }
 
-  setGameStatus(status) {
-    this.status = status
-  }
 
-  //Взятые фигуры
-  addCapturedFigures(color, figure) {
-    // this.capturedFigures[color] = [...this.capturedFigures[color], figure]
-    this.capturedFigures = {
-      ...this.capturedFigures,
-      [color]: [...this.capturedFigures[color], figure]
-    }
-    console.log(toJS(this.capturedFigures))
-  }
 
+
+
+
+  // не используются!
   updateHistoryMoves(newHistoryMove) {
     this.historyMoves = [...this.historyMoves, newHistoryMove]
     console.log(toJS(this.historyMoves))
   }
-
 
   updateHistoryList() {
     const historyList = this.chess.history({ verbose: true })
@@ -166,9 +174,6 @@ class appStore {
 
     this.historyList = [...this.historyList, historyMove]
   }
-
-
-
 }
 
 export default new appStore()
