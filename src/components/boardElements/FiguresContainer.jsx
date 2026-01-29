@@ -27,7 +27,7 @@ height: 30px;
 pointer-events: none;
 `;
 
-const BoardElements = memo(observer(({
+const FiguresContainer = memo(observer(({
   setDraggedFigure,
   draggedFigure,
   handlePointerDown,
@@ -93,4 +93,4 @@ const BoardElements = memo(observer(({
   )
 }))
 
-export default BoardElements
+export default FiguresContainer

@@ -10,13 +10,13 @@ const BacklightCells = memo(observer(({
   fugureMove,
   grabCell
 }) => {
-
+// const [secondClick, setSecondClick] = useState(false)
 
   return (
-    <div>
+    <>
       {appStore.possibleMoves.length > 0 && appStore.possibleMoves.map(possibleMove => (
         <PossibleMove
-          key={crypto.randomUUID()}
+          key={possibleMove.id}
           cell={possibleMove.cell}
           fugureMove={fugureMove}
           grabCell={grabCell}
@@ -29,7 +29,7 @@ const BacklightCells = memo(observer(({
           cell={lastMove.cell}
         />
       ))}
-    </div>
+    </>
   );
 }));
 

@@ -1,16 +1,17 @@
 import { observer } from "mobx-react-lite";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import appStore from "../../store/appStore";
+import { FOOTER_HEIGHT, COLORS, HEADER_HEIGHT } from "../../constants/gameInitial";
 import useWindowResizeThrottle from "../../hooks/useWindowResizeThrottle";
-import BoardContainer from "./BoardContainer";
 import Header from "./Header";
 import HistoryList from "../../widgets/HistoryList";
 import GameStatus from "../../widgets/GameStatus";
+import ChessBoardContainer from "./ChessBoardContainer";
 import Widget from "../../widgets/Widget";
 import CapturedArea from "../../widgets/CapturedArea";
-import { FOOTER_HEIGHT, COLORS, HEADER_HEIGHT } from "../../constants/gameInitial";
 import Footer from "./Footer";
-import { useEffect, useState } from "react";
+import ChessClock from "../../components/boardElements/ChessClock";
 
 
 
@@ -70,6 +71,7 @@ grid-row: 11 / 12;
 
 
 const MainPage = observer(() => {
+	
 	console.log('MainPage')
 
 	const [cellSize, setCellSize] = useState(null)
@@ -108,10 +110,6 @@ const MainPage = observer(() => {
 
 
 
-	const testFN = (cl) => {
-		cl()
-	}
-
 
 	return (
 		<PageContainer>
@@ -124,7 +122,7 @@ const MainPage = observer(() => {
 					<CapturedAreaWhite>
 						<CapturedArea player={appStore.whiteBottom ? 'b' : 'w'} />
 					</CapturedAreaWhite>
-					<BoardContainer windowSize={{ width, height }} />
+					<ChessBoardContainer windowSize={{ width, height }} />
 					<Status>
 						<Widget title={{
 							title: 'Статус игры',
@@ -135,6 +133,7 @@ const MainPage = observer(() => {
 							<GameStatus />
 						</Widget>
 					</Status>
+					{/* <ChessClock /> */}
 					{/* <History>
 						<Widget title={{
 							title: 'История',

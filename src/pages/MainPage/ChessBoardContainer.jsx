@@ -15,7 +15,7 @@ const Container = styled.div`
 
 
 
-const BoardContainer = observer(({windowSize}) => {
+const BoardContainer = observer(({ windowSize }) => {
 
 	console.log('BoardContainer')
 

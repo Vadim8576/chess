@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
-import BoardElements from '../boardElements/BoardElements';
+import FiguresContainer from '../boardElements/FiguresContainer';
 import appStore from '../../store/appStore';
 import Board from './Board';
 import { useFigureDrag } from '../../hooks/useFigureDrag';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import DraggableFigure from '../boardElements/DraggableFigure';
 import HighlightedCell from '../boardElements/backlightСells/HighlightedCell';
 import BacklightСells from '../boardElements/backlightСells/BacklightСells';
@@ -22,6 +22,7 @@ const BoardWrapper = styled.div`
 const ChessBoard = observer(() => {
   console.log('ChessBoard Render')
 
+  const pageRef = useRef(null)
   const size = appStore.board.cellSize * 8
 
   const [draggedFigure, setDraggedFigure] = useState(null)
@@ -56,13 +57,10 @@ const ChessBoard = observer(() => {
   }, []);
 
 
-  // useEffect(() => {  
-    // appStore.updateHistoryList()
-  // }, [appStore.whiteBottom])
-
 
   useEffect(() => {
     if (isDragging) {
+
       document.addEventListener('pointermove', handlePointerMove)
       document.addEventListener('pointerup', handlePointerUp)
       document.addEventListener('pointercancel', handlePointerCancel)
@@ -87,6 +85,9 @@ const ChessBoard = observer(() => {
   }, [handlePointerDown])
 
 
+
+
+
   return (
     <BoardWrapper $size={size}>
       <Board />
@@ -95,6 +96,7 @@ const ChessBoard = observer(() => {
         fugureMove={fugureMoveMemo}
         grabCell={grabCell}
       />
+
 
       {highlightedCell.visible && (
         <HighlightedCell
@@ -108,7 +110,7 @@ const ChessBoard = observer(() => {
         />
       )}
 
-      <BoardElements
+      <FiguresContainer
         handlePointerDown={handlePointerDownMemo}
         setDraggedFigure={setDraggedFigure}
         draggedFigure={draggedFigure}

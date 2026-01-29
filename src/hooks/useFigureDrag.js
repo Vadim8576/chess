@@ -18,10 +18,7 @@ export const useFigureDrag = (
   const [position, setPosition] = useState(null)
   const [highlightedCell, setHighlightedCell] = useState({})
 
-  // const [cellInCheck, setCellInCheck] = useState({})
-
   const handlePointerDown = useCallback((e, currentFigureSquare) => {
-
     const startX = appStore.board.x
     const startY = appStore.board.y
     const x = e.clientX - startX
@@ -35,9 +32,7 @@ export const useFigureDrag = (
 
     console.log('!!!!!', 'физически ', currentFigureSquare, 'по расчету ', grabFigure.square)
 
-
     const isCurrentPlayer = grabFigure.color === appStore.chess.turn()
-
 
     // if (!isCurrentPlayer) {
     //   console.log('Сейчас ход другого игрока!')
@@ -54,17 +49,21 @@ export const useFigureDrag = (
 
     if (isCurrentPlayer) {
       appStore.setLastMoveCells([])
-      console.log('Взял свою же фигуру')
+      console.log('Взял другую свою фигуру')
     }
 
 
+    // const attack = appStore.chess.attackers(grabFigure.square)
+    // console.log(`Атака `, attack)
 
-    const attack = appStore.chess.attackers(grabFigure.square)
-    console.log(`Атака `, attack)
 
-
-    const pm = getPossibleMoves(appStore, grabFigure.square)
-    appStore.setPossibleMoves([...pm])
+    // if (appStore.possibleMoves.length > 0) {
+    //   appStore.setPossibleMoves([])
+    //   return
+    // } else {
+      const pm = getPossibleMoves(appStore, grabFigure.square)
+      appStore.setPossibleMoves([...pm])
+    // }
 
     setGrabCell({ col, row })
 
@@ -74,7 +73,6 @@ export const useFigureDrag = (
         row: row
       }
     }])
-
 
     setHighlightedCell({
       cell: {
