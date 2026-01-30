@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import ChessBoard from "../../components/ChessBoard/ChessBoard";
+import ChessBoard from "../components/ChessBoard/ChessBoard";
 import { useEffect, useRef } from "react";
 import { observer } from "mobx-react-lite";
-import appStore from "../../store/appStore";
+import AppStore from "../store/AppStore";
 
 const Container = styled.div`
 	// border: 1px blue solid;
@@ -27,17 +27,17 @@ const BoardContainer = observer(({ windowSize }) => {
 
 		const boardContainerRect = ref.current.getBoundingClientRect()
 
-		appStore.setBoard({
+		AppStore.setBoard({
 			x: boardContainerRect.x,
 			y: boardContainerRect.y
 		})
 
-	}, [windowSize.width, windowSize.height, appStore.board.cellSize])
+	}, [windowSize.width, windowSize.height, AppStore.board.cellSize])
 
 	return (
 		<Container
 			ref={ref}
-			$size={appStore.board.cellSize * 8}
+			$size={AppStore.board.cellSize * 8}
 		>
 			<ChessBoard />
 		</Container>

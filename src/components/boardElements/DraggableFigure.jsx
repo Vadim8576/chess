@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { observer } from "mobx-react-lite";
 import styled from 'styled-components'
-import appStore from "../../store/appStore";
+import AppStore from "../../store/AppStore";
 
 
 const ImgWrapper = styled.div.attrs(props => ({
@@ -41,7 +41,7 @@ const DraggableFigure = observer(({ image, position }) => {
 
   if(!position) return null
 
-  const cellSize = appStore.board.cellSize
+  const cellSize = AppStore.board.cellSize
 
   if (!image) return
 

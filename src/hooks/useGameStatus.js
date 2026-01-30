@@ -1,47 +1,47 @@
 import { toJS } from 'mobx';
 import { squareToIndices } from '../utils/squareToIndices';
 
-export const useGameStatus = (appStore) => {
+export const useGameStatus = (AppStore) => {
 
   const getGameStatus = () => {
-    const player = appStore.chess.turn()
+    const player = AppStore.chess.turn()
     // console.log('player = ', player)
-    appStore.setGameStatus(`Ход ${player === 'w' ? 'белых' : 'чёрных'}!`)
+    AppStore.setGameStatus(`Ход ${player === 'w' ? 'белых' : 'чёрных'}!`)
     
 
-    if (appStore.chess.inCheck()) {
-      appStore.setGameStatus(`Шах ${player === 'w' ? 'белым' : 'чёрным'}!`)
+    if (AppStore.chess.inCheck()) {
+      AppStore.setGameStatus(`Шах ${player === 'w' ? 'белым' : 'чёрным'}!`)
     }
 
-    if (appStore.chess.isCheckmate()) {
-      appStore.setGameStatus(`Мат ${player === 'w' ? 'белым' : 'чёрным'}!`)
+    if (AppStore.chess.isCheckmate()) {
+      AppStore.setGameStatus(`Мат ${player === 'w' ? 'белым' : 'чёрным'}!`)
 
       // updateHistoryItem('Мат!')
     }
 
-    if (appStore.chess.isStalemate()) {
+    if (AppStore.chess.isStalemate()) {
       const status = 'Пат. Ничья!'
-      appStore.setGameStatus(status)
+      AppStore.setGameStatus(status)
 
       // updateHistoryItem('Пат!')
     }
 
-    if (appStore.chess.isThreefoldRepetition()) {
+    if (AppStore.chess.isThreefoldRepetition()) {
       const status = 'Троекратное повторение. Ничья!'
-      appStore.setGameStatus(status)
+      AppStore.setGameStatus(status)
 
       // updateHistoryItem('Ничья!')
     }
 
-    if (appStore.chess.isDraw()) {
+    if (AppStore.chess.isDraw()) {
       const status = 'Правило 50 ходов. Ничья!'
-      appStore.setGameStatus(status)
+      AppStore.setGameStatus(status)
 
       // updateHistoryItem('Ничья!')
     }
 
 
-    if (appStore.chess.isGameOver()) {
+    if (AppStore.chess.isGameOver()) {
       console.log('Игра окончена.')
     }
   }

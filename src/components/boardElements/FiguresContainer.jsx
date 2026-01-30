@@ -1,7 +1,7 @@
 import { useMemo, memo } from "react";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components"
-import appStore from "../../store/appStore";
+import AppStore from "../../store/AppStore";
 import Figure from "./Figure"
 import { getSrc } from "../../utils/getSrc";
 import { files, ranks } from "../../constants/gameInitial";
@@ -34,37 +34,43 @@ const FiguresContainer = memo(observer(({
   isMoving
 }) => {
 
-  console.log('BoardElements', appStore.status)
+  console.log('BoardElements', AppStore.status)
 
 
   const figures = useMemo(() => {
+    if (!AppStore.chess) return
+    const turn = AppStore.chess.turn()
+    const board = AppStore.chess.board()
     const figure = []
-    const turn = appStore.chess.turn()
-    const board = appStore.chess.board()
     ranks.forEach((rank, y) => {
       return files.forEach((file, x) => {
-        const src = getSrc(appStore.whiteBottom, board, x, y)
-        const yy = appStore.whiteBottom ? y : (7 - y)
-        const xx = appStore.whiteBottom ? x : (7 - x)
-        const currentFigure = appStore.chess.board()[yy][xx]
+        const src = getSrc(AppStore.whiteBottom, board, x, y)
+        const yy = AppStore.whiteBottom ? y : (7 - y)
+        const xx = AppStore.whiteBottom ? x : (7 - x)
+        const currentFigure = AppStore.chess.board()[yy][xx]
         if (!src || !currentFigure) return
         const state = {
           src,
           id: `${file}_${rank}`,
-          top: appStore.board.cellSize * y,
-          left: appStore.board.cellSize * x,
+          top: AppStore.board.cellSize * y,
+          left: AppStore.board.cellSize * x,
           pointerEvents: (currentFigure.color !== turn) ? 'none' : 'auto'
         }
         figure.push(state)
       })
     })
     return figure
-  }, [appStore.board.cellSize, appStore.whiteBottom, appStore.status, appStore.chess])
+  }, [
+    AppStore.board.cellSize,
+    AppStore.whiteBottom,
+    AppStore.status,
+    AppStore.chess
+  ])
 
 
   return (
     <ElementsWrapper>
-      {figures.map(figure => {
+      {figures && figures.map(figure => {
         if (true) {
           // if (draggedFigure?.id !== figure.id) {
           if (!isMoving || draggedFigure?.id !== figure.id) {
@@ -85,8 +91,8 @@ const FiguresContainer = memo(observer(({
       })}
 
       {/* <Indicator
-        top={appStore.board.y}
-        left={appStore.board.x}
+        top={AppStore.board.y}
+        left={AppStore.board.x}
       /> */}
 
     </ElementsWrapper>

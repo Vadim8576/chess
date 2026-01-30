@@ -4,7 +4,7 @@ import { Chess } from "chess.js";
 
 
 
-class appStore {
+class AppStore {
   chess = new Chess()
 
   // Сверять hash по сети
@@ -33,6 +33,14 @@ class appStore {
   }
 
 
+  createNewChess() {
+    this.chess = new Chess()
+  }
+
+  setChess(chess) {
+    this.chess = chess
+  }
+
   initVariables() {
     this.historyMoves = []
     this.historyList = []
@@ -41,6 +49,12 @@ class appStore {
       'w': [],
       'b': []
     }
+  }
+
+  loadGame(fen) {
+    this.chess = new Chess()
+    this.chess.load(fen)
+    console.log('load game ', fen)
   }
 
   restartGame() {
@@ -116,12 +130,13 @@ class appStore {
 
   saveSettingToLocalStorage(setting) {
     const oldSetting = localStorage.getItem('Setting') || {}
-
     console.log(oldSetting)
-    console.log(JSON.parse(oldSetting))
-    const newSetting = { ...JSON.parse(oldSetting), ...setting }
+    // oldSetting = JSON.parse(oldSetting)
 
-    // console.log(newSetting)
+    // console.log(JSON.parse(oldSetting))
+    const newSetting = { ...setting }
+
+    console.log(newSetting)
 
     try {
       localStorage.setItem('Setting', JSON.stringify(newSetting))
@@ -176,4 +191,4 @@ class appStore {
   }
 }
 
-export default new appStore()
+export default new AppStore()

@@ -1,7 +1,7 @@
 
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
-import appStore from "../store/appStore";
+import AppStore from "../store/AppStore";
 import { COLORS } from "../constants/gameInitial";
 
 
@@ -27,7 +27,7 @@ const GameStatus = observer(() => {
 
 	return (
 		<Status>
-			{appStore.status}
+			{AppStore.status}
 		</Status>
 	)
 })

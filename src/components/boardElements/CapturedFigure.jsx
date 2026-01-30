@@ -3,7 +3,7 @@ import { useLoadImage } from "../../hooks/useLoadImage"
 import styled from 'styled-components'
 import { observer } from "mobx-react-lite";
 import { toJS } from 'mobx';
-import appStore from "../../store/appStore";
+import AppStore from "../../store/AppStore";
 import { useFigureDrag } from "../../hooks/useFigureDrag";
 
 

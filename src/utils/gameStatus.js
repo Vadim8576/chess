@@ -1,48 +1,49 @@
-export const gameStatus = (appStore) => {
-  const player = appStore.chess.turn()
-  appStore.setGameStatus(`Ход ${player === 'w' ? 'белых' : 'чёрных'}!`)
+export const gameStatus = (AppStore) => {
+  if(!AppStore.chess) return
+  const player = AppStore.chess.turn()
+  AppStore.setGameStatus(`Ход ${player === 'w' ? 'белых' : 'чёрных'}!`)
 
-  if (appStore.chess.inCheck()) {
-    appStore.setGameStatus(`Шах ${player === 'w' ? 'белым' : 'чёрным'}!`)
+  if (AppStore.chess.inCheck()) {
+    AppStore.setGameStatus(`Шах ${player === 'w' ? 'белым' : 'чёрным'}!`)
   }
 
-  if (appStore.chess.isCheckmate()) {
-    appStore.setGameStatus(`Мат ${player === 'w' ? 'белым' : 'чёрным'}!`)
+  if (AppStore.chess.isCheckmate()) {
+    AppStore.setGameStatus(`Мат ${player === 'w' ? 'белым' : 'чёрным'}!`)
   }
 
-  if (appStore.chess.isStalemate()) {
+  if (AppStore.chess.isStalemate()) {
     const status = 'Пат. Ничья!'
-    appStore.setGameStatus(status)
+    AppStore.setGameStatus(status)
   }
 
-  if (appStore.chess.isThreefoldRepetition()) {
+  if (AppStore.chess.isThreefoldRepetition()) {
     // const status = 'Троекратное повторение. Ничья!'
     const status = 'Ничья!'
-    appStore.setGameStatus(status)
+    AppStore.setGameStatus(status)
   }
 
-  if (appStore.chess.isDraw()) {
+  if (AppStore.chess.isDraw()) {
     // const status = 'Правило 50 ходов. Ничья!'
     const status = 'Ничья!'
-    appStore.setGameStatus(status)
+    AppStore.setGameStatus(status)
   }
 
-  if (appStore.chess.isDrawByFiftyMoves()) {
+  if (AppStore.chess.isDrawByFiftyMoves()) {
     const status = 'Ничья!'
-    appStore.setGameStatus(status)
+    AppStore.setGameStatus(status)
   }
  
-  if (appStore.chess.isInsufficientMaterial()) {
+  if (AppStore.chess.isInsufficientMaterial()) {
     const status = 'Ничья!'
-    appStore.setGameStatus(status)
+    AppStore.setGameStatus(status)
   }
 
-  if (appStore.chess.isInsufficientMaterial()) {
+  if (AppStore.chess.isInsufficientMaterial()) {
     const status = 'Ничья!'
-    appStore.setGameStatus(status)
+    AppStore.setGameStatus(status)
   }
 
-  if (appStore.chess.isGameOver()) {
+  if (AppStore.chess.isGameOver()) {
     console.log('Игра окончена!')
   }
 }

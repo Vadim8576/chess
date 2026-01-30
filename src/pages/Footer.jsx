@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
-import { FOOTER_HEIGHT, COLORS, HEADER_HEIGHT } from "../../constants/gameInitial";
+import { FOOTER_HEIGHT, COLORS, HEADER_HEIGHT } from "../constants/gameInitial";
 
 
 const FooterLine = styled.div`

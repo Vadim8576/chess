@@ -1,18 +1,21 @@
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import appStore from "../../store/appStore";
+import AppStore from "../../store/AppStore";
 import { FOOTER_HEIGHT, COLORS, HEADER_HEIGHT } from "../../constants/gameInitial";
 import useWindowResizeThrottle from "../../hooks/useWindowResizeThrottle";
-import Header from "./Header";
+import Header from "../Header";
 import HistoryList from "../../widgets/HistoryList";
 import GameStatus from "../../widgets/GameStatus";
-import ChessBoardContainer from "./ChessBoardContainer";
+import ChessBoardContainer from "../ChessBoardContainer";
 import Widget from "../../widgets/Widget";
 import CapturedArea from "../../widgets/CapturedArea";
-import Footer from "./Footer";
+import Footer from "../Footer";
 import ChessClock from "../../components/boardElements/ChessClock";
 import Menu from "../../components/UI/Menu";
+import authStore from "../../store/authStore";
+import { useAuth } from "../../hooks/useAuth";
+import gameStore from "../../store/gameStore";
 
 
 
@@ -72,7 +75,11 @@ grid-row: 11 / 12;
 
 
 const MainPage = observer(() => {
-	
+
+	const {user, loading } = useAuth()
+
+	// console.log('user ',  user.uid)
+
 	console.log('MainPage')
 
 	const [cellSize, setCellSize] = useState(null)
@@ -94,7 +101,7 @@ const MainPage = observer(() => {
 
 		setCellSize(cellSize)
 
-		appStore.setBoard({
+		AppStore.setBoard({
 			cellSize,
 			width: cellSize * 8
 		})
@@ -103,12 +110,35 @@ const MainPage = observer(() => {
 
 
 	useEffect(() => {
-		// ['e2e4', 'e7e5', 'f1c4', 'd7d6'].forEach(move => appStore.chess.move(move))
+		// ['e2e4', 'e7e5', 'f1c4', 'd7d6'].forEach(move => AppStore.chess.move(move))
 
-		// appStore.chess.load('rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2')
-		// appStore.chess.load('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2')
+		// AppStore.chess.load('rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2')
+		// AppStore.chess.load('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2')
 	}, [width, height])
 
+
+
+
+	// useEffect(() => {
+		
+	// 	authStore.singIn(email.trim(), password.trim())
+	// 	// navigation.navigate('TabNavigator', { name: 'TabNavigator' })
+	
+
+	// }, [])
+
+	// useEffect(() => {
+	// 	if(!gameStore.gameId) return
+	// 	const unsubscribe = gameStore.gameSubscribe()
+  //   return unsubscribe
+	// }, [gameStore.gameId])
+
+
+	useEffect(() => {
+		if(!user) return
+		const unsubscribe = gameStore.currentGameSubscribe()
+		return unsubscribe
+	}, [gameStore.gameId, user])
 
 
 
@@ -118,10 +148,10 @@ const MainPage = observer(() => {
 			<PageWrapper>
 				{cellSize && <Grid $size={cellSize * 12}>
 					<CapturedAreaBlack>
-						<CapturedArea player={appStore.whiteBottom ? 'w' : 'b'} />
+						<CapturedArea player={AppStore.whiteBottom ? 'w' : 'b'} />
 					</CapturedAreaBlack>
 					<CapturedAreaWhite>
-						<CapturedArea player={appStore.whiteBottom ? 'b' : 'w'} />
+						<CapturedArea player={AppStore.whiteBottom ? 'b' : 'w'} />
 					</CapturedAreaWhite>
 					<ChessBoardContainer windowSize={{ width, height }} />
 					<Status>

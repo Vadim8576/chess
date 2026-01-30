@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 import FiguresContainer from '../boardElements/FiguresContainer';
-import appStore from '../../store/appStore';
+import AppStore from '../../store/AppStore';
 import Board from './Board';
 import { useFigureDrag } from '../../hooks/useFigureDrag';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -23,7 +23,7 @@ const ChessBoard = observer(() => {
   console.log('ChessBoard Render')
 
   const pageRef = useRef(null)
-  const size = appStore.board.cellSize * 8
+  const size = AppStore.board.cellSize * 8
 
   const [draggedFigure, setDraggedFigure] = useState(null)
   const [isMoving, setIsMoving] = useState(false)
@@ -40,7 +40,7 @@ const ChessBoard = observer(() => {
     handlePointerUp,
     handlePointerCancel
   } = useFigureDrag(
-    appStore,
+    AppStore,
     setDraggedFigure,
     setIsMoving,
   )
@@ -49,12 +49,12 @@ const ChessBoard = observer(() => {
   useEffect(() => {
     const chessFen = localStorage.getItem('ChessFen')
     if (chessFen) {
-      appStore.loadGameFromLocalStorage()
-      updateKingCheckHighlight()
+      // AppStore.loadGameFromLocalStorage()
     }
-    gameStatus(appStore)
-    appStore.setSettingFromLocalStorage()
-  }, []);
+    updateKingCheckHighlight()
+    gameStatus(AppStore)
+    AppStore.setSettingFromLocalStorage()
+  }, [AppStore.chess])
 
 
 
@@ -104,9 +104,9 @@ const ChessBoard = observer(() => {
         />
       )}
 
-      {appStore.cellInCheck.visible && (
+      {AppStore.cellInCheck.visible && (
         <HighlightedCell
-          highlightedCell={appStore.cellInCheck}
+          highlightedCell={AppStore.cellInCheck}
         />
       )}
 

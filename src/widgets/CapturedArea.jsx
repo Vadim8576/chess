@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
-import appStore from "../store/appStore";
+import AppStore from "../store/AppStore";
 import CapturedFigure from "../components/boardElements/CapturedFigure";
 import { figure, COLORS } from "../constants/gameInitial";
 import { toJS } from 'mobx';
@@ -38,7 +38,7 @@ align-content: center;
 
 
 const CapturedArea = observer(({ player }) => {
-  const figureList = appStore.capturedFigures[player] // player 'w' || 'b'
+  const figureList = AppStore.capturedFigures[player] // player 'w' || 'b'
 
   console.log('CapturedArea')
   // console.log(toJS(figureList))

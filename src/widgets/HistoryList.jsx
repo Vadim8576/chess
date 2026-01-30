@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
-import appStore from "../store/appStore";
+import AppStore from "../store/AppStore";
 import { COLORS } from "../constants/gameInitial";
 import { useAutoScroll } from "../hooks/useAutoScroll";
 
@@ -25,7 +25,7 @@ font-size: 2.2vmin;
 const HistoryList = observer(() => {
   console.log('HistoryList')
 
-  const historyList = appStore.historyList
+  const historyList = AppStore.historyList
 
   const scrollRef = useAutoScroll(historyList, { smooth: true })
 

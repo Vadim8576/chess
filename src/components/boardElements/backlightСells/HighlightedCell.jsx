@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
-import appStore from "../../../store/appStore";
+import AppStore from "../../../store/AppStore";
 
 
 const CellWrapper = styled.div`
@@ -32,17 +32,17 @@ const HighlightedCell = observer(({ highlightedCell }) => {
 
 	const colTemp = highlightedCell.cell.col
 	const rowTemp = highlightedCell.cell.row
-	const col = appStore.whiteBottom ? colTemp : (7 - colTemp)
-	const row = appStore.whiteBottom ? rowTemp : (7 - rowTemp)
-	const top = row * appStore.board.cellSize
-	const left = col * appStore.board.cellSize
+	const col = AppStore.whiteBottom ? colTemp : (7 - colTemp)
+	const row = AppStore.whiteBottom ? rowTemp : (7 - rowTemp)
+	const top = row * AppStore.board.cellSize
+	const left = col * AppStore.board.cellSize
 
 
 	return (
 		<CellWrapper
 			$top={top}
 			$left={left}
-			$cellSize={appStore.board.cellSize}
+			$cellSize={AppStore.board.cellSize}
 		>
 			<Cell
 				color={highlightedCell.color}

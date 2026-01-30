@@ -1,7 +1,7 @@
 import PossibleMove from "./PossibleMove";
 import LastMove from "./LastMove";
 import { memo, useRef, useState } from "react";
-import appStore from "../../../store/appStore";
+import AppStore from "../../../store/AppStore";
 import { observer } from "mobx-react-lite";
 
 
@@ -14,7 +14,7 @@ const BacklightCells = memo(observer(({
 
   return (
     <>
-      {appStore.possibleMoves.length > 0 && appStore.possibleMoves.map(possibleMove => (
+      {AppStore.possibleMoves.length > 0 && AppStore.possibleMoves.map(possibleMove => (
         <PossibleMove
           key={possibleMove.id}
           cell={possibleMove.cell}
@@ -23,7 +23,7 @@ const BacklightCells = memo(observer(({
         />
       ))}
 
-      {appStore.lastMoveCells.length > 0 && appStore.lastMoveCells.map(lastMove => (
+      {AppStore.lastMoveCells.length > 0 && AppStore.lastMoveCells.map(lastMove => (
         <LastMove
           key={crypto.randomUUID()}
           cell={lastMove.cell}

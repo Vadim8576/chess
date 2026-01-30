@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import appStore from "../../store/appStore";
+import AppStore from "../../store/AppStore";
 import { useMemo, memo } from "react";
 import { files, COLORS, ranks } from "../../constants/gameInitial";
 import { observer } from "mobx-react-lite";
@@ -47,13 +47,13 @@ const Board = memo(observer(() => {
 
 	console.log('Board')
 
-	const cellSize = appStore.board.cellSize
+	const cellSize = AppStore.board.cellSize
 
 	const board = useMemo(() => {
 		const cells = [];
 		let currentRanks
 		let currentFiles
-		if (appStore.whiteBottom) {
+		if (AppStore.whiteBottom) {
       currentRanks = ranks.slice()
       currentFiles = files.slice()
     } else {
@@ -76,7 +76,7 @@ const Board = memo(observer(() => {
 		})
 
 		return cells
-	}, [cellSize, appStore.whiteBottom])
+	}, [cellSize, AppStore.whiteBottom])
 
 
 	return (

@@ -1,9 +1,9 @@
 import { getSquare } from "./getSquare"
 import { squareToIndices } from "./squareToIndices"
 
-export const getPossibleMoves = (appStore, grabFigureSquare) => {
+export const getPossibleMoves = (AppStore, grabFigureSquare) => {
     // movesTemp - массив допустимых ходов для данной фигуры grabFigure. verbose: true - возвращает объект
-    const movesTemp = appStore.chess.moves({ square: grabFigureSquare, verbose: true }).map(m => m.to)
+    const movesTemp = AppStore.chess.moves({ square: grabFigureSquare, verbose: true }).map(m => m.to)
     if (movesTemp.length < 1) {
       console.log('Нет доступного хода для этой фигуры!')
     }

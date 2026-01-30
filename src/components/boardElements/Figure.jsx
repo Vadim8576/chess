@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { observer } from "mobx-react-lite";
 import styled from 'styled-components'
-import appStore from "../../store/appStore";
+import AppStore from "../../store/AppStore";
 import { useLoadImage } from "../../hooks/useLoadImage"
 import { getCellPosition } from "../../utils/getCellPosition";
 import { getSquare } from "../../utils/getSquare";
@@ -58,7 +58,7 @@ const Figure = memo(observer(({
 
 
 	const { isLoading, isError, image } = useLoadImage(src)
-	const cellSize = appStore.board.cellSize
+	const cellSize = AppStore.board.cellSize
 
 
 	if (isLoading) {
@@ -76,10 +76,10 @@ const Figure = memo(observer(({
 	const onPointerDown = (e) => {
 		e.preventDefault()
 		if (e.button !== 0 && e.pointerType !== 'touch') return
-		if (appStore.chess.isGameOver()) return
+		if (AppStore.chess.isGameOver()) return
 		setDraggedFigure({ image, id })
-		const [col, row] = getCellPosition(left, top, appStore)
-		const square = getSquare(appStore.whiteBottom, col, row)
+		const [col, row] = getCellPosition(left, top, AppStore)
+		const square = getSquare(AppStore.whiteBottom, col, row)
 
 		handlePointerDown(e, square)
 
