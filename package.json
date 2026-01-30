@@ -10,8 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@coreui/coreui": "^5.5.0",
-    "@coreui/react": "^5.9.2",
     "chess.js": "^1.4.0",
     "mobx-react-lite": "^4.1.1",
     "react": "^19.2.3",
