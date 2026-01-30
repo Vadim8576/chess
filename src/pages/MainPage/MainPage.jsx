@@ -144,7 +144,7 @@ const MainPage = observer(() => {
 
 	return (
 		<PageContainer>
-			<Header />
+			{/* <Header /> */}
 			<PageWrapper>
 				{cellSize && <Grid $size={cellSize * 12}>
 					<CapturedAreaBlack>
@@ -178,7 +178,7 @@ const MainPage = observer(() => {
 				</Grid>}
 				{/* <Menu /> */}
 			</PageWrapper>
-			<Footer />
+			{/* <Footer /> */}
 		</PageContainer>
 	)
 })
