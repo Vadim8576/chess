@@ -1,25 +1,30 @@
 import { BrowserRouter, Routes, Route, Outlet } from "react-router"
-import MainPage from "./pages/MainPage/MainPage"
-import AnonymousGame from "./pages/AnonymousGame/AnonymousGame"
+import LocalGamePage from "./pages/LocalGamePage/LocalGamePage"
+import AnonymousGamePage from "./pages/AnonymousGamePage/AnonymousGamePage"
 import Home from "./pages/Home/Home"
 import Header from "./pages/Header";
 import Footer from "./pages/Footer";
+import RateGamePage from "./pages/RateGamePage/RateGamePage";
 
 
 
 const Layout = () => {
   return (
     <div className="layout" style={{
+      display: 'flex',
+      flexDirection: 'column',
       width: '100%',
       height: '100%'
     }}>
       <Header />
       <main style={{
-        width: '100%',
-        height: '100%'
+        // width: '100%',
+        // height: '100%',
+        flexGrow: '1'
       }}>
-        <Footer />
+        <Outlet />
       </main>
+      <Footer />
     </div>
   );
 };
@@ -31,8 +36,10 @@ const App = () => {
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
-            <Route path="/mainpage" element={<MainPage />} />
-            <Route path="/anonymousgame" element={<AnonymousGame />} />
+            {/* <Route path="/" element={<LocalGamePage />} /> */}
+            <Route path="/local" element={<LocalGamePage />} />
+            <Route path="/anonymous" element={<AnonymousGamePage />} />
+            <Route path="/rate" element={<RateGamePage />} />
             {/* <Route path="*" element={<NoMatch />} /> 404-страница */}
           </Route>
         </Routes>

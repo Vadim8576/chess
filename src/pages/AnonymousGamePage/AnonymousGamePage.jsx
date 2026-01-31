@@ -4,7 +4,6 @@ import styled from "styled-components";
 import AppStore from "../../store/AppStore";
 import { FOOTER_HEIGHT, COLORS, HEADER_HEIGHT } from "../../constants/gameInitial";
 import useWindowResizeThrottle from "../../hooks/useWindowResizeThrottle";
-import Header from "../Header";
 import HistoryList from "../../widgets/HistoryList";
 import GameStatus from "../../widgets/GameStatus";
 import ChessBoardContainer from "../ChessBoardContainer";
@@ -16,7 +15,6 @@ import Menu from "../../components/UI/Menu";
 import authStore from "../../store/authStore";
 import { useAuth } from "../../hooks/useAuth";
 import gameStore from "../../store/gameStore";
-
 
 
 const PageContainer = styled.div`
@@ -31,7 +29,7 @@ justify-content: center;
 align-items: center;
 width: 100%;
 height: calc(100% - ${HEADER_HEIGHT}px - ${FOOTER_HEIGHT}px);
-`;
+`
 
 const Grid = styled.div`
 // border: 1px pink solid;
@@ -46,17 +44,14 @@ height: ${props => props.$size}px;
 // min-height: 450px;
 aspect-ratio: 1 / 1;
 `
-
 const Status = styled.div`
 grid-column: 9 / 13;
 grid-row: 3 / 5;
 `
-
 const History = styled.div`
 grid-column: 9 / 13;
 grid-row: 6 / 11;
 `
-
 const CapturedAreaBlack = styled.div`
 display: grid;
 grid-template-columns: repeat(16, 1fr);
@@ -64,7 +59,6 @@ grid-template-rows: repeat(1, 1fr);
 grid-column: 1 / 9;
 grid-row: 2 / 3;
 `
-
 const CapturedAreaWhite = styled.div`
 display: grid;
 grid-template-columns: repeat(16, 1fr);
@@ -73,14 +67,13 @@ grid-column: 1 / 9;
 grid-row: 11 / 12;
 `
 
-
-const MainPage = observer(() => {
+const AnonymousGame = observer(() => {
 
 	const {user, loading } = useAuth()
 
 	// console.log('user ',  user.uid)
 
-	console.log('MainPage')
+	console.log('LocalGamePage')
 
 	const [cellSize, setCellSize] = useState(null)
 	const { width, height } = useWindowResizeThrottle(300)
@@ -140,7 +133,10 @@ const MainPage = observer(() => {
 		return unsubscribe
 	}, [gameStore.gameId, user])
 
-
+	useEffect(() => {
+		AppStore.setGameType('fastGame')
+		AppStore.createNewChess()
+	}, [])
 
 	return (
 		<PageContainer>
@@ -183,4 +179,4 @@ const MainPage = observer(() => {
 	)
 })
 
-export default MainPage
+export default AnonymousGame

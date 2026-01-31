@@ -10,6 +10,7 @@ class AppStore {
   // Сверять hash по сети
   // hash = chess.hash()
   // -> '3436f01fd716346e'
+  gameType = '' // 'localGame' | 'fastGame' | 'rateGame'
 
   board = {
     cellSize: 0,
@@ -32,6 +33,9 @@ class AppStore {
     makeAutoObservable(this)
   }
 
+  setGameType(type) {
+    this.gameType = type
+  }
 
   createNewChess() {
     this.chess = new Chess()
@@ -71,8 +75,8 @@ class AppStore {
     this.board = { ...this.board, ...board }
     // console.log('board = ', toJS(this.board))
   }
-
-  setGameStatus(status) {
+  
+  setStatus(status) {
     this.status = status
   }
 

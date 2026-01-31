@@ -8,9 +8,17 @@ import AppStore from "./AppStore";
 class GameStore {
 
   gameId = null
+  isLoading = true
 
   constructor() {
     makeAutoObservable(this)
+  }
+
+  // Оставить стерлочную функцию, чтобы не терялся контекст
+  setIsLoading = (isLoading) => {
+    console.log('this.isLoading = ', this.isLoading)
+    console.log('isLoading = ', isLoading)
+    this.isLoading = isLoading
   }
 
   async createNewAnonymous () {
@@ -30,13 +38,14 @@ class GameStore {
   }
 
   gameSubscribe() {
-    return fb.gameSubscribe(this.gameId, this.loadGame)
+    return fb.gameSubscribe(this.gameId, this.loadGame, this.setIsLoading)
   }
 
   currentGameSubscribe() {
     this.setGameId('65NH7uPgvKw44ft4euD4')
     console.log('currentGameSubscribe')
-    return fb.gameSubscribe('65NH7uPgvKw44ft4euD4', this.loadGame)
+
+    return fb.gameSubscribe('65NH7uPgvKw44ft4euD4', this.loadGame, this.setIsLoading)
   }
 
   updateBoard() {

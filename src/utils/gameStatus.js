@@ -1,46 +1,47 @@
 export const gameStatus = (AppStore) => {
   if(!AppStore.chess) return
   const player = AppStore.chess.turn()
-  AppStore.setGameStatus(`Ход ${player === 'w' ? 'белых' : 'чёрных'}!`)
+  console.log('gameStatus!!!!!!!!!!!!!!!!', player)
+  AppStore.setStatus(`Ход ${player === 'w' ? 'белых' : 'чёрных'}!`)
 
   if (AppStore.chess.inCheck()) {
-    AppStore.setGameStatus(`Шах ${player === 'w' ? 'белым' : 'чёрным'}!`)
+    AppStore.setStatus(`Шах ${player === 'w' ? 'белым' : 'чёрным'}!`)
   }
 
   if (AppStore.chess.isCheckmate()) {
-    AppStore.setGameStatus(`Мат ${player === 'w' ? 'белым' : 'чёрным'}!`)
+    AppStore.setStatus(`Мат ${player === 'w' ? 'белым' : 'чёрным'}!`)
   }
 
   if (AppStore.chess.isStalemate()) {
     const status = 'Пат. Ничья!'
-    AppStore.setGameStatus(status)
+    AppStore.setStatus(status)
   }
 
   if (AppStore.chess.isThreefoldRepetition()) {
     // const status = 'Троекратное повторение. Ничья!'
     const status = 'Ничья!'
-    AppStore.setGameStatus(status)
+    AppStore.setStatus(status)
   }
 
   if (AppStore.chess.isDraw()) {
     // const status = 'Правило 50 ходов. Ничья!'
     const status = 'Ничья!'
-    AppStore.setGameStatus(status)
+    AppStore.setStatus(status)
   }
 
   if (AppStore.chess.isDrawByFiftyMoves()) {
     const status = 'Ничья!'
-    AppStore.setGameStatus(status)
+    AppStore.setStatus(status)
   }
  
   if (AppStore.chess.isInsufficientMaterial()) {
     const status = 'Ничья!'
-    AppStore.setGameStatus(status)
+    AppStore.setStatus(status)
   }
 
   if (AppStore.chess.isInsufficientMaterial()) {
     const status = 'Ничья!'
-    AppStore.setGameStatus(status)
+    AppStore.setStatus(status)
   }
 
   if (AppStore.chess.isGameOver()) {

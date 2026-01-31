@@ -3,9 +3,7 @@ import styled from "styled-components";
 import { COLORS, HEADER_HEIGHT } from "../constants/gameInitial";
 import AppStore from "../store/AppStore";
 import { gameStatus } from "../utils/gameStatus";
-import AuthManager from "../components/authManager/AuthManager";
-import gameStore from "../store/gameStore";
-import { useNavigate } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 
 
 const HeaderLine = styled.div`
@@ -31,7 +29,7 @@ const RestartButton = styled.button`
   cursor: pointer;
   margin-left: 10px;
   font-weight: bold;
-  font-size: 2.2vmin;
+  font-size: 2vmin;
 `
 
 
@@ -50,29 +48,36 @@ const Header = observer(() => {
     AppStore.removeHightLightCells()
     gameStatus(AppStore)
   }
-  
+
   const rotateBoard = () => {
     console.log('rotateBoard')
     AppStore.rotateBoard()
   }
-  
-  
-  const createNewAnonymous = () => {
-    navigate('/anonymousgame')
-    // gameStore.createNewAnonymous()
-  }
+
+
+  // const createNewAnonymous = () => {
+  //   navigate('/anonymous')
+  //   // gameStore.createNewAnonymous()
+  // }
 
 
   return (
     <HeaderLine $height={HEADER_HEIGHT}>
-      <h1 style={{ color: '#fff' }}>Chess</h1>
+      <NavLink to='/'
+        style={{
+          textDecoration: 'none',
+          color: '#fff'
+        }}
+      >
+        <h1 style={{ color: '#fff' }}>Chess</h1>
+      </NavLink>
       <div>
-        <RestartButton
+        {/* <RestartButton
           color={'green'}
           onMouseDown={createNewAnonymous}
         >
           Create Game
-        </RestartButton>
+        </RestartButton> */}
         <RestartButton
           color={'green'}
           onMouseDown={restartGame}

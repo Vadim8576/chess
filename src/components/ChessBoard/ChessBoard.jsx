@@ -9,13 +9,25 @@ import DraggableFigure from '../boardElements/DraggableFigure';
 import HighlightedCell from '../boardElements/backlightСells/HighlightedCell';
 import BacklightСells from '../boardElements/backlightСells/BacklightСells';
 import { gameStatus } from '../../utils/gameStatus';
+import gameStore from '../../store/gameStore';
+import Spinner from '../UI/Spinner';
 
 
 const BoardWrapper = styled.div`
   position: relative;
   width: ${props => props.$size}px;
   height: ${props => props.$size}px;
-  
+`;
+
+const SpinnerWrapper = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 
@@ -46,15 +58,29 @@ const ChessBoard = observer(() => {
   )
 
 
+
+
+
   useEffect(() => {
+    AppStore.createNewChess()
+    // gameStatus(AppStore)
+
+    if (AppStore.gameType !== 'local') {
+      handlePointerCancel()
+      return
+    }
+    
     const chessFen = localStorage.getItem('ChessFen')
     if (chessFen) {
-      // AppStore.loadGameFromLocalStorage()
+      AppStore.loadGameFromLocalStorage()
     }
     updateKingCheckHighlight()
-    gameStatus(AppStore)
+
     AppStore.setSettingFromLocalStorage()
-  }, [AppStore.chess])
+  }, [AppStore.gameType, AppStore.status])
+
+
+
 
 
 
@@ -73,12 +99,9 @@ const ChessBoard = observer(() => {
     }
   }, [isDragging])
 
-
-
   const handlePointerDownMemo = useCallback((e, square) => {
     handlePointerDown(e, square)
   }, [handlePointerDown])
-
 
   const fugureMoveMemo = useCallback((startCell, finishCell) => {
     fugureMove(startCell, finishCell)
@@ -86,6 +109,21 @@ const ChessBoard = observer(() => {
 
 
 
+  const ShowSpinner = observer(() => {
+    if(AppStore.gameType === 'local') return null
+    if (gameStore.isLoading) {
+      return (
+        <SpinnerWrapper>
+          <Spinner />
+        </SpinnerWrapper>
+      )
+    } else {
+      return null
+    }
+  })
+
+
+  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', AppStore.gameType)
 
 
   return (
@@ -96,7 +134,6 @@ const ChessBoard = observer(() => {
         fugureMove={fugureMoveMemo}
         grabCell={grabCell}
       />
-
 
       {highlightedCell.visible && (
         <HighlightedCell
@@ -110,12 +147,14 @@ const ChessBoard = observer(() => {
         />
       )}
 
+      <ShowSpinner />
+
       <FiguresContainer
-        handlePointerDown={handlePointerDownMemo}
-        setDraggedFigure={setDraggedFigure}
-        draggedFigure={draggedFigure}
-        isMoving={isMoving}
-      />
+          handlePointerDown={handlePointerDownMemo}
+          setDraggedFigure={setDraggedFigure}
+          draggedFigure={draggedFigure}
+          isMoving={isMoving}
+        />
 
       {draggedFigure && (
         <DraggableFigure

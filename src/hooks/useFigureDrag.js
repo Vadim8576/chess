@@ -210,6 +210,9 @@ export const useFigureDrag = (
 
     AppStore.saveGameToLocalStorage()
 
+
+    if(AppStore.gameType === 'local') return
+
     gameStore.updateBoard() // обновить доску в Firebase
 
   }, [AppStore, grabCell])

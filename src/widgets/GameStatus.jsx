@@ -2,7 +2,10 @@
 import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 import AppStore from "../store/AppStore";
+import gameStore from "../store/gameStore";
 import { COLORS } from "../constants/gameInitial";
+import Spinner from "../components/UI/Spinner";
+import { gameStatus } from "../utils/gameStatus";
 
 
 const Status = styled.div`
@@ -23,11 +26,21 @@ border: 1px ${COLORS.neutral} solid;
 
 const GameStatus = observer(() => {
 
+
+	gameStatus(AppStore)
+
+	console.log(gameStore.isLoading)
+
 	console.log('GameStatus')
 
 	return (
 		<Status>
-			{AppStore.status}
+			{gameStore.isLoading && AppStore.gameType !== 'local'
+				?
+				<Spinner scale={1} />
+				:
+				<>{AppStore.status}</>
+			}
 		</Status>
 	)
 })
