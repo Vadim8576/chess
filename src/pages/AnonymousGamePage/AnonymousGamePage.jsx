@@ -73,7 +73,7 @@ const AnonymousGame = observer(() => {
 
 	// console.log('user ',  user.uid)
 
-	console.log('LocalGamePage')
+	// console.log('AnonymousGame')
 
 	const [cellSize, setCellSize] = useState(null)
 	const { width, height } = useWindowResizeThrottle(300)
@@ -84,10 +84,10 @@ const AnonymousGame = observer(() => {
 
 		if ((height - HEADER_HEIGHT - FOOTER_HEIGHT) <= width) {
 			cellSize = (height - HEADER_HEIGHT - FOOTER_HEIGHT) / 14
-			console.log('h < w', cellSize, width, cellSize * 12)
+			// console.log('h < w', cellSize, width, cellSize * 12)
 		} else {
 			cellSize = width / 14
-			console.log('h > w', cellSize, width, cellSize * 12)
+			// console.log('h > w', cellSize, width, cellSize * 12)
 		}
 
 		cellSize = Math.round(cellSize)

@@ -34,7 +34,7 @@ const FiguresContainer = memo(observer(({
   isMoving
 }) => {
 
-  console.log('BoardElements', AppStore.status)
+  // console.log('BoardElements', AppStore.status)
 
 
   const figures = useMemo(() => {

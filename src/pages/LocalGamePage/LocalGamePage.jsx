@@ -77,7 +77,7 @@ const LocalGamePage = observer(() => {
 
 	// console.log('user ',  user.uid)
 
-	console.log('LocalGamePage')
+	// console.log('LocalGamePage')
 
 	const [cellSize, setCellSize] = useState(null)
 	const { width, height } = useWindowResizeThrottle(300)

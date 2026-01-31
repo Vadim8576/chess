@@ -6,6 +6,7 @@ import gameStore from "../store/gameStore";
 import { COLORS } from "../constants/gameInitial";
 import Spinner from "../components/UI/Spinner";
 import { gameStatus } from "../utils/gameStatus";
+import { useEffect } from "react";
 
 
 const Status = styled.div`
@@ -27,11 +28,10 @@ border: 1px ${COLORS.neutral} solid;
 const GameStatus = observer(() => {
 
 
-	gameStatus(AppStore)
 
-	console.log(gameStore.isLoading)
+	// console.log(gameStore.isLoading)
 
-	console.log('GameStatus')
+	// console.log('GameStatus')
 
 	return (
 		<Status>

@@ -29,7 +29,7 @@ export const useFigureDrag = (
 
     if (!grabFigure) return
 
-    console.log('!!!!!', 'физически ', currentFigureSquare, 'по расчету ', grabFigure.square)
+    // console.log('!!!!!', 'физически ', currentFigureSquare, 'по расчету ', grabFigure.square)
 
     const isCurrentPlayer = grabFigure.color === AppStore.chess.turn()
 
@@ -153,7 +153,7 @@ export const useFigureDrag = (
 
   const fugureMove = useCallback((startCell, finishCell, type) => {
 
-    console.log(startCell, finishCell)
+    // console.log(startCell, finishCell)
 
     const col = finishCell.col
     const row = finishCell.row

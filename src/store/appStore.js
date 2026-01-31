@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx"
+import { action, makeAutoObservable } from "mobx"
 import { toJS } from 'mobx';
 import { Chess } from "chess.js";
 
@@ -76,9 +76,9 @@ class AppStore {
     // console.log('board = ', toJS(this.board))
   }
   
-  setStatus(status) {
+  setStatus = action((status) => {
     this.status = status
-  }
+  })
 
   //Взятые фигуры
   addCapturedFigures(color, figure) {

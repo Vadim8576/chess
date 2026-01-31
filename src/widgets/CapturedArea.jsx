@@ -40,7 +40,7 @@ align-content: center;
 const CapturedArea = observer(({ player }) => {
   const figureList = AppStore.capturedFigures[player] // player 'w' || 'b'
 
-  console.log('CapturedArea')
+  // console.log('CapturedArea')
   // console.log(toJS(figureList))
 
   return (

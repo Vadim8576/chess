@@ -17,7 +17,7 @@ const Container = styled.div`
 
 const BoardContainer = observer(({ windowSize }) => {
 
-	console.log('BoardContainer')
+	// console.log('BoardContainer')
 
 	const ref = useRef(null)
 

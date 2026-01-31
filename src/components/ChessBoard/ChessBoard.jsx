@@ -32,7 +32,7 @@ const SpinnerWrapper = styled.div`
 
 
 const ChessBoard = observer(() => {
-  console.log('ChessBoard Render')
+  // console.log('ChessBoard Render')
 
   const pageRef = useRef(null)
   const size = AppStore.board.cellSize * 8
@@ -62,11 +62,11 @@ const ChessBoard = observer(() => {
 
 
   useEffect(() => {
-    AppStore.createNewChess()
-    // gameStatus(AppStore)
-
+    console.log('Создана новый объект игры!!!!!!')
+    
+    gameStatus(AppStore)
     if (AppStore.gameType !== 'local') {
-      handlePointerCancel()
+      handlePointerCancel() // Убрать ненужные подсветки клетки
       return
     }
     
@@ -77,7 +77,7 @@ const ChessBoard = observer(() => {
     updateKingCheckHighlight()
 
     AppStore.setSettingFromLocalStorage()
-  }, [AppStore.gameType, AppStore.status])
+  }, [AppStore.gameType, AppStore.chess])
 
 
 
@@ -123,7 +123,7 @@ const ChessBoard = observer(() => {
   })
 
 
-  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', AppStore.gameType)
+  // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', AppStore.gameType)
 
 
   return (

@@ -43,7 +43,7 @@ class GameStore {
 
   currentGameSubscribe() {
     this.setGameId('65NH7uPgvKw44ft4euD4')
-    console.log('currentGameSubscribe')
+    // console.log('currentGameSubscribe')
 
     return fb.gameSubscribe('65NH7uPgvKw44ft4euD4', this.loadGame, this.setIsLoading)
   }

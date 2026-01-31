@@ -45,7 +45,7 @@ const CellFile = styled.div`
 
 const Board = memo(observer(() => {
 
-	console.log('Board')
+	// console.log('Board')
 
 	const cellSize = AppStore.board.cellSize
 

@@ -82,8 +82,6 @@ const Figure = memo(observer(({
 		const square = getSquare(AppStore.whiteBottom, col, row)
 
 		handlePointerDown(e, square)
-
-		console.log(image)
 	}
 
 	return (
