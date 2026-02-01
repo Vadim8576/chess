@@ -38,7 +38,8 @@ const App = () => {
             <Route path="/" element={<Home />} />
             {/* <Route path="/" element={<LocalGamePage />} /> */}
             <Route path="/local" element={<LocalGamePage />} />
-            <Route path="/fast" element={<FastOnlineGamePage />} />
+            {/* <Route path="/fast" element={<FastOnlineGamePage />} /> */}
+            <Route path="/chess-game/:gameId" element={<FastOnlineGamePage />} />
             <Route path="/rate" element={<RateGamePage />} />
             {/* <Route path="*" element={<NoMatch />} /> 404-страница */}
           </Route>

@@ -42,11 +42,21 @@ align-content: center;
 
 const CapturedArea = observer(({ player }) => {
 
-  if(gameStore.isLoading) return null
+  // console.log('!!!!!CapturedArea')
+  // console.log(gameStore.isLoading)
+  // console.log(AppStore.gameType)
+  // console.log(AppStore.gameType !== 'local' && gameStore.isLoading)
+  
+
+  if(AppStore.gameType !== 'local' && gameStore.isLoading) return null
 
   const capturedFigures = { ...AppStore.capturedFigures[gameStore.currentGameId] }
+
+  // console.log(capturedFigures)
+
   if (!capturedFigures) return null
   if (!(player in capturedFigures)) return null
+  // console.log('CapturedArea!!!!!!')
 
   const figureList = AppStore.capturedFigures[gameStore.currentGameId][player] // player 'w' || 'b'
 

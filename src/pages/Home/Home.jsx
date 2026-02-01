@@ -1,6 +1,10 @@
 import React from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
+import gameStore from '../../store/gameStore';
+import { observer } from 'mobx-react-lite';
 
 
 const HomeWrapper = styled.div`
@@ -34,13 +38,39 @@ margin-bottom: 10px;
 border-radius: 5px;
 `
 
+const InvitLinkContainer = styled.div`
+width: 100%;
+`
 
-const Home = () => {
+
+const Home = observer(() => {
+  const [inviteUrl, setInviteUrl] = useState(null)
+  const [isLoading, setIsLoading] = useState(null)
+
   const navigate = useNavigate()
 
+
+
+  useEffect(() => {
+    console.log('!!!!!!!!!!!!!!!!-----------')
+    if (!gameStore.fastOnlineGameId) return
+    console.log('-----------!!!!!!!!!!!!!!!!!')
+    setIsLoading(false)
+    setInviteUrl(`${window.location.origin}/chess-game/${gameStore.fastOnlineGameId}`)
+  }, [gameStore.fastOnlineGameId])
+
+
+
+
   const localGame = () => navigate('/local')
-  const fastGame = () => navigate('/fast')
+  const inviteGame = () => navigate(`/chess-game/${gameStore.fastOnlineGameId}`)
+  const fastGame = () => {
+    setIsLoading(true)
+    gameStore.createFastOnlineGame()
+  }
   const RateGame = () => navigate('/rate')
+
+
 
   return (
     <HomeWrapper>
@@ -49,14 +79,22 @@ const Home = () => {
           Локальная игра
         </MenuButton>
         <MenuButton onClick={fastGame}>
-          Быстрая игра по сети
+          {isLoading !== null && isLoading ? 'Spinner' : 'Быстрая игра по сети'}
         </MenuButton>
+        {inviteUrl &&
+
+          <InvitLinkContainer>
+            {`Ссылка-приглашение: ${inviteUrl}`}
+            <button onClick={inviteGame}>В игру</button>
+          </InvitLinkContainer>
+
+        }
         <MenuButton onClick={RateGame}>
           Рейтинговая игра по сети
         </MenuButton>
       </MenuWrapper>
-    </HomeWrapper>
+    </HomeWrapper >
   )
-}
+})
 
 export default Home

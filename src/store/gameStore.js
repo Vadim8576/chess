@@ -8,7 +8,8 @@ import AppStore from "./AppStore";
 class GameStore {
 
   currentGameId = null
-  fastOnlineGameId = '65NH7uPgvKw44ft4euD4'
+  fastOnlineGameId = null
+  // fastOnlineGameId = '65NH7uPgvKw44ft4euD4'
 
   isLoading = true
 

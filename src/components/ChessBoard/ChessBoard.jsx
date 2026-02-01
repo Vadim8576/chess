@@ -19,7 +19,7 @@ const BoardWrapper = styled.div`
   height: ${props => props.$size}px;
 `;
 
-const SpinnerWrapper = styled.div`
+const FullSizeWrapper = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
@@ -36,7 +36,6 @@ const ChessBoard = observer(() => {
 
   const pageRef = useRef(null)
   const size = AppStore.board.cellSize * 8
-
   const [draggedFigure, setDraggedFigure] = useState(null)
   const [isMoving, setIsMoving] = useState(false)
 
@@ -63,16 +62,16 @@ const ChessBoard = observer(() => {
 
   useEffect(() => {
     console.log('Создана новый объект игры!!!!!!')
-    
+
     gameStatus(AppStore)
     if (AppStore.gameType !== 'local') {
       handlePointerCancel() // Убрать ненужные подсветки клетки
       return
     }
-    
+
     // const chessFen = localStorage.getItem('ChessFen')
     // if (chessFen) {
-      AppStore.loadGameFromLocalStorage()
+    AppStore.loadGameFromLocalStorage()
     // }
     AppStore.loadCapturedFiguresFromLocalStorage()
     updateKingCheckHighlight()
@@ -81,6 +80,7 @@ const ChessBoard = observer(() => {
   }, [AppStore.gameType, AppStore.chess])
 
 
+  
 
 
 
@@ -110,13 +110,14 @@ const ChessBoard = observer(() => {
 
 
 
+
   const ShowSpinner = observer(() => {
-    if(AppStore.gameType === 'local') return null
+    if (AppStore.gameType === 'local') return null
     if (gameStore.isLoading) {
       return (
-        <SpinnerWrapper>
+        <FullSizeWrapper>
           <Spinner />
-        </SpinnerWrapper>
+        </FullSizeWrapper>
       )
     } else {
       return null
@@ -151,11 +152,11 @@ const ChessBoard = observer(() => {
       <ShowSpinner />
 
       <FiguresContainer
-          handlePointerDown={handlePointerDownMemo}
-          setDraggedFigure={setDraggedFigure}
-          draggedFigure={draggedFigure}
-          isMoving={isMoving}
-        />
+        handlePointerDown={handlePointerDownMemo}
+        setDraggedFigure={setDraggedFigure}
+        draggedFigure={draggedFigure}
+        isMoving={isMoving}
+      />
 
       {draggedFigure && (
         <DraggableFigure
