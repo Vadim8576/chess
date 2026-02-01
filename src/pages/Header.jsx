@@ -1,9 +1,11 @@
 import { observer } from "mobx-react-lite";
+import { toJS } from 'mobx';
 import styled from "styled-components";
 import { COLORS, HEADER_HEIGHT } from "../constants/gameInitial";
 import AppStore from "../store/AppStore";
 import { gameStatus } from "../utils/gameStatus";
 import { NavLink, useNavigate } from "react-router";
+import gameStore from "../store/gameStore";
 
 
 const HeaderLine = styled.div`
@@ -45,8 +47,6 @@ const Header = observer(() => {
   const restartGame = () => {
     console.log('Restart')
     AppStore.restartGame()
-    AppStore.removeHightLightCells()
-    gameStatus(AppStore)
   }
 
   const rotateBoard = () => {
@@ -54,10 +54,11 @@ const Header = observer(() => {
     AppStore.rotateBoard()
   }
 
+  console.log(toJS(gameStore.currentGameId))
 
-  // const createNewAnonymous = () => {
-  //   navigate('/anonymous')
-  //   // gameStore.createNewAnonymous()
+  // const createFastOnlineGame = () => {
+  //   navigate('/fast')
+  //   // gameStore.createFastOnlineGame()
   // }
 
 
@@ -71,10 +72,11 @@ const Header = observer(() => {
       >
         <h1 style={{ color: '#fff' }}>Chess</h1>
       </NavLink>
+      {gameStore.currentGameId && <span style={{color: 'yellow'}}>{gameStore.currentGameId + ''}</span>}
       <div>
         {/* <RestartButton
           color={'green'}
-          onMouseDown={createNewAnonymous}
+          onMouseDown={createFastOnlineGame}
         >
           Create Game
         </RestartButton> */}

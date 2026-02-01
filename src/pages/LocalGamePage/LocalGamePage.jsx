@@ -88,10 +88,10 @@ const LocalGamePage = observer(() => {
 
 		if ((height - HEADER_HEIGHT - FOOTER_HEIGHT) <= width) {
 			cellSize = (height - HEADER_HEIGHT - FOOTER_HEIGHT) / 14
-			console.log('h < w', cellSize, width, cellSize * 12)
+			// console.log('h < w', cellSize, width, cellSize * 12)
 		} else {
 			cellSize = width / 14
-			console.log('h > w', cellSize, width, cellSize * 12)
+			// console.log('h > w', cellSize, width, cellSize * 12)
 		}
 
 		cellSize = Math.round(cellSize)
@@ -117,6 +117,8 @@ const LocalGamePage = observer(() => {
 
 	useEffect(() => {
 		AppStore.setGameType('local')
+		gameStore.setCurrentGameId('local')
+		AppStore.loadCapturedFiguresFromLocalStorage()
 	}, [])
 
 	

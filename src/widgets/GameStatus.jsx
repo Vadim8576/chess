@@ -37,7 +37,7 @@ const GameStatus = observer(() => {
 		<Status>
 			{gameStore.isLoading && AppStore.gameType !== 'local'
 				?
-				<Spinner scale={1} />
+				'...'
 				:
 				<>{AppStore.status}</>
 			}

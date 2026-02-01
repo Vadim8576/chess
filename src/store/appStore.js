@@ -1,6 +1,8 @@
 import { action, makeAutoObservable } from "mobx"
 import { toJS } from 'mobx';
 import { Chess } from "chess.js";
+import gameStore from "./gameStore";
+import { gameStatus } from "../utils/gameStatus";
 
 
 
@@ -16,10 +18,12 @@ class AppStore {
     cellSize: 0,
     borderSize: 0
   }
-  capturedFigures = {
-    'w': [],
-    'b': []
-  }
+  // capturedFigures = {
+  //   'w': [],
+  //   'b': []
+  // }
+  capturedFigures = {}
+
   historyMoves = []
   historyList = []
   whiteBottom = true // true | false
@@ -49,10 +53,6 @@ class AppStore {
     this.historyMoves = []
     this.historyList = []
     this.status = ''
-    this.capturedFigures = {
-      'w': [],
-      'b': []
-    }
   }
 
   loadGame(fen) {
@@ -66,29 +66,23 @@ class AppStore {
       localStorage.removeItem('ChessFen')
       this.chess = new Chess()
       this.initVariables()
+      this.removeHightLightCells()
+      this.resetCapturedFigures()
+      gameStatus(this)
     } catch (e) {
       console.log('Не удалось удалить fen из localStorage: ', e)
     }
+
   }
 
   setBoard(board) {
     this.board = { ...this.board, ...board }
     // console.log('board = ', toJS(this.board))
   }
-  
+
   setStatus = action((status) => {
     this.status = status
   })
-
-  //Взятые фигуры
-  addCapturedFigures(color, figure) {
-    this.capturedFigures = {
-      ...this.capturedFigures,
-      [color]: [...this.capturedFigures[color], figure]
-    }
-    console.log(toJS(this.capturedFigures))
-  }
-
 
 
 
@@ -117,11 +111,79 @@ class AppStore {
 
 
 
+  //Взятые фигуры
+  addCapturedFigures = action((color, figure) => {
+
+    console.log('currentGameId = ', gameStore.currentGameId)
+    console.log('color = ', color)
+    console.log('figure = ', figure)
+    console.log(toJS(this.capturedFigures))
+
+    const gameId = gameStore.currentGameId;
+
+    this.capturedFigures = {
+      ...this.capturedFigures,
+      [gameId]: {
+        ...this.capturedFigures[gameId],
+        [color]: [
+          ...(this.capturedFigures[gameId]?.[color] || []),
+          figure
+        ]
+      }
+    }
+
+
+    console.log(toJS(this.capturedFigures))
+
+    this.saveCapturedFiguresToLocalStorage()
+  })
+
+
+  resetCapturedFigures() {
+
+    if (this.capturedFigures[gameStore.currentGameId]) delete this.capturedFigures[gameStore.currentGameId]
+
+    console.log(toJS(this.capturedFigures))
+    // this.capturedFigures[gameStore.currentGameId] = {}
+
+    console.log(toJS(this.capturedFigures))
+    this.saveCapturedFiguresToLocalStorage()
+  }
+
+  setCapturedFigures(capturedFigures) {
+    // this.capturedFigures[gameStore.currentGameId] = capturedFigures
+    this.capturedFigures = { ...capturedFigures }
+    
+  }
+
+  saveCapturedFiguresToLocalStorage() {
+    // const capturedFigures = {
+    //   [gameStore.currentGameId]: { ...this.capturedFigures }
+    // }
+    try {
+      localStorage.setItem('CapturedFigures', JSON.stringify(this.capturedFigures))
+    } catch (e) {
+      console.log('Не удалось сохранить CapturedFigures в localStorage: ', e)
+    }
+  }
+
+  loadCapturedFiguresFromLocalStorage() {
+    const capturedFigures = localStorage.getItem('CapturedFigures')
+    if (capturedFigures) this.setCapturedFigures(JSON.parse(capturedFigures))
+    console.log(capturedFigures)
+  }
+
+
+
+
+
+
+
 
   saveGameToLocalStorage() {
     const fen = this.chess.fen()
     try {
-      localStorage.setItem('ChessFen', fen)
+      localStorage.setItem('ChessFen', JSON.stringify(fen))
     } catch (e) {
       console.log('Не удалось сохранить fen в localStorage: ', e)
     }
@@ -129,15 +191,16 @@ class AppStore {
 
   loadGameFromLocalStorage() {
     const fen = localStorage.getItem('ChessFen')
-    if (fen) this.chess.load(fen)
+    if (fen) this.chess.load(JSON.parse(fen))
   }
 
   saveSettingToLocalStorage(setting) {
-    const oldSetting = localStorage.getItem('Setting') || {}
-    console.log(oldSetting)
+    // const oldSetting = localStorage.getItem('Setting') || {}
+    // console.log(oldSetting)
     // oldSetting = JSON.parse(oldSetting)
 
     // console.log(JSON.parse(oldSetting))
+
     const newSetting = { ...setting }
 
     console.log(newSetting)

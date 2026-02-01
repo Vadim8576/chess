@@ -27,7 +27,7 @@ export const db = getFirestore(app)
 
 export const fb = {
 
-  createNewAnonymousGame: async (initialBoardFen) => {
+  createFastOnlineGame: async (initialBoardFen) => {
     const user = auth.currentUser
 
     if (user) {
@@ -37,7 +37,7 @@ export const fb = {
         const initialGameData = {
           creatorUid: user.uid,
           joinerUid: null,
-          status: 'waiting',
+          status: 'waiting', // "waiting" (ожидание второго игрока), "playing", "finished", "cancelled"
           whitePlayerUid: user.uid, // Создатель пока играет белыми по умолчанию
           blackPlayerUid: null,
           isTimed: false,
@@ -45,7 +45,7 @@ export const fb = {
           whiteTimeLeft: null,
           blackTimeLeft: null,
           boardState: initialBoardFen,
-          currentTurn: 'white',
+          // currentTurn: 'white',
           movesHistory: [],
           lastMoveTimestamp: new Date(),
           winnerUid: null,

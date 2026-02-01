@@ -67,9 +67,9 @@ grid-column: 1 / 9;
 grid-row: 11 / 12;
 `
 
-const AnonymousGame = observer(() => {
+const FastOnlineGamePage = observer(() => {
 
-	const {user, loading } = useAuth()
+	const { user, loading } = useAuth()
 
 	// console.log('user ',  user.uid)
 
@@ -113,29 +113,31 @@ const AnonymousGame = observer(() => {
 
 
 	// useEffect(() => {
-		
+
 	// 	authStore.singIn(email.trim(), password.trim())
 	// 	// navigation.navigate('TabNavigator', { name: 'TabNavigator' })
-	
+
 
 	// }, [])
 
 	// useEffect(() => {
 	// 	if(!gameStore.gameId) return
 	// 	const unsubscribe = gameStore.gameSubscribe()
-  //   return unsubscribe
+	//   return unsubscribe
 	// }, [gameStore.gameId])
 
 
 	useEffect(() => {
-		if(!user) return
-		const unsubscribe = gameStore.currentGameSubscribe()
+		if (!user) return
+		const unsubscribe = gameStore.gameSubscribe()
 		return unsubscribe
 	}, [gameStore.gameId, user])
 
 	useEffect(() => {
 		AppStore.setGameType('fastGame')
+		gameStore.setCurrentGameId(gameStore.fastOnlineGameId)
 		AppStore.createNewChess()
+		AppStore.loadCapturedFiguresFromLocalStorage()
 	}, [])
 
 	return (
@@ -179,4 +181,4 @@ const AnonymousGame = observer(() => {
 	)
 })
 
-export default AnonymousGame
+export default FastOnlineGamePage

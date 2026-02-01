@@ -4,6 +4,9 @@ import AppStore from "../store/AppStore";
 import CapturedFigure from "../components/boardElements/CapturedFigure";
 import { figure, COLORS } from "../constants/gameInitial";
 import { toJS } from 'mobx';
+import gameStore from "../store/gameStore";
+import { useEffect } from "react";
+import { useState } from "react";
 
 
 // const Wrapper = styled.div`
@@ -38,15 +41,18 @@ align-content: center;
 
 
 const CapturedArea = observer(({ player }) => {
-  const figureList = AppStore.capturedFigures[player] // player 'w' || 'b'
 
-  // console.log('CapturedArea')
-  // console.log(toJS(figureList))
+  if(gameStore.isLoading) return null
+
+  const capturedFigures = { ...AppStore.capturedFigures[gameStore.currentGameId] }
+  if (!capturedFigures) return null
+  if (!(player in capturedFigures)) return null
+
+  const figureList = AppStore.capturedFigures[gameStore.currentGameId][player] // player 'w' || 'b'
 
   return (
     <>
-      {figureList.map((cf, key) => {
-        console.log(figure[cf])
+      {figureList && figureList.map((cf, key) => {
         return (
           <CapturedFigure
             key={key}

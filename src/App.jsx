@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Outlet } from "react-router"
 import LocalGamePage from "./pages/LocalGamePage/LocalGamePage"
-import AnonymousGamePage from "./pages/AnonymousGamePage/AnonymousGamePage"
+import FastOnlineGamePage from "./pages/FastOnlineGamePage/FastOnlineGamePage"
 import Home from "./pages/Home/Home"
 import Header from "./pages/Header";
 import Footer from "./pages/Footer";
@@ -38,7 +38,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             {/* <Route path="/" element={<LocalGamePage />} /> */}
             <Route path="/local" element={<LocalGamePage />} />
-            <Route path="/anonymous" element={<AnonymousGamePage />} />
+            <Route path="/fast" element={<FastOnlineGamePage />} />
             <Route path="/rate" element={<RateGamePage />} />
             {/* <Route path="*" element={<NoMatch />} /> 404-страница */}
           </Route>

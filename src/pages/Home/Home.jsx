@@ -39,7 +39,7 @@ const Home = () => {
   const navigate = useNavigate()
 
   const localGame = () => navigate('/local')
-  const fastGame = () => navigate('/anonymous')
+  const fastGame = () => navigate('/fast')
   const RateGame = () => navigate('/rate')
 
   return (

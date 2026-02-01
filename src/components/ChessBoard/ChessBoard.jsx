@@ -70,10 +70,11 @@ const ChessBoard = observer(() => {
       return
     }
     
-    const chessFen = localStorage.getItem('ChessFen')
-    if (chessFen) {
+    // const chessFen = localStorage.getItem('ChessFen')
+    // if (chessFen) {
       AppStore.loadGameFromLocalStorage()
-    }
+    // }
+    AppStore.loadCapturedFiguresFromLocalStorage()
     updateKingCheckHighlight()
 
     AppStore.setSettingFromLocalStorage()

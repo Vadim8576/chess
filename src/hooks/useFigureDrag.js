@@ -219,9 +219,7 @@ export const useFigureDrag = (
 
 
   function updateKingCheckHighlight() {
-    console.log('До проверки')
     if (AppStore?.chess.inCheck() || AppStore?.chess.isCheckmate()) {
-      console.log('После проверки')
       const player = AppStore.chess.turn() // чей сейчас ход
       const squareArr = AppStore.chess.findPiece({ type: 'k', color: player }) // ищем клетку на котором король
 

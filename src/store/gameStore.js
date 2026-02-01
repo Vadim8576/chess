@@ -7,7 +7,9 @@ import AppStore from "./AppStore";
 
 class GameStore {
 
-  gameId = null
+  currentGameId = null
+  fastOnlineGameId = '65NH7uPgvKw44ft4euD4'
+
   isLoading = true
 
   constructor() {
@@ -16,21 +18,25 @@ class GameStore {
 
   // Оставить стерлочную функцию, чтобы не терялся контекст
   setIsLoading = (isLoading) => {
-    console.log('this.isLoading = ', this.isLoading)
-    console.log('isLoading = ', isLoading)
+    // console.log('this.isLoading = ', this.isLoading)
+    // console.log('isLoading = ', isLoading)
     this.isLoading = isLoading
   }
 
-  async createNewAnonymous () {
+  async createFastOnlineGame () {
     // const chess = AppStore.createNewChess()
     // const fen = chess.fen()
     const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
-    const gameId = await fb.createNewAnonymousGame(fen)
-    this.setGameId(gameId)
+    const gameId = await fb.createFastOnlineGame(fen)
+    this.setFastOnlineGameId(gameId)
   }
 
-  setGameId(gameId) {
-    this.gameId = gameId
+  setCurrentGameId(gameId) {
+    this.currentGameId = gameId
+  }
+
+  setFastOnlineGameId(gameId) {
+    this.fastOnlineGameId = gameId
   }
 
   loadGame(fen) {
@@ -38,19 +44,19 @@ class GameStore {
   }
 
   gameSubscribe() {
-    return fb.gameSubscribe(this.gameId, this.loadGame, this.setIsLoading)
+    return fb.gameSubscribe(this.fastOnlineGameId, this.loadGame, this.setIsLoading)
   }
 
-  currentGameSubscribe() {
-    this.setGameId('65NH7uPgvKw44ft4euD4')
-    // console.log('currentGameSubscribe')
+  // currentGameSubscribe() {
+  //   // this.setGameId('65NH7uPgvKw44ft4euD4')
+  //   // console.log('currentGameSubscribe')
 
-    return fb.gameSubscribe('65NH7uPgvKw44ft4euD4', this.loadGame, this.setIsLoading)
-  }
+  //   return fb.gameSubscribe('65NH7uPgvKw44ft4euD4', this.loadGame, this.setIsLoading)
+  // }
 
   updateBoard() {
     const newBoardState = AppStore.chess.fen()
-    fb.updateBoard(this.gameId, newBoardState)
+    fb.updateBoard(this.currentGameId, newBoardState)
   }
 
 }
