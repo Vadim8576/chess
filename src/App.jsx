@@ -18,8 +18,6 @@ const Layout = () => {
     }}>
       <Header />
       <main style={{
-        // width: '100%',
-        // height: '100%',
         flexGrow: '1'
       }}>
         <Outlet />
@@ -36,9 +34,7 @@ const App = () => {
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
-            {/* <Route path="/" element={<LocalGamePage />} /> */}
             <Route path="/local" element={<LocalGamePage />} />
-            {/* <Route path="/fast" element={<FastOnlineGamePage />} /> */}
             <Route path="/chess-game/:gameId" element={<FastOnlineGamePage />} />
             <Route path="/rate" element={<RateGamePage />} />
             {/* <Route path="*" element={<NoMatch />} /> 404-страница */}

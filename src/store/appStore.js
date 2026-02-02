@@ -37,23 +37,23 @@ class AppStore {
     makeAutoObservable(this)
   }
 
-  setGameType(type) {
+  setGameType = action((type) => {
     this.gameType = type
-  }
+  })
 
-  createNewChess() {
+  createNewChess = action(() => {
     this.chess = new Chess()
-  }
+  })
 
-  setChess(chess) {
+  setChess = action((chess) => {
     this.chess = chess
-  }
+  })
 
-  initVariables() {
+  initVariables = action(() => {
     this.historyMoves = []
     this.historyList = []
     this.status = ''
-  }
+  })
 
   loadGame(fen) {
     this.chess = new Chess()
@@ -61,7 +61,7 @@ class AppStore {
     console.log('load game ', fen)
   }
 
-  restartGame() {
+  restartGame = action(() => {
     try {
       localStorage.removeItem('ChessFen')
       this.chess = new Chess()
@@ -72,13 +72,11 @@ class AppStore {
     } catch (e) {
       console.log('Не удалось удалить fen из localStorage: ', e)
     }
+  })
 
-  }
-
-  setBoard(board) {
+  setBoard = action((board) => {
     this.board = { ...this.board, ...board }
-    // console.log('board = ', toJS(this.board))
-  }
+  })
 
   setStatus = action((status) => {
     this.status = status
@@ -86,26 +84,26 @@ class AppStore {
 
 
 
-  setLastMoveCells(cells) {
+  setLastMoveCells = action((cells) => {
     this.lastMoveCells = cells
     // console.log(toJS(this.lastMoveCells))
-  }
+  })
 
-  setPossibleMoves(cells) {
+  setPossibleMoves = action((cells) => {
     this.possibleMoves = cells
     // console.log(toJS(this.possibleMoves))
-  }
+  })
 
-  setCellInCheck(cell) {
+  setCellInCheck = action((cell) => {
     this.cellInCheck = cell
     // console.log(toJS(this.cellInCheck))
-  }
+  })
 
-  removeHightLightCells() {
+  removeHightLightCells = action(() => {
     this.setLastMoveCells([])
     this.setPossibleMoves([])
     this.setCellInCheck({})
-  }
+  })
 
 
 
@@ -139,7 +137,7 @@ class AppStore {
   })
 
 
-  resetCapturedFigures() {
+  resetCapturedFigures = action(() => {
 
     if (this.capturedFigures[gameStore.currentGameId]) delete this.capturedFigures[gameStore.currentGameId]
 
@@ -148,13 +146,13 @@ class AppStore {
 
     console.log(toJS(this.capturedFigures))
     this.saveCapturedFiguresToLocalStorage()
-  }
+  })
 
-  setCapturedFigures(capturedFigures) {
+  setCapturedFigures = action((capturedFigures) => {
     // this.capturedFigures[gameStore.currentGameId] = capturedFigures
     this.capturedFigures = { ...capturedFigures }
     
-  }
+  })
 
   saveCapturedFiguresToLocalStorage() {
     // const capturedFigures = {
@@ -167,11 +165,11 @@ class AppStore {
     }
   }
 
-  loadCapturedFiguresFromLocalStorage() {
+  loadCapturedFiguresFromLocalStorage = action(() => {
     const capturedFigures = localStorage.getItem('CapturedFigures')
     if (capturedFigures) this.setCapturedFigures(JSON.parse(capturedFigures))
     console.log(capturedFigures)
-  }
+  })
 
 
 
@@ -189,18 +187,12 @@ class AppStore {
     }
   }
 
-  loadGameFromLocalStorage() {
+  loadGameFromLocalStorage = action(() => {
     const fen = localStorage.getItem('ChessFen')
     if (fen) this.chess.load(JSON.parse(fen))
-  }
+  })
 
   saveSettingToLocalStorage(setting) {
-    // const oldSetting = localStorage.getItem('Setting') || {}
-    // console.log(oldSetting)
-    // oldSetting = JSON.parse(oldSetting)
-
-    // console.log(JSON.parse(oldSetting))
-
     const newSetting = { ...setting }
 
     console.log(newSetting)
@@ -212,7 +204,7 @@ class AppStore {
     }
   }
 
-  setSettingFromLocalStorage() {
+  setSettingFromLocalStorage = action(() => {
     const setting = localStorage.getItem('Setting')
     if (!setting) return
     const parseSetting = JSON.parse(setting)
@@ -222,12 +214,12 @@ class AppStore {
     }
 
     // console.log(this.whiteBottom)
-  }
+  })
 
-  rotateBoard() {
+  rotateBoard = action(() => {
     this.whiteBottom = !this.whiteBottom
     this.saveSettingToLocalStorage({ whiteBottom: this.whiteBottom })
-  }
+  })
 
 
 

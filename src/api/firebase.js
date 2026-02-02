@@ -30,6 +30,8 @@ export const fb = {
   createFastOnlineGame: async (initialBoardFen) => {
     const user = auth.currentUser
 
+    // console.log('user', user)
+
     if (user) {
       try {
         const gamesCollectionRef = collection(db, 'games')
@@ -74,9 +76,9 @@ export const fb = {
 
 
 
-  gameSubscribe: (gameIdToSubscribe, loadGame, setIsLoading) => {
+  gameSubscribe: (gameIdToSubscribe, setIsLoading, setGameData) => {
     const user = auth.currentUser
-    // console.log('gameSubscribe', user.uid)
+    console.log('gameSubscribe', user.uid)
     if (user) {
       const gameRef = doc(db, "games", gameIdToSubscribe)
 
@@ -89,26 +91,15 @@ export const fb = {
 
           console.log(`Получен Snapshot: isFromCache=${isFromCache}, hasPendingWrites=${hasPendingWrites}`);
 
-  
+
           if (!isFromCache && !hasPendingWrites) {
             console.log('Данные получены с сервера и готовы к отображению.')
-            setIsLoading(false)
           }
-
-
 
           const gameData = docSnapshot.data()
           console.log("Current game data:", gameData)
-
-          // if (gameData.currentPlayer) {
-          //   displayCurrentPlayer(gameData.currentPlayer);
-          // }
-
-          if (gameData.boardState) {
-            loadGame(gameData.boardState)
-          }
-
-
+          setIsLoading(false)
+          setGameData(gameData)
 
         } else {
 

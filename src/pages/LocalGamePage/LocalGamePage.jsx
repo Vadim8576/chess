@@ -8,13 +8,9 @@ import CommonPageElements from "../CommonPageElements";
 
 const LocalGamePage = observer(() => {
 
-	// const {user, loading } = useAuth()
-
 	useEffect(() => {
 		AppStore.setGameType('local')
-		console.log('useEffect AppStore.setGameType(local)')
 		gameStore.setCurrentGameId('local')
-		AppStore.loadCapturedFiguresFromLocalStorage()
 	}, [])
 
 	

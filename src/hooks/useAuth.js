@@ -1,4 +1,4 @@
-import { onAuthStateChanged } from "firebase/auth"
+import { onAuthStateChanged, signInAnonymously } from "firebase/auth"
 import { useEffect, useMemo, useState } from "react"
 import { auth } from "../api/firebase"
 import authStore from "../store/authStore"
@@ -6,8 +6,12 @@ import authStore from "../store/authStore"
 export const useAuth = () => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [startAuth, setStartAuth] = useState(false)
+
+
 
   useEffect(() => {
+    if(!startAuth) return
     // Подписываемся на изменения состояния аутентификации
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -35,19 +39,14 @@ export const useAuth = () => {
     })
 
     return () => unsubscribe()
-  }, [])
+  }, [startAuth])
 
-  // if (loading) {
-  //   return <div>Загрузка аутентификации...</div>
-  // }
 
-  // const values = {
-  //   user: authStore.user, isAuth
-  
-  // }
+  const start = () => setStartAuth(true)
+ 
 
   const values = {
-    user, loading
+    user, loading, start
   }
 
 

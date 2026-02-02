@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { action, makeAutoObservable } from "mobx";
 import { fb } from "../api/firebase"
 // import { logOut } from '../api/firebase'
 
@@ -14,29 +14,30 @@ class Auth {
     makeAutoObservable(this)
   }
 
-  setUser(user) {
+  setUser = action((user) => {
     this.user = user
-  }
+    // console.log('Пользователь вошел. ID = ', this.user.uid)
+  })
 
   // setNewUserCreated = (created) => {
   //   this.newUserCreated = created
   // }
 
-  setError(error) {
-    this.authError = error
-  }
+  // setError = action((error) => {
+  //   this.authError = error
+  // })
 
-  async singIn(email, password) {
-    await fb.singIn(email, password)
-  }
+  // singIn = action(async (email, password) => {
+  //   await fb.singIn(email, password)
+  // })
 
   // logout() {
   //   logOut()
   // }
 
-  setLogIn(bool) {
-    this.isLogIn = bool
-  }
+  // setLogIn = action((bool) => {
+  //   this.isLogIn = bool
+  // })
 
   // createUser = ({email, password, nickName}) => {
   //   fb.createUser({email, password, nickName, setNewUserCreated: this.setNewUserCreated})

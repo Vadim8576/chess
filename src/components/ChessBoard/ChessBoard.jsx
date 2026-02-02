@@ -61,26 +61,25 @@ const ChessBoard = observer(() => {
 
 
   useEffect(() => {
-    console.log('Создана новый объект игры!!!!!!')
+    console.log('Создан новый объект игры!!!!!!')
+    AppStore.createNewChess()
 
     gameStatus(AppStore)
+
     if (AppStore.gameType !== 'local') {
       handlePointerCancel() // Убрать ненужные подсветки клетки
       return
     }
 
-    // const chessFen = localStorage.getItem('ChessFen')
-    // if (chessFen) {
     AppStore.loadGameFromLocalStorage()
-    // }
     AppStore.loadCapturedFiguresFromLocalStorage()
     updateKingCheckHighlight()
-
     AppStore.setSettingFromLocalStorage()
-  }, [AppStore.gameType, AppStore.chess])
+
+  }, [AppStore.gameType])
 
 
-  
+
 
 
 
@@ -113,6 +112,9 @@ const ChessBoard = observer(() => {
 
   const ShowSpinner = observer(() => {
     if (AppStore.gameType === 'local') return null
+
+    console.log('isLoading = ', gameStore.isLoading)
+
     if (gameStore.isLoading) {
       return (
         <FullSizeWrapper>
@@ -148,9 +150,11 @@ const ChessBoard = observer(() => {
           highlightedCell={AppStore.cellInCheck}
         />
       )}
-
-      <ShowSpinner />
-
+      {(AppStore.gameType !== 'local' && gameStore.isLoading) && (
+        <FullSizeWrapper>
+          <Spinner />
+        </FullSizeWrapper>)
+      }
       <FiguresContainer
         handlePointerDown={handlePointerDownMemo}
         setDraggedFigure={setDraggedFigure}

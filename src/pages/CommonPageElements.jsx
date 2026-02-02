@@ -21,7 +21,8 @@ display: flex;
 justify-content: center;
 align-items: center;
 width: 100%;
-height: calc(100% - ${HEADER_HEIGHT}px - ${FOOTER_HEIGHT}px);
+// height: calc(100% - ${HEADER_HEIGHT}px - ${FOOTER_HEIGHT}px);
+height: 100%;
 `
 
 const Grid = styled.div`

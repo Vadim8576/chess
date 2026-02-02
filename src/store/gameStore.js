@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { action, makeAutoObservable } from "mobx";
 import { fb } from "../api/firebase"
 import authStore from "./authStore";
 import AppStore from "./AppStore";
@@ -8,45 +8,58 @@ import AppStore from "./AppStore";
 class GameStore {
 
   currentGameId = null
-  fastOnlineGameId = null
+  // fastOnlineGameId = null
   // fastOnlineGameId = '65NH7uPgvKw44ft4euD4'
 
+  gameData = null
+  inviteUrl = null
   isLoading = true
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  // Оставить стерлочную функцию, чтобы не терялся контекст
-  setIsLoading = (isLoading) => {
-    // console.log('this.isLoading = ', this.isLoading)
-    // console.log('isLoading = ', isLoading)
-    this.isLoading = isLoading
-  }
+  setInviteUrl = action((url) => {
+    this.inviteUrl = `${window.location.origin}/chess-game/${this.currentGameId}`
+    // console.log(this.gameData)
+  })
 
-  async createFastOnlineGame () {
+  setGameData = action((data) => {
+    this.gameData = { ...data }
+    console.log(this.gameData)
+  })
+
+  // Оставить стерлочную функцию, чтобы не терялся контекст
+  setIsLoading = action((isLoading) => {
+    console.log('this.isLoading = ', this.isLoading)
+    this.isLoading = isLoading
+  })
+
+  createFastOnlineGame = action(async () => {
     // const chess = AppStore.createNewChess()
     // const fen = chess.fen()
     const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
     const gameId = await fb.createFastOnlineGame(fen)
-    this.setFastOnlineGameId(gameId)
-  }
+    this.setCurrentGameId(gameId)
+  })
 
-  setCurrentGameId(gameId) {
+  setCurrentGameId = action((gameId) => {
     this.currentGameId = gameId
-  }
+  })
 
-  setFastOnlineGameId(gameId) {
-    this.fastOnlineGameId = gameId
-  }
+  // setFastOnlineGameId(gameId) {
+  //   this.fastOnlineGameId = gameId
+  // }
 
-  loadGame(fen) {
+  loadGame = action((fen) => {
     AppStore.loadGame(fen)
-  }
+  })
 
-  gameSubscribe() {
-    return fb.gameSubscribe(this.fastOnlineGameId, this.loadGame, this.setIsLoading)
-  }
+  gameSubscribe = action(() => {
+    const unsubscribe = fb.gameSubscribe(this.currentGameId, this.setIsLoading, this.setGameData)
+    // this.loadGame(this.gameData.boardState)
+    return unsubscribe
+  })
 
   // currentGameSubscribe() {
   //   // this.setGameId('65NH7uPgvKw44ft4euD4')

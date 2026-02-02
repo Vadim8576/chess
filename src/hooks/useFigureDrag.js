@@ -208,11 +208,11 @@ export const useFigureDrag = (
 
     updateKingCheckHighlight()
 
-    AppStore.saveGameToLocalStorage()
-
-
-    if(AppStore.gameType === 'local') return
-
+    if(AppStore.gameType === 'local') {
+      AppStore.saveGameToLocalStorage()
+      return
+    }
+    
     gameStore.updateBoard() // обновить доску в Firebase
 
   }, [AppStore, grabCell])

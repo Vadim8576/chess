@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 import gameStore from '../../store/gameStore';
 import { observer } from 'mobx-react-lite';
+import { useCreateFastOnlineGame } from '../../hooks/useCreateFastOnlineGame';
 
 
 const HomeWrapper = styled.div`
@@ -49,25 +50,33 @@ const Home = observer(() => {
 
   const navigate = useNavigate()
 
+  const { user, loading, start } = useCreateFastOnlineGame()
+
 
 
   useEffect(() => {
-    console.log('!!!!!!!!!!!!!!!!-----------')
-    if (!gameStore.fastOnlineGameId) return
-    console.log('-----------!!!!!!!!!!!!!!!!!')
+   
+    if (!gameStore.currentGameId || gameStore.currentGameId === 'local') {
+      return
+    }
+    console.log('fast online game, currentId = ', gameStore.currentGameId)
     setIsLoading(false)
-    setInviteUrl(`${window.location.origin}/chess-game/${gameStore.fastOnlineGameId}`)
-  }, [gameStore.fastOnlineGameId])
+    setInviteUrl(`${window.location.origin}/chess-game/${gameStore.currentGameId}`)
+  }, [gameStore.currentGameId])
 
 
 
 
   const localGame = () => navigate('/local')
-  const inviteGame = () => navigate(`/chess-game/${gameStore.fastOnlineGameId}`)
+
+  const inviteGame = () => navigate(`/chess-game/${gameStore.currentGameId}`)
+
   const fastGame = () => {
     setIsLoading(true)
-    gameStore.createFastOnlineGame()
+    start()
+
   }
+
   const RateGame = () => navigate('/rate')
 
 
@@ -78,14 +87,20 @@ const Home = observer(() => {
         <MenuButton onClick={localGame}>
           Локальная игра
         </MenuButton>
-        <MenuButton onClick={fastGame}>
+        <MenuButton
+          onClick={fastGame}
+        >
           {isLoading !== null && isLoading ? 'Spinner' : 'Быстрая игра по сети'}
         </MenuButton>
         {inviteUrl &&
 
           <InvitLinkContainer>
-            {`Ссылка-приглашение: ${inviteUrl}`}
-            <button onClick={inviteGame}>В игру</button>
+            <p>Ссылка-приглашение:</p>
+            <p>{inviteUrl}</p>
+            <button
+              onClick={inviteGame}
+              style={{ padding: '10px 20px' }}
+            >В игру</button>
           </InvitLinkContainer>
 
         }
