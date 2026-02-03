@@ -30,7 +30,7 @@ export const fb = {
   createFastOnlineGame: async (initialBoardFen) => {
     const user = auth.currentUser
 
-    // console.log('user', user)
+    console.log('user', user)
 
     if (user) {
       try {

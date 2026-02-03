@@ -45,6 +45,7 @@ class GameStore {
 
   setCurrentGameId = action((gameId) => {
     this.currentGameId = gameId
+    console.log('Id игры = ', this.currentGameId)
   })
 
   // setFastOnlineGameId(gameId) {

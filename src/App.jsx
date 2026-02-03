@@ -5,6 +5,8 @@ import Home from "./pages/Home/Home"
 import Header from "./pages/Header";
 import Footer from "./pages/Footer";
 import RateGamePage from "./pages/RateGamePage/RateGamePage";
+import GameLobby from "./pages/GameLobby";
+
 
 
 
@@ -35,7 +37,8 @@ const App = () => {
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
             <Route path="/local" element={<LocalGamePage />} />
-            <Route path="/chess-game/:gameId" element={<FastOnlineGamePage />} />
+            <Route path="/game/:gameId" element={<FastOnlineGamePage />} />
+            <Route path="/lobby/:gameId" element={<GameLobby />} />
             <Route path="/rate" element={<RateGamePage />} />
             {/* <Route path="*" element={<NoMatch />} /> 404-страница */}
           </Route>

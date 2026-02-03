@@ -50,26 +50,23 @@ const Home = observer(() => {
 
   const navigate = useNavigate()
 
-  const { user, loading, start } = useCreateFastOnlineGame()
+  const { creatorUid, isGameCreate, start } = useCreateFastOnlineGame()
 
 
 
   useEffect(() => {
-   
-    if (!gameStore.currentGameId || gameStore.currentGameId === 'local') {
-      return
-    }
-    console.log('fast online game, currentId = ', gameStore.currentGameId)
+    console.log('isGameCreate = ', isGameCreate)
+    if(!isGameCreate) return
     setIsLoading(false)
-    setInviteUrl(`${window.location.origin}/chess-game/${gameStore.currentGameId}`)
-  }, [gameStore.currentGameId])
+    setInviteUrl(`${window.location.origin}/lobby/${gameStore.currentGameId}`)
+  }, [isGameCreate])
 
 
 
 
   const localGame = () => navigate('/local')
 
-  const inviteGame = () => navigate(`/chess-game/${gameStore.currentGameId}`)
+  const inviteGame = () => navigate(`/game/${gameStore.currentGameId}`)
 
   const fastGame = () => {
     setIsLoading(true)

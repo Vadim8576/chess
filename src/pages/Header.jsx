@@ -54,7 +54,7 @@ const Header = observer(() => {
     AppStore.rotateBoard()
   }
 
-  console.log(toJS(gameStore.currentGameId))
+  // console.log(toJS(gameStore.currentGameId))
 
   // const createFastOnlineGame = () => {
   //   navigate('/fast')

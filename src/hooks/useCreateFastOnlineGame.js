@@ -1,30 +1,26 @@
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useAuth } from "./useAuth"
-import authStore from "../store/authStore"
 import gameStore from "../store/gameStore"
 
 export const useCreateFastOnlineGame = () => {
-  // const [isLoading, setIsLoading] = useState(null)
-  const { user, loading, start } = useAuth()
+  const [isGameCreate, setIsGameCreate] = useState(false)
+  const { creatorUid, isAuth, start } = useAuth()
 
   useEffect(() => {
-    if (!user) return
+    if (!isAuth) return
     gameStore.createFastOnlineGame()
-  }, [user])
+  }, [isAuth])
 
   
 
   useEffect(() => {
-    if(!gameStore.gameData?.boardState) return
-
-    console.log('useEffect Получили gameData.boardState')
-    
-    gameStore.loadGame(gameStore.gameData.boardState)
-  }, [gameStore.gameData])
+    if(!gameStore.currentGameId) return
+    setIsGameCreate(true) // Игра создана, получены данные доски
+  }, [gameStore.currentGameId]) // если изменился currentGameId - создали новую игру в firebase
 
 
   const values = {
-    user, loading, start
+    creatorUid, isGameCreate, start
   }
 
   return useMemo(() => values, [values])
