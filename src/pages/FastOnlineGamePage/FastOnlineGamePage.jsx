@@ -4,7 +4,7 @@ import AppStore from "../../store/AppStore";
 import gameStore from "../../store/gameStore";
 import CommonPageElements from "../CommonPageElements";
 import authStore from "../../store/authStore";
-import { useLocation } from "react-router";
+import { useLocation, useParams } from "react-router";
 
 
 
@@ -19,6 +19,8 @@ const FastOnlineGamePage = observer(() => {
 
 	// const [pageId, setPageId] = useState(null)
 	// const location = useLocation()
+
+	const { gameId } = useParams()
 
 
 
@@ -45,7 +47,7 @@ const FastOnlineGamePage = observer(() => {
 		// console.log(gameStore.currentGameId)
 
 		console.log('----------- Подписка на игру ---------------')
-		const unsubscribe = gameStore.gameSubscribe()
+		const unsubscribe = gameStore.gameSubscribe(gameId)
 		return () => {
 			console.log('----------- Отписался от игры ---------------')
 			return unsubscribe

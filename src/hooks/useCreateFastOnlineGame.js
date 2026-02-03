@@ -15,8 +15,8 @@ export const useCreateFastOnlineGame = () => {
 
   useEffect(() => {
     if(!gameStore.currentGameId) return
-    setIsGameCreate(true) // Игра создана, получены данные доски
-  }, [gameStore.currentGameId]) // если изменился currentGameId - создали новую игру в firebase
+    setIsGameCreate(true)
+  }, [gameStore.currentGameId])
 
 
   const values = {

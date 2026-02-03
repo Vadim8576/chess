@@ -1,7 +1,7 @@
 import { onAuthStateChanged, signInAnonymously } from 'firebase/auth';
 import { auth, db } from '../api/firebase';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import authStore from '../store/authStore';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
@@ -79,6 +79,8 @@ async function joinGame(gameId, setIsJoin) {
 const GameLobby = () => {
   const [isJoin, setIsJoin] = useState(false)
   const { gameId } = useParams() // Из URL: /game/:gameId
+
+  const navigate = useNavigate()
 
 
   useEffect(() => {

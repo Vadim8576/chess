@@ -56,9 +56,8 @@ class GameStore {
     AppStore.loadGame(fen)
   })
 
-  gameSubscribe = action(() => {
-    const unsubscribe = fb.gameSubscribe(this.currentGameId, this.setIsLoading, this.setGameData)
-    // this.loadGame(this.gameData.boardState)
+  gameSubscribe = action((gameId) => {
+    const unsubscribe = fb.gameSubscribe(gameId, this.setIsLoading, this.setGameData)
     return unsubscribe
   })
 

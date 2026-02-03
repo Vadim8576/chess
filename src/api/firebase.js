@@ -76,11 +76,12 @@ export const fb = {
 
 
 
-  gameSubscribe: (gameIdToSubscribe, setIsLoading, setGameData) => {
+  gameSubscribe: (gameId, setIsLoading, setGameData) => {
     const user = auth.currentUser
-    console.log('gameSubscribe', user.uid)
+    console.log('gameId', gameId)
+    console.log('user.uid', user.uid)
     if (user) {
-      const gameRef = doc(db, "games", gameIdToSubscribe)
+      const gameRef = doc(db, "games", gameId)
 
       const unsubscribe = onSnapshot(gameRef, (docSnapshot) => {
         if (docSnapshot.exists()) {
