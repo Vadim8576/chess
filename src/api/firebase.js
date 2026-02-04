@@ -124,6 +124,8 @@ export const fb = {
 
   updateBoard: (gameId, newBoardState) => {
     const user = auth.currentUser
+    console.log('gameId', gameId)
+    console.log('user.uid', user.uid)
     if (user) {
       const gameRef = doc(db, "games", gameId)
 

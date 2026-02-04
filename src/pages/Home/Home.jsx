@@ -69,7 +69,7 @@ const Home = observer(() => {
 
   const localGame = () => navigate('/local')
 
-  const inviteGame = () => navigate(`/game/${gameStore.currentGameId}`)
+  const inviteGame = () => navigate(`/game/${gameStore.fastOnlineGameId}`)
 
   const fastGame = () => {
     setIsLoading(true)

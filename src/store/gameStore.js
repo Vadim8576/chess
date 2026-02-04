@@ -8,6 +8,7 @@ import AppStore from "./AppStore";
 class GameStore {
 
   currentGameId = null
+  fastOnlineGameId = null
   // fastOnlineGameId = null
   // fastOnlineGameId = '65NH7uPgvKw44ft4euD4'
 
@@ -53,6 +54,7 @@ class GameStore {
     const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
     const gameId = await fb.createFastOnlineGame(fen)
     this.setCurrentGameId(gameId)
+    this.setFastOnlineGameId(gameId)
   })
 
   setCurrentGameId = action((gameId) => {
@@ -60,15 +62,17 @@ class GameStore {
     console.log('Id игры = ', this.currentGameId)
   })
 
-  // setFastOnlineGameId(gameId) {
-  //   this.fastOnlineGameId = gameId
-  // }
+  setFastOnlineGameId = action((gameId) => {
+    this.fastOnlineGameId = gameId
+    console.log('fastOnlineGame Id = ', this.fastOnlineGameId)
+  })
 
   loadGame = action((fen) => {
     AppStore.loadGame(fen)
   })
 
   gameSubscribe = action((gameId) => {
+    this.setIsLoading(true)
     const unsubscribe = fb.gameSubscribe(gameId, this.setIsLoading, this.setGameData)
     return unsubscribe
   })

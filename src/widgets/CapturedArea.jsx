@@ -52,7 +52,7 @@ const CapturedArea = observer(({ player }) => {
 
   const capturedFigures = { ...AppStore.capturedFigures[gameStore.currentGameId] }
 
-  // console.log(capturedFigures)
+  console.log(capturedFigures)
 
   if (!capturedFigures) return null
   if (!(player in capturedFigures)) return null

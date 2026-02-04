@@ -65,15 +65,16 @@ const ChessBoard = observer(() => {
     AppStore.createNewChess()
 
     gameStatus(AppStore)
+    handlePointerCancel()
+    updateKingCheckHighlight()
 
     if (AppStore.gameType !== 'local') {
-      handlePointerCancel() // Убрать ненужные подсветки клетки
+       // Убрать ненужные подсветки клетки
       return
     }
 
     AppStore.loadGameFromLocalStorage()
     AppStore.loadCapturedFiguresFromLocalStorage()
-    updateKingCheckHighlight()
     AppStore.setSettingFromLocalStorage()
 
   }, [AppStore.gameType])

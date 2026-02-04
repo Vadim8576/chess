@@ -17,7 +17,7 @@ export const useCreateFastOnlineGame = (isAuth) => {
   useEffect(() => {
     if(!gameStore.currentGameId) return
     setIsGameCreate(true)
-  }, [gameStore.currentGameId])
+  }, [gameStore.fastOnlineGameId])
 
 
   const values = {
