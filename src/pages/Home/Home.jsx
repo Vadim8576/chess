@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import gameStore from '../../store/gameStore';
 import { observer } from 'mobx-react-lite';
 import { useCreateFastOnlineGame } from '../../hooks/useCreateFastOnlineGame';
+import { useAuth } from '../../hooks/useAuth';
 
 
 const HomeWrapper = styled.div`
@@ -39,7 +40,7 @@ margin-bottom: 10px;
 border-radius: 5px;
 `
 
-const InvitLinkContainer = styled.div`
+const InviteLinkContainer = styled.div`
 width: 100%;
 `
 
@@ -47,16 +48,18 @@ width: 100%;
 const Home = observer(() => {
   const [inviteUrl, setInviteUrl] = useState(null)
   const [isLoading, setIsLoading] = useState(null)
+  const [isCopied, setIsCopied] = useState(false)
 
   const navigate = useNavigate()
 
-  const { creatorUid, isGameCreate, start } = useCreateFastOnlineGame()
+  const { isAuth, start } = useAuth()
+  const { isGameCreate } = useCreateFastOnlineGame(isAuth)
 
 
 
   useEffect(() => {
     console.log('isGameCreate = ', isGameCreate)
-    if(!isGameCreate) return
+    if (!isGameCreate) return
     setIsLoading(false)
     setInviteUrl(`${window.location.origin}/lobby/${gameStore.currentGameId}`)
   }, [isGameCreate])
@@ -78,6 +81,17 @@ const Home = observer(() => {
 
 
 
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(inviteUrl)
+      setIsCopied(true)
+      // Сбрасываем статус через 2 сек
+      setTimeout(() => setIsCopied(false), 2000)
+    } catch (err) {
+      console.error('Не удалось скопировать:', err)
+    }
+  }
+
   return (
     <HomeWrapper>
       <MenuWrapper>
@@ -91,14 +105,31 @@ const Home = observer(() => {
         </MenuButton>
         {inviteUrl &&
 
-          <InvitLinkContainer>
+          <InviteLinkContainer>
             <p>Ссылка-приглашение:</p>
             <p>{inviteUrl}</p>
             <button
+              onClick={copyToClipboard}
+              disabled={isCopied}
+              style={{
+                padding: '8px 12px',
+                backgroundColor: isCopied ? '#4CAF50' : '#2196F3',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: isCopied ? 'default' : 'pointer',
+                marginBottom: '10px'
+              }}
+            >
+              {isCopied ? 'Скопировано!' : 'Скопировать'}
+            </button>
+            <button
               onClick={inviteGame}
               style={{ padding: '10px 20px' }}
-            >В игру</button>
-          </InvitLinkContainer>
+            >
+              В игру
+            </button>
+          </InviteLinkContainer>
 
         }
         <MenuButton onClick={RateGame}>

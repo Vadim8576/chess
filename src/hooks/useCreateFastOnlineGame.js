@@ -2,9 +2,10 @@ import { useEffect, useMemo, useState } from "react"
 import { useAuth } from "./useAuth"
 import gameStore from "../store/gameStore"
 
-export const useCreateFastOnlineGame = () => {
+export const useCreateFastOnlineGame = (isAuth) => {
   const [isGameCreate, setIsGameCreate] = useState(false)
-  const { creatorUid, isAuth, start } = useAuth()
+
+  // const { isAuth, start } = useAuth()
 
   useEffect(() => {
     if (!isAuth) return
@@ -20,7 +21,7 @@ export const useCreateFastOnlineGame = () => {
 
 
   const values = {
-    creatorUid, isGameCreate, start
+    isGameCreate
   }
 
   return useMemo(() => values, [values])

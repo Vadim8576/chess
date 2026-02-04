@@ -6,8 +6,8 @@ import { fb } from "../api/firebase"
 
 class Auth {
 
-  creatorUid = null
-  joinerUid = null
+  userId = null
+
   // newUserCreated = 'no' // 'yes', 'no' или 'error'
   // isLogIn = false
 
@@ -15,13 +15,13 @@ class Auth {
     makeAutoObservable(this)
   }
 
-  setCreatorUid = action((creatorUid) => {
-    this.creatorUid = creatorUid
+
+
+
+  setUserId = action((id) => {
+    this.userId = id
   })
 
-  setJoinerUid = action((joinerUid) => {
-    this.joinerUid = joinerUid
-  })
 
   // setNewUserCreated = (created) => {
   //   this.newUserCreated = created

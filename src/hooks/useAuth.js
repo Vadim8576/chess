@@ -4,7 +4,6 @@ import { auth } from "../api/firebase"
 import authStore from "../store/authStore"
 
 export const useAuth = () => {
-  const [creatorUid, setCreatorUid] = useState(null)
   const [isAuth, setIsAuth] = useState(false)
   const [startAuth, setStartAuth] = useState(false)
 
@@ -16,14 +15,13 @@ export const useAuth = () => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // Пользователь вошел в систему (анонимно или иным способом)
-        setCreatorUid(user.uid)
-        authStore.setCreatorUid(user.uid)
+        authStore.setUserId(user.uid)
         setIsAuth(true)
         console.log("Пользователь вошел в систему:", user.uid)
       } else {
         // Пользователь вышел из системы
-        setCreatorUid(null)
-        authStore.setCreatorUid(null)
+        setUserId(null)
+        authStore.setUserId(null)
         console.log("Пользователь вышел из системы.")
         // Попытка анонимного входа, если пользователь не вошел
         signInAnonymously(auth)
@@ -48,7 +46,7 @@ export const useAuth = () => {
   }
 
   const values = {
-    creatorUid, isAuth, start
+    isAuth, start
   }
 
 

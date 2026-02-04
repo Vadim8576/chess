@@ -15,9 +15,20 @@ class GameStore {
   inviteUrl = null
   isLoading = true
 
+  
+
   constructor() {
     makeAutoObservable(this)
+    this.initAuthListener()
   }
+
+
+  initAuthListener() {
+    fb.initAuthListener(this.setIsLoading, authStore.setUserId)
+  }
+
+
+
 
   setInviteUrl = action((url) => {
     this.inviteUrl = `${window.location.origin}/chess-game/${this.currentGameId}`
@@ -27,6 +38,7 @@ class GameStore {
   setGameData = action((data) => {
     this.gameData = { ...data }
     console.log(this.gameData)
+    this.loadGame(this.gameData.boardState)
   })
 
   // Оставить стерлочную функцию, чтобы не терялся контекст

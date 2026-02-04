@@ -27,6 +27,14 @@ export const db = getFirestore(app)
 
 export const fb = {
 
+  initAuthListener: (setIsLoading, setUserId) => {
+    setIsLoading(true)
+    auth.onAuthStateChanged((user) => {
+      setUserId(user.uid)
+      setIsLoading(false)
+    })
+  },
+
   createFastOnlineGame: async (initialBoardFen) => {
     const user = auth.currentUser
 
