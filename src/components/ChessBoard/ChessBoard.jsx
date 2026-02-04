@@ -61,10 +61,8 @@ const ChessBoard = observer(() => {
 
 
   useEffect(() => {
-    console.log('Создан новый объект игры!!!!!!')
-    AppStore.createNewChess()
 
-    gameStatus(AppStore)
+    // gameStatus(AppStore)
     handlePointerCancel()
     updateKingCheckHighlight()
 

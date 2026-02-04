@@ -6,46 +6,53 @@ import authStore from '../store/authStore';
 import { doc, getDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import styled from 'styled-components';
 import gameStore from '../store/gameStore';
+import { useJoinGame } from '../hooks/useJoinGame';
 
 
-async function joinGame(gameId, setIsJoin) {
-  try {
-    const userCredential = await signInAnonymously(auth)
-    const user = userCredential.user;
-    const userUid = user.uid;
+// async function joinGame(gameId, setIsJoin) {
+//   try {
+//     const userCredential = await signInAnonymously(auth)
+//     const user = userCredential.user;
+//     const userUid = user.uid;
 
-    console.log('Id присоединившегося юзера = ', userUid)
+//     console.log('Id присоединившегося юзера = ', userUid)
 
-    // Обновляем документ игры, записывая UID текущего пользователя
-    const gameRef = doc(db, "games", gameId)
-    await updateDoc(gameRef, {
-      joinerUid: userUid,
-      blackPlayerUid: userUid,
-      status: 'playing',
-      updatedAt: serverTimestamp()
-    }).then(() => {
+//     // Обновляем документ игры, записывая UID текущего пользователя
+//     const gameRef = doc(db, "games", gameId)
+//     await updateDoc(gameRef, {
+//       joinerUid: userUid,
+//       blackPlayerUid: userUid,
+//       status: 'playing',
+//       updatedAt: serverTimestamp()
+//     }).then(() => {
 
-      authStore.setUserId(userUid)
-      gameStore.setCurrentGameId(gameId)
-      setIsJoin(true)
-      console.log(`Пользователь ${userUid} успешно присоединился к игре ${gameId}`);
-    })
+//       authStore.setUserId(userUid)
+//       gameStore.setCurrentGameId(gameId)
+//       setIsJoin(true)
+//       console.log(`Пользователь ${userUid} успешно присоединился к игре ${gameId}`);
+//     })
 
 
-  } catch (error) {
-    console.error("Ошибка при присоединении к игре:", error);
-  }
-}
+//   } catch (error) {
+//     console.error("Ошибка при присоединении к игре:", error);
+//   }
+// }
 
 
 
 const LobbyWrapper = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;width: 100%;
+height: 100%;
+
 `
 
 
 const GameLobby = () => {
-  const [isJoin, setIsJoin] = useState(false)
   const { gameId } = useParams() // Из URL: /game/:gameId
+
+  const { isJoin, joinGame } = useJoinGame(gameId)
 
   const navigate = useNavigate()
 
@@ -53,7 +60,7 @@ const GameLobby = () => {
   useEffect(() => {
     console.log(gameId, isJoin)
     if (!gameId || isJoin) return
-    joinGame(gameId, setIsJoin)
+    joinGame()
   }, [])
 
   const inviteGame = () => navigate(`/game/${gameId}`)

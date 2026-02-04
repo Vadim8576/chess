@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 import gameStore from '../../store/gameStore';
 import { observer } from 'mobx-react-lite';
-import { useCreateFastOnlineGame } from '../../hooks/useCreateFastOnlineGame';
 import { useAuth } from '../../hooks/useAuth';
 
 
@@ -52,29 +51,37 @@ const Home = observer(() => {
 
   const navigate = useNavigate()
 
-  const { isAuth, start } = useAuth()
-  const { isGameCreate } = useCreateFastOnlineGame(isAuth)
+  const { isAuth, startAuth } = useAuth()
+
+
+  useEffect(() => {
+    if (!isAuth) return
+    gameStore.createFastOnlineGame()
+  }, [isAuth])
 
 
 
   useEffect(() => {
-    console.log('isGameCreate = ', isGameCreate)
-    if (!isGameCreate) return
-    setIsLoading(false)
-    setInviteUrl(`${window.location.origin}/lobby/${gameStore.currentGameId}`)
-  }, [isGameCreate])
+    if (!gameStore.currentGameId || gameStore.currentGameId === 'local') {
+      setInviteUrl(null)
+    } else {
+      setInviteUrl(`${window.location.origin}/lobby/${gameStore.currentGameId}`)
+    }
+  }, [gameStore.currentGameId])
 
 
 
 
   const localGame = () => navigate('/local')
 
-  const inviteGame = () => navigate(`/game/${gameStore.fastOnlineGameId}`)
+  const inviteGame = () => {
+    setInviteUrl(null)
+    navigate(`/game/${gameStore.fastOnlineGameId}`)
+  }
 
-  const fastGame = () => {
+  const createFastGame = () => {
     setIsLoading(true)
-    start()
-
+    startAuth()
   }
 
   const RateGame = () => navigate('/rate')
@@ -99,7 +106,7 @@ const Home = observer(() => {
           Локальная игра
         </MenuButton>
         <MenuButton
-          onClick={fastGame}
+          onClick={createFastGame}
         >
           {isLoading !== null && isLoading ? 'Spinner' : 'Быстрая игра по сети'}
         </MenuButton>

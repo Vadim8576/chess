@@ -5,12 +5,12 @@ import authStore from "../store/authStore"
 
 export const useAuth = () => {
   const [isAuth, setIsAuth] = useState(false)
-  const [startAuth, setStartAuth] = useState(false)
+  const [isAuthLoading, setAuthLoading] = useState(false)
 
 
 
   useEffect(() => {
-    if (!startAuth) return
+    if (!isAuthLoading) return
     // Подписываемся на изменения состояния аутентификации
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -38,15 +38,15 @@ export const useAuth = () => {
     })
 
     return () => unsubscribe()
-  }, [startAuth])
+  }, [isAuthLoading])
 
 
-  const start = () => {
-    setStartAuth(true)
+  const startAuth = () => {
+    setAuthLoading(true)
   }
 
   const values = {
-    isAuth, start
+    isAuth, startAuth
   }
 
 

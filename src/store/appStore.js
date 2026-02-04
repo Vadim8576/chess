@@ -58,7 +58,8 @@ class AppStore {
   loadGame(fen) {
     this.chess = new Chess()
     this.chess.load(fen)
-    console.log('load game ', fen)
+    gameStatus(this)
+    console.log('Создан новый объект Chess, в него загружен fen ', fen)
   }
 
   restartGame = action(() => {
@@ -189,7 +190,7 @@ class AppStore {
 
   loadGameFromLocalStorage = action(() => {
     const fen = localStorage.getItem('ChessFen')
-    if (fen) this.chess.load(JSON.parse(fen))
+    if (fen) this.loadGame(JSON.parse(fen))
   })
 
   saveSettingToLocalStorage(setting) {
