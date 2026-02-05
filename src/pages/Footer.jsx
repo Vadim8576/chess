@@ -1,6 +1,7 @@
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 import { FOOTER_HEIGHT, COLORS } from "../constants/gameInitial";
+import gameStore from "../store/gameStore";
 
 
 const FooterLine = styled.div`
@@ -23,7 +24,7 @@ const Footer = observer(() => {
 
   return (
     <FooterLine $height={FOOTER_HEIGHT}>
-      Footer
+      {gameStore.currentGameId && <span style={{color: 'yellow'}}>{`game Id = ${gameStore.currentGameId}`}</span>}
     </FooterLine>
   )
 })

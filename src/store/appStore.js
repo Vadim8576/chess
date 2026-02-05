@@ -33,9 +33,17 @@ class AppStore {
   possibleMoves = []
   cellInCheck = {}
 
+  currentPage = '' // 'home' || 'local' || 'gamelist' || 'fastgame' || 'lobby' || 'rategame'
+
   constructor() {
     makeAutoObservable(this)
   }
+
+
+
+  setCurrentPage = action((page) => {
+    this.currentPage = page
+  })
 
   setGameType = action((type) => {
     this.gameType = type

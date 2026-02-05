@@ -31,7 +31,7 @@ const RestartButton = styled.button`
   cursor: pointer;
   margin-left: 10px;
   font-weight: bold;
-  font-size: 2vmin;
+  font-size: 1.5vmin;
 `
 
 
@@ -67,31 +67,46 @@ const Header = observer(() => {
       <NavLink to='/'
         style={{
           textDecoration: 'none',
-          color: '#fff'
+          color: '#fff',
         }}
       >
         <h1 style={{ color: '#fff' }}>Chess</h1>
       </NavLink>
-      {gameStore.currentGameId && <span style={{color: 'yellow'}}>{gameStore.currentGameId + ''}</span>}
+      {AppStore.currentPage && <span style={{ color: '#fff', fontSize: '3vmin' }}>{`Page: "${AppStore.currentPage}"`}</span>}
+
+
       <div>
-        {/* <RestartButton
-          color={'green'}
-          onMouseDown={createFastOnlineGame}
+        <NavLink to='/gamelist'
+          style={{
+            color: 'red',
+            fontSize: '3vmin'
+          }}
         >
-          Create Game
-        </RestartButton> */}
-        <RestartButton
-          color={'green'}
-          onMouseDown={restartGame}
-        >
-          New game
-        </RestartButton>
-        <RestartButton
-          color={'blue'}
-          onMouseDown={rotateBoard}
-        >
-          Rotate
-        </RestartButton>
+          Game List
+        </NavLink>
+
+        {
+          AppStore.currentPage === 'local' && (
+            <RestartButton
+              color={'green'}
+              onMouseDown={restartGame}
+            >
+              New game
+            </RestartButton>
+          )
+        }
+
+        {
+          (AppStore.currentPage === 'local' || AppStore.currentPage === 'fastgame') && (
+            <RestartButton
+              color={'blue'}
+              onMouseDown={rotateBoard}
+            >
+              Rotate
+            </RestartButton>
+          )
+        }
+
       </div>
 
     </HeaderLine>

@@ -12,7 +12,10 @@ import { useLocation, useParams } from "react-router";
 const FastOnlineGamePage = observer(() => {
 	const { gameId } = useParams()
 
+
+
 	useEffect(() => {
+		AppStore.setCurrentPage('fastgame')
 		AppStore.setGameType('fastGame')
 	}, [])
 

@@ -8,6 +8,7 @@ import ChessBoardContainer from './ChessBoardContainer';
 import Widget from '../widgets/Widget';
 import GameStatus from '../widgets/GameStatus';
 import gameStore from '../store/gameStore';
+import { observer } from 'mobx-react-lite';
 
 
 const PageContainer = styled.div`
@@ -61,7 +62,7 @@ grid-column: 1 / 9;
 grid-row: 11 / 12;
 `
 
-const CommonPageElements = () => {
+const CommonPageElements = observer(() => {
 
   const [cellSize, setCellSize] = useState(null)
 	const { width, height } = useWindowResizeThrottle(300)
@@ -107,10 +108,10 @@ const CommonPageElements = () => {
 			<PageContentWrapper>
 				{cellSize && <Grid $size={cellSize * 12}>
 					<CapturedAreaBlack>
-						<CapturedArea player={AppStore.whiteBottom ? 'w' : 'b'} />
+						<CapturedArea player={AppStore.whiteBottom ? 'w' : 'b'} side={'up'} />
 					</CapturedAreaBlack>
 					<CapturedAreaWhite>
-						<CapturedArea player={AppStore.whiteBottom ? 'b' : 'w'} />
+						<CapturedArea player={AppStore.whiteBottom ? 'b' : 'w'}  side={'down'}/>
 					</CapturedAreaWhite>
 					<ChessBoardContainer windowSize={{ width, height }} />
 					<Status>
@@ -140,6 +141,6 @@ const CommonPageElements = () => {
 			{/* <Footer /> */}
 		</PageContainer>
   )
-}
+})
 
 export default CommonPageElements

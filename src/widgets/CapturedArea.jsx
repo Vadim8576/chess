@@ -40,7 +40,7 @@ align-content: center;
 
 
 
-const CapturedArea = observer(({ player }) => {
+const CapturedArea = observer(({ player, side }) => {
 
   // console.log('!!!!!CapturedArea')
   // console.log(gameStore.isLoading)
@@ -52,7 +52,8 @@ const CapturedArea = observer(({ player }) => {
 
   const capturedFigures = { ...AppStore.capturedFigures[gameStore.currentGameId] }
 
-  console.log(capturedFigures)
+  console.log(side, player)
+  console.log(toJS(capturedFigures))
 
   if (!capturedFigures) return null
   if (!(player in capturedFigures)) return null

@@ -9,6 +9,7 @@ class GameStore {
 
   currentGameId = null
   fastOnlineGameId = null
+  fastGameList = []
   // fastOnlineGameId = null
   // fastOnlineGameId = '65NH7uPgvKw44ft4euD4'
 
@@ -16,7 +17,7 @@ class GameStore {
   inviteUrl = null
   isLoading = true
 
-  
+
 
   constructor() {
     makeAutoObservable(this)
@@ -88,6 +89,20 @@ class GameStore {
     const newBoardState = AppStore.chess.fen()
     fb.updateBoard(this.currentGameId, newBoardState)
   }
+
+  removeGame(id) {
+    fb.removeGame(id)
+  }
+
+  setFastGameList = action((list) => {
+    this.fastGameList = list
+    console.log(this.fastGameList)
+  })
+
+  getAllGamesId = action(async () => {
+    const list = await fb.getAllGamesId()
+    this.setFastGameList(list)
+  })
 
 }
 

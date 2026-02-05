@@ -197,9 +197,7 @@ export const useFigureDrag = (
       }
     }
 
-    if (capturedFigure != null || capturedFigure != undefined) {
-      AppStore.addCapturedFigures(capturedFigure.color, `${capturedFigure.type}${capturedFigure.color}`)
-    }
+
 
     // AppStore.updateHistoryMoves(moveSquares)
     // AppStore.updateHistoryList()
@@ -208,11 +206,14 @@ export const useFigureDrag = (
 
     updateKingCheckHighlight()
 
-    if(AppStore.gameType === 'local') {
+    if (AppStore.gameType === 'local') {
       AppStore.saveGameToLocalStorage()
+      if (capturedFigure != null || capturedFigure != undefined) {
+        AppStore.addCapturedFigures(capturedFigure.color, `${capturedFigure.type}${capturedFigure.color}`)
+      }
       return
     }
-    
+
     gameStore.updateBoard() // обновить доску в Firebase
 
   }, [AppStore, grabCell])

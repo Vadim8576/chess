@@ -1,11 +1,12 @@
 import React from 'react';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 import gameStore from '../../store/gameStore';
 import { observer } from 'mobx-react-lite';
 import { useAuth } from '../../hooks/useAuth';
+import AppStore from '../../store/AppStore';
 
 
 const HomeWrapper = styled.div`
@@ -41,6 +42,9 @@ border-radius: 5px;
 
 const InviteLinkContainer = styled.div`
 width: 100%;
+font-size: 2vmin;
+color: green;
+font-weight: bold;
 `
 
 
@@ -55,6 +59,10 @@ const Home = observer(() => {
 
 
   useEffect(() => {
+    AppStore.setCurrentPage('home')
+  }, [])
+
+  useEffect(() => {
     if (!isAuth) return
     gameStore.createFastOnlineGame()
   }, [isAuth])
@@ -64,6 +72,7 @@ const Home = observer(() => {
   useEffect(() => {
     if (!gameStore.currentGameId || gameStore.currentGameId === 'local') {
       setInviteUrl(null)
+      setIsLoading(null)
     } else {
       setInviteUrl(`${window.location.origin}/lobby/${gameStore.currentGameId}`)
     }
@@ -76,11 +85,12 @@ const Home = observer(() => {
 
   const inviteGame = () => {
     setInviteUrl(null)
-    navigate(`/game/${gameStore.fastOnlineGameId}`)
+    navigate(`/fastgame/${gameStore.fastOnlineGameId}`)
   }
 
   const createFastGame = () => {
     setIsLoading(true)
+    setInviteUrl(null)
     startAuth()
   }
 
@@ -108,34 +118,43 @@ const Home = observer(() => {
         <MenuButton
           onClick={createFastGame}
         >
-          {isLoading !== null && isLoading ? 'Spinner' : 'Быстрая игра по сети'}
+          {(isLoading !== null && !inviteUrl) && isLoading ? 'Spinner' : 'Быстрая игра по сети'}
         </MenuButton>
         {inviteUrl &&
 
           <InviteLinkContainer>
-            <p>Ссылка-приглашение:</p>
-            <p>{inviteUrl}</p>
-            <button
-              onClick={copyToClipboard}
-              disabled={isCopied}
-              style={{
-                padding: '8px 12px',
-                backgroundColor: isCopied ? '#4CAF50' : '#2196F3',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: isCopied ? 'default' : 'pointer',
-                marginBottom: '10px'
-              }}
-            >
-              {isCopied ? 'Скопировано!' : 'Скопировать'}
-            </button>
-            <button
-              onClick={inviteGame}
-              style={{ padding: '10px 20px' }}
-            >
-              В игру
-            </button>
+            <p style={{ color: '#000', marginBottom: '10px' }}>Ссылка-приглашение:</p>
+            <p style={{ marginBottom: '10px' }}>{inviteUrl}</p>
+            <p>
+              <button
+                onClick={copyToClipboard}
+                disabled={isCopied}
+                style={{
+                  padding: '8px 12px',
+                  backgroundColor: isCopied ? '#4CAF50' : '#2196F3',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: isCopied ? 'default' : 'pointer',
+                  marginBottom: '10px'
+                }}
+              >
+                {isCopied ? 'Скопировано!' : 'Copy'}
+              </button>
+            </p>
+            <p>
+              <button
+                onClick={inviteGame}
+                style={{
+                  padding: '10px 20px',
+                  marginBottom: '10px',
+                  background: 'red'
+                 }}
+              >
+                В игру
+              </button>
+            </p>
+
           </InviteLinkContainer>
 
         }

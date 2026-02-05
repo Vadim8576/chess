@@ -80,10 +80,6 @@ export const fb = {
 
 
 
-
-
-
-
   gameSubscribe: (gameId, setIsLoading, setGameData) => {
     const user = auth.currentUser
     console.log('gameId', gameId)
@@ -139,10 +135,37 @@ export const fb = {
           console.error("Ошибка при обновлении boardState:", error)
         });
     }
+
+
+  },
+
+  getAllGamesId: async () => {
+    try {
+      const games = collection(db, 'games')
+      const gamesSnapshot = await getDocs(games)
+      const gamesIds = gamesSnapshot.docs.map(doc => ({ id: doc.id }))
+      console.log("Документы успешно получены!")
+      console.log(gamesIds)
+      return gamesIds
+    } catch (error) {
+      console.error("Ошибка при получении документов: ", error)
+      return []
+    }
+
   },
 
 
-
+  removeGame: (id) => {
+    
+    const docRef = doc(db, 'games', id)
+    deleteDoc(docRef)
+      .then(() => {
+        console.log("Документ успешно удален!")
+      })
+      .catch((error) => {
+        console.error("Ошибка при удалении документа: ", error)
+      })
+  },
 
 
 
