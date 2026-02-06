@@ -19,6 +19,7 @@ class GameStore {
 
 
 
+
   constructor() {
     makeAutoObservable(this)
     this.initAuthListener()
@@ -29,11 +30,12 @@ class GameStore {
     fb.initAuthListener(this.setIsLoading, authStore.setUserId)
   }
 
-
+  
 
 
   setInviteUrl = action((url) => {
-    this.inviteUrl = `${window.location.origin}/chess-game/${this.currentGameId}`
+    
+    this.inviteUrl = url === null ? null : url
     // console.log(this.gameData)
   })
 

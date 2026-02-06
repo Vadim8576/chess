@@ -7,6 +7,8 @@ import gameStore from '../../store/gameStore';
 import { observer } from 'mobx-react-lite';
 import { useAuth } from '../../hooks/useAuth';
 import AppStore from '../../store/AppStore';
+import InviteLink from '../../components/UI/InviteLink';
+import Spinner from '../../components/UI/Spinner';
 
 
 const HomeWrapper = styled.div`
@@ -29,6 +31,9 @@ justify-content: flex-start;
 `
 
 const MenuButton = styled.button`
+display: flex;
+justify-content: center;
+align-items: center;
 width: 100%;
 height: min-content;
 border: none;
@@ -49,9 +54,8 @@ font-weight: bold;
 
 
 const Home = observer(() => {
-  const [inviteUrl, setInviteUrl] = useState(null)
-  const [isLoading, setIsLoading] = useState(null)
-  const [isCopied, setIsCopied] = useState(false)
+  // const [inviteUrl, setInviteUrl] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const navigate = useNavigate()
 
@@ -70,11 +74,11 @@ const Home = observer(() => {
 
 
   useEffect(() => {
+    setIsLoading(false)
     if (!gameStore.currentGameId || gameStore.currentGameId === 'local') {
-      setInviteUrl(null)
-      setIsLoading(null)
+      gameStore.setInviteUrl(null)
     } else {
-      setInviteUrl(`${window.location.origin}/lobby/${gameStore.currentGameId}`)
+      gameStore.setInviteUrl(`${window.location.origin}/lobby/${gameStore.currentGameId}`)
     }
   }, [gameStore.currentGameId])
 
@@ -84,30 +88,28 @@ const Home = observer(() => {
   const localGame = () => navigate('/local')
 
   const inviteGame = () => {
-    setInviteUrl(null)
-    navigate(`/fastgame/${gameStore.fastOnlineGameId}`)
+    // setInviteUrl(null)
+    // navigate(`/fastgame/${gameStore.fastOnlineGameId}`)
+    navigate(`/lobby/${gameStore.fastOnlineGameId}`)
   }
 
   const createFastGame = () => {
+    console.log('createFastGame')
     setIsLoading(true)
-    setInviteUrl(null)
+    gameStore.setInviteUrl(null)
     startAuth()
   }
 
   const RateGame = () => navigate('/rate')
 
 
+  const CreateButtonInside = observer(({ isLoading }) => {
 
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(inviteUrl)
-      setIsCopied(true)
-      // Сбрасываем статус через 2 сек
-      setTimeout(() => setIsCopied(false), 2000)
-    } catch (err) {
-      console.error('Не удалось скопировать:', err)
-    }
-  }
+    if (isLoading && !gameStore.inviteUrl) return <Spinner scale={1} />
+    if (!isLoading && gameStore.inviteUrl) return 'В игру'
+    return <>Быстрая игра по сети</>
+  })
+
 
   return (
     <HomeWrapper>
@@ -116,48 +118,13 @@ const Home = observer(() => {
           Локальная игра
         </MenuButton>
         <MenuButton
-          onClick={createFastGame}
+          onClick={(!isLoading && gameStore.inviteUrl) ? () => inviteGame()  : () => createFastGame()}
         >
-          {(isLoading !== null && !inviteUrl) && isLoading ? 'Spinner' : 'Быстрая игра по сети'}
+          {/* {(isLoading !== null && !inviteUrl) && isLoading ? <Spinner scale={1} /> : 'Быстрая игра по сети'} */}
+          <CreateButtonInside isLoading={isLoading} />
         </MenuButton>
-        {inviteUrl &&
+        {/* {inviteUrl && <InviteLink inviteUrl={inviteUrl} />} */}
 
-          <InviteLinkContainer>
-            <p style={{ color: '#000', marginBottom: '10px' }}>Ссылка-приглашение:</p>
-            <p style={{ marginBottom: '10px' }}>{inviteUrl}</p>
-            <p>
-              <button
-                onClick={copyToClipboard}
-                disabled={isCopied}
-                style={{
-                  padding: '8px 12px',
-                  backgroundColor: isCopied ? '#4CAF50' : '#2196F3',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: isCopied ? 'default' : 'pointer',
-                  marginBottom: '10px'
-                }}
-              >
-                {isCopied ? 'Скопировано!' : 'Copy'}
-              </button>
-            </p>
-            <p>
-              <button
-                onClick={inviteGame}
-                style={{
-                  padding: '10px 20px',
-                  marginBottom: '10px',
-                  background: 'red'
-                 }}
-              >
-                В игру
-              </button>
-            </p>
-
-          </InviteLinkContainer>
-
-        }
         <MenuButton onClick={RateGame}>
           Рейтинговая игра по сети
         </MenuButton>
