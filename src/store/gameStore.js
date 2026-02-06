@@ -18,8 +18,6 @@ class GameStore {
   isLoading = true
 
 
-
-
   constructor() {
     makeAutoObservable(this)
     this.initAuthListener()
@@ -39,9 +37,14 @@ class GameStore {
     // console.log(this.gameData)
   })
 
+  setIsPlay = action((isPlay) => {
+    this.isPlay = isPlay
+  })
+
   setGameData = action((data) => {
     this.gameData = { ...data }
     console.log(this.gameData)
+
     this.loadGame(this.gameData.boardState)
   })
 

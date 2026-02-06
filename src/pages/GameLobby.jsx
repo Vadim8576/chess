@@ -32,8 +32,10 @@ const GameLobby = observer(() => {
 
   useEffect(() => {
     AppStore.setCurrentPage('lobby')
-    console.log(gameId, isJoin, gameStore.inviteUrl)
-    if (!gameId || isJoin && gameStore.inviteUrl) return
+    console.log(!gameId, isJoin, gameStore.inviteUrl)
+
+    // Если это создатель игры, не присоединяемя к игре (joinGame)
+    if (!gameId || isJoin || gameStore.inviteUrl || authStore.userId) return
     joinGame()
   }, [])
 

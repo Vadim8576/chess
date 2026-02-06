@@ -5,6 +5,7 @@ import gameStore from "../../store/gameStore";
 import CommonPageElements from "../CommonPageElements";
 import authStore from "../../store/authStore";
 import { useLocation, useParams } from "react-router";
+import GameLobby from "../GameLobby";
 
 
 
@@ -36,8 +37,19 @@ const FastOnlineGamePage = observer(() => {
 
 
 
+	// console.log(gameStore?.gameData?.status)
+
+
+
+
 	return (
-		<CommonPageElements />
+		<>
+			{
+				gameStore?.gameData?.status === 'playing'
+					? <CommonPageElements />
+					: <GameLobby />
+			}
+		</>
 	)
 })
 

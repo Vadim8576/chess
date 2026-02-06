@@ -16,6 +16,8 @@ export const useJoinGame = (gameId) => {
 
       console.log('Id присоединившегося юзера = ', userUid)
 
+      console.log('В сторе userId = ', authStore.userId)
+
       // Обновляем документ игры, записывая UID текущего пользователя
       const gameRef = doc(db, "games", gameId)
       await updateDoc(gameRef, {
@@ -25,6 +27,7 @@ export const useJoinGame = (gameId) => {
         updatedAt: serverTimestamp()
       }).then(() => {
 
+        
         authStore.setUserId(userUid)
         gameStore.setCurrentGameId(gameId)
         setIsJoin(true)

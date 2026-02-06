@@ -78,7 +78,7 @@ const Home = observer(() => {
     if (!gameStore.currentGameId || gameStore.currentGameId === 'local') {
       gameStore.setInviteUrl(null)
     } else {
-      gameStore.setInviteUrl(`${window.location.origin}/lobby/${gameStore.currentGameId}`)
+      gameStore.setInviteUrl(`${window.location.origin}/fastgame/${gameStore.currentGameId}`)
     }
   }, [gameStore.currentGameId])
 
@@ -90,7 +90,7 @@ const Home = observer(() => {
   const inviteGame = () => {
     // setInviteUrl(null)
     // navigate(`/fastgame/${gameStore.fastOnlineGameId}`)
-    navigate(`/lobby/${gameStore.fastOnlineGameId}`)
+    navigate(`/fastgame/${gameStore.fastOnlineGameId}`)
   }
 
   const createFastGame = () => {
