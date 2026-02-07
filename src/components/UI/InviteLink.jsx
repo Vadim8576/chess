@@ -12,11 +12,11 @@ display: flex;
 justify-content: center;
 align-items: center;
 flex-direction: column;
-width: 400px;
+// width: 400px;
 // height: 60px;
 border: 1px #333 solid;
 // padding: 20px;
-font-size: 2.2vmin;
+font-size: 1.1rem;
 `
 
 const InviteLinkWrapper = styled.div`
@@ -25,11 +25,12 @@ justify-content: center;
 align-items: center;
 width: 100%;
 height: 50%;
-font-size: 2.2vmin;
-color: ${props => props.$isCopied ? '#4CAF50' : COLORS.primary};
+font-size: 1.2rem;
+color: ${props => props.$isCopied ? '#4CAF50' : COLORS.blackCell};
+// color: ${props => props.$isCopied ? '#4CAF50' : COLORS.primary};
 font-weight: bold;
 // border: 1px #666 solid;
-padding: 10px 0;
+padding: 15px;
 `
 
 const Header = styled.div`
@@ -57,8 +58,11 @@ margin-left: 5px;
 // border-radius: 5px;
 `
 const Icon = styled.img`
-width: 20px;
-height: 20px;
+width: 1.5rem;
+height: 1.5rem;
+&:hover {
+  background-color: ${COLORS.errorCell};
+}
 `
 
 
@@ -94,38 +98,7 @@ const InviteLink = observer(() => {
       <InviteLinkWrapper $isCopied={isCopied}>
         {/* <p style={{ color: '#000', marginBottom: '10px' }}>Ссылка-приглашение:</p> */}
         {isCopied ? 'Ссылка скопирована!' : gameStore.inviteUrl}
-        {/* <p>
-          <button
-            onClick={copyToClipboard}
-            disabled={isCopied}
-            style={{
-              padding: '2px',
-              backgroundColor: isCopied ? '#4CAF50' : '#2196F3',
-              color: 'white',
-              border: 'none',
-              borderRadius: '3px',
-              cursor: isCopied ? 'default' : 'pointer',
-              marginBottom: '10px'
-            }}
-          >
-            <CopyIcon src={copyIcon} alt='copy' />
-            // {isCopied ? 'Скопировано!' : 'Copy'}
-          </button>
-        </p> 
-        <p>
-        <button
-          onClick={inviteGame}
-          style={{
-            padding: '10px 20px',
-            marginBottom: '10px',
-            background: 'green',
-            color: '#fff'
-          }}
-        >
-          В игру
-        </button>
-      </p>
-      */}
+      
       </InviteLinkWrapper>
 
     </InviteLinkContainer>

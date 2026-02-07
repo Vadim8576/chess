@@ -1,15 +1,13 @@
-import { onAuthStateChanged, signInAnonymously } from 'firebase/auth';
-import { auth, db } from '../api/firebase';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import authStore from '../store/authStore';
-import { doc, getDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import styled from 'styled-components';
 import gameStore from '../store/gameStore';
 import { useJoinGame } from '../hooks/useJoinGame';
 import AppStore from '../store/AppStore';
 import InviteLink from '../components/UI/InviteLink';
 import { observer } from 'mobx-react-lite';
+import { COLORS } from '../constants/gameInitial';
 
 
 
@@ -19,6 +17,7 @@ justify-content: center;
 align-items: center;
 width: 100%;
 height: 100%;
+background-color: ${COLORS.background};
 `
 
 

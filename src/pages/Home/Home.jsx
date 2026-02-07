@@ -9,6 +9,7 @@ import { useAuth } from '../../hooks/useAuth';
 import AppStore from '../../store/AppStore';
 import InviteLink from '../../components/UI/InviteLink';
 import Spinner from '../../components/UI/Spinner';
+import { COLORS } from '../../constants/gameInitial';
 
 
 const HomeWrapper = styled.div`
@@ -42,7 +43,10 @@ padding: 20px;
 font-size: 2.2vmin;
 cursor: pointer;
 margin-bottom: 10px;
-border-radius: 5px;
+// border-radius: 5px;
+&:hover {
+  background-color: ${COLORS.errorCell};
+}
 `
 
 const InviteLinkContainer = styled.div`
