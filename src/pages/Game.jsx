@@ -9,6 +9,7 @@ import Widget from '../widgets/Widget';
 import GameStatus from '../widgets/GameStatus';
 import gameStore from '../store/gameStore';
 import { observer } from 'mobx-react-lite';
+import PawnPromotion from '../components/boardElements/PawnPromotion';
 
 
 const PageContainer = styled.div`
@@ -27,7 +28,7 @@ height: 100%;
 `
 
 const Grid = styled.div`
-// border: 1px pink solid;
+position: relative;
 display: grid;
 grid-template-columns: repeat(12, 1fr);
 grid-template-rows: repeat(12, 1fr);
@@ -62,7 +63,7 @@ grid-column: 1 / 9;
 grid-row: 11 / 12;
 `
 
-const CommonPageElements = observer(() => {
+const Game = observer(() => {
 
   const [cellSize, setCellSize] = useState(null)
 	const { width, height } = useWindowResizeThrottle(300)
@@ -94,7 +95,7 @@ const CommonPageElements = observer(() => {
 	useEffect(() => {
 		// ['e2e4', 'e7e5', 'f1c4', 'd7d6'].forEach(move => AppStore.chess.move(move))
 
-		// AppStore.chess.load('rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2')
+		// AppStore.chess.load('rnbqkbnr/pp1P1ppp/8/8/8/8/PPp1PPPP/RNBQKBNR w KQkq - 0 1')
 		// AppStore.chess.load('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2')
 	}, [width, height])
 
@@ -107,6 +108,7 @@ const CommonPageElements = observer(() => {
 			{/* <Header /> */}
 			<PageContentWrapper>
 				{cellSize && <Grid $size={cellSize * 12}>
+					{AppStore.promotion !== null && <PawnPromotion />}
 					<CapturedAreaBlack>
 						<CapturedArea player={AppStore.whiteBottom ? 'w' : 'b'} side={'up'} />
 					</CapturedAreaBlack>
@@ -143,4 +145,4 @@ const CommonPageElements = observer(() => {
   )
 })
 
-export default CommonPageElements
+export default Game

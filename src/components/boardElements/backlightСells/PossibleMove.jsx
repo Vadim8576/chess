@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { observer } from "mobx-react-lite";
 import AppStore from "../../../store/AppStore";
 import { COLORS } from "../../../constants/gameInitial";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 
 const CellWrapper = styled.div`

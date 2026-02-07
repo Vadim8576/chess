@@ -3,6 +3,8 @@ import { toJS } from 'mobx';
 import { Chess } from "chess.js";
 import gameStore from "./gameStore";
 import { gameStatus } from "../utils/gameStatus";
+import { squareToIndices } from "../utils/squareToIndices";
+import { COLORS } from "../constants/gameInitial";
 
 
 
@@ -23,6 +25,7 @@ class AppStore {
   //   'b': []
   // }
   capturedFigures = {}
+  promotion = null
 
   historyMoves = []
   historyList = []
@@ -38,6 +41,111 @@ class AppStore {
   constructor() {
     makeAutoObservable(this)
   }
+
+
+
+
+
+
+
+
+
+  checkingMove = action((capturedFigure, moveSquares) => {
+
+    const { startSquare, finishSquare } = moveSquares
+    const possibleMoves = this.chess.moves({ verbose: true })
+
+    console.log(startSquare, finishSquare)
+    console.log(toJS(possibleMoves))
+
+    const move = possibleMoves.find(m => m.from === startSquare && m.to === finishSquare)
+
+    if (!move) {
+      console.log('Некорректный ход')
+      return
+    }
+
+
+    if (move.isPromotion()) {
+      console.log(`Превращение: ${move.from} → ${move.to} (в ${move.promotion})`)
+      this.setPromotion(moveSquares)
+      return
+    }
+
+
+    // const move = this.chess.move(moveSquares)
+
+    // if (move && move.flags.includes('e')) {
+    if (move && move.isEnPassant()) {
+      console.log('Взятие на проходе!')
+      capturedFigure = {
+        type: 'p',
+        color: move.color === 'w' ? 'b' : 'w'
+      }
+
+
+    }
+
+
+
+    // AppStore.updateHistoryMoves(moveSquares)
+    // AppStore.updateHistoryList()
+
+
+
+    this.makeMove(moveSquares)
+
+
+    if (this.gameType === 'local') {
+      this.saveGameToLocalStorage()
+      if (capturedFigure != null || capturedFigure != undefined) {
+        this.addCapturedFigures(capturedFigure.color, `${capturedFigure.type}${capturedFigure.color}`)
+      }
+      return
+    }
+    gameStore.updateBoard() // обновить доску в Firebase
+  })
+
+
+
+  makeMove = action((moveSquares, promoteTo = undefined) => {
+    const { startSquare, finishSquare } = moveSquares
+
+    console.log('Ход')
+    this.chess.move({
+      from: startSquare,
+      to: finishSquare,
+      promotion: promoteTo // 'q', 'r', 'b' или 'n'
+    })
+
+    this.updateKingCheckHighlight()
+    gameStatus(this)
+    this.setPromotion(null)
+  })
+
+
+  setPromotion = action((promotion) => {
+    this.promotion = promotion
+  })
+
+
+
+
+
+  updateKingCheckHighlight = action(() => {
+    if (this.chess.inCheck() || this.chess.isCheckmate()) {
+      const player = this.chess.turn() // чей сейчас ход
+      const squareArr = this.chess.findPiece({ type: 'k', color: player }) // ищем клетку на котором король
+
+      if (squareArr.length !== 1) return
+
+      const cellIndices = squareToIndices(squareArr[0])
+      console.log('король на: ', cellIndices)
+      this.setCellInCheck({ cell: { ...cellIndices }, color: COLORS.errorCell, visible: true })
+    } else {
+      this.setCellInCheck(state => ({ ...state, visible: false }))
+    }
+  })
 
 
 
@@ -160,7 +268,7 @@ class AppStore {
   setCapturedFigures = action((capturedFigures) => {
     // this.capturedFigures[gameStore.currentGameId] = capturedFigures
     this.capturedFigures = { ...capturedFigures }
-    
+
   })
 
   saveCapturedFiguresToLocalStorage() {
@@ -198,7 +306,8 @@ class AppStore {
 
   loadGameFromLocalStorage = action(() => {
     const fen = localStorage.getItem('ChessFen')
-    if (fen) this.loadGame(JSON.parse(fen))
+    // if (fen) this.loadGame(JSON.parse(fen))
+    if (fen) this.loadGame('rnbqkbnr/p1P1pppp/8/8/8/8/PPp1PPPP/RNBQKBNR b KQkq - 0 1')
   })
 
   saveSettingToLocalStorage(setting) {

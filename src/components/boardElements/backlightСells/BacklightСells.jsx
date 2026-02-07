@@ -3,7 +3,7 @@ import LastMove from "./LastMove";
 import { memo, useRef, useState } from "react";
 import AppStore from "../../../store/AppStore";
 import { observer } from "mobx-react-lite";
-
+import { toJS } from 'mobx';
 
 
 const BacklightCells = memo(observer(({
@@ -11,6 +11,8 @@ const BacklightCells = memo(observer(({
   grabCell
 }) => {
 // const [secondClick, setSecondClick] = useState(false)
+
+// console.log(toJS(AppStore.possibleMoves))
 
   return (
     <>

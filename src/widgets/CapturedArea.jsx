@@ -68,6 +68,8 @@ const CapturedArea = observer(({ player, side }) => {
           <CapturedFigure
             key={key}
             src={figure[cf]}
+            cursor={'auto'}
+            action={null}
           />
         )
       }

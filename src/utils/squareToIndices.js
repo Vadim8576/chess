@@ -1,4 +1,5 @@
 export const squareToIndices = (square) => {
+  // console.log(square)
   if (typeof square !== 'string' || square.length !== 2) {
     throw new Error('Invalid square format: expected "a1"–"h8"');
   }

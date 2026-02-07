@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import AppStore from "../../store/AppStore";
 import gameStore from "../../store/gameStore";
-import CommonPageElements from "../CommonPageElements";
+import Game from "../Game";
 import authStore from "../../store/authStore";
 import { useLocation, useParams } from "react-router";
 import GameLobby from "../GameLobby";
@@ -37,16 +37,12 @@ const FastOnlineGamePage = observer(() => {
 
 
 
-	// console.log(gameStore?.gameData?.status)
-
-
-
 
 	return (
 		<>
 			{
 				gameStore?.gameData?.status === 'playing'
-					? <CommonPageElements />
+					? <Game />
 					: <GameLobby />
 			}
 		</>

@@ -4,11 +4,10 @@ import FiguresContainer from '../boardElements/FiguresContainer';
 import AppStore from '../../store/AppStore';
 import Board from './Board';
 import { useFigureDrag } from '../../hooks/useFigureDrag';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import DraggableFigure from '../boardElements/DraggableFigure';
 import HighlightedCell from '../boardElements/backlightСells/HighlightedCell';
 import BacklightСells from '../boardElements/backlightСells/BacklightСells';
-import { gameStatus } from '../../utils/gameStatus';
 import gameStore from '../../store/gameStore';
 import Spinner from '../UI/Spinner';
 
@@ -34,7 +33,6 @@ const FullSizeWrapper = styled.div`
 const ChessBoard = observer(() => {
   // console.log('ChessBoard Render')
 
-  const pageRef = useRef(null)
   const size = AppStore.board.cellSize * 8
   const [draggedFigure, setDraggedFigure] = useState(null)
   const [isMoving, setIsMoving] = useState(false)
@@ -45,7 +43,6 @@ const ChessBoard = observer(() => {
     grabCell,
     highlightedCell,
     fugureMove,
-    updateKingCheckHighlight,
     handlePointerDown,
     handlePointerMove,
     handlePointerUp,
@@ -64,7 +61,7 @@ const ChessBoard = observer(() => {
 
     // gameStatus(AppStore)
     handlePointerCancel()
-    updateKingCheckHighlight()
+    AppStore.updateKingCheckHighlight()
 
     if (AppStore.gameType !== 'local') {
        // Убрать ненужные подсветки клетки
