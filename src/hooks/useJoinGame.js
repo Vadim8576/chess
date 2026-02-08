@@ -17,28 +17,30 @@ export const useJoinGame = (gameId) => {
       console.log('Id игры = ', gameId)
 
 
-      let creatorUid = await gameStore.getCreatorId(gameId)
+      let creatorInfo = await gameStore.getCreatorInfo(gameId)
+      console.log(creatorInfo)
 
 
-      
-      if (creatorUid === joinerUid) {
+      if (creatorInfo.creatorUid === joinerUid) {
         console.log('Это создатель игры!')
-        authStore.setCreatorUid(creatorUid)
+        authStore.setCreatorUid(creatorInfo.creatorUid)
         setIsJoin(true)
         return
       }
 
+      // Каким цветом играет присоединившийся
+      let key = creatorInfo.whitePlayerUid == null ? 'whitePlayerUid' : 'blackPlayerUid'
 
       // Обновляем документ игры, записывая UID текущего пользователя
       const gameRef = doc(db, "games", gameId)
       await updateDoc(gameRef, {
         joinerUid: joinerUid,
-        blackPlayerUid: joinerUid,
+        [key]: joinerUid,
         status: 'playing',
         updatedAt: serverTimestamp()
       }).then(() => {
 
-        
+
         authStore.setJoinerUid(joinerUid)
         gameStore.setCurrentGameId(gameId)
         setIsJoin(true)

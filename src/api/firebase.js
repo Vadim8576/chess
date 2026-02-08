@@ -49,8 +49,8 @@ export const fb = {
           creatorUid: user.uid,
           joinerUid: null,
           status: 'waiting', // "waiting" (ожидание второго игрока), "playing", "finished", "cancelled"
-          whitePlayerUid: user.uid, // Создатель пока играет белыми по умолчанию
-          blackPlayerUid: null,
+          whitePlayerUid: null, // Создатель пока играет белыми по умолчанию
+          blackPlayerUid: user.uid,
           isTimed: false,
           timeControl: null,
           whiteTimeLeft: null,
@@ -168,7 +168,7 @@ export const fb = {
       })
   },
 
-  getCreatorId: async (gameId) => {
+  getCreatorInfo: async (gameId) => {
     const gameRef = doc(db, "games", gameId) // Создаем ссылку на документ
     const gameSnap = await getDoc(gameRef) // Получаем документ
 
@@ -176,8 +176,9 @@ export const fb = {
       // Документ существует, теперь вы можете получить его данные
       const gameData = gameSnap.data()
       const creatorUid = gameData.creatorUid
+      const whitePlayerUid = gameData.whitePlayerUid
       console.log("creatorUid из документа:", creatorUid)
-      return creatorUid
+      return {creatorUid, whitePlayerUid}
     } else {
       // Документ не найден
       console.log("Документ игры не найден!")

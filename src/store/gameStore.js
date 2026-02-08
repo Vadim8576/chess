@@ -111,8 +111,8 @@ class GameStore {
   })
 
 
-  async getCreatorId(gameId) {
-    return await fb.getCreatorId(gameId)
+  async getCreatorInfo(gameId) {
+    return await fb.getCreatorInfo(gameId)
   }
 
 
