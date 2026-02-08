@@ -83,6 +83,7 @@ const Figure = memo(observer(({
 
 		handlePointerDown(e, square)
 	}
+ 
 
 	return (
 		<ImgWrapper

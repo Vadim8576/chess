@@ -3,8 +3,7 @@ import { COLORS } from '../../constants/gameInitial';
 
 const Spinner = ({ 
   scale = 1.5,
-  color = COLORS.primary,
-  ariaLabel = 'Чайник с паром'
+  color = COLORS.primary
 }) => {
   return (
     <svg
@@ -14,8 +13,7 @@ const Spinner = ({
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       role="img"
-      aria-label={ariaLabel}
-      style={{ display: 'block' }}
+      aria-label={'Spinner'}
     >
       <style>
         {`

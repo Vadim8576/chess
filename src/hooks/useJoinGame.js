@@ -12,40 +12,49 @@ export const useJoinGame = (gameId) => {
   const joinGame = async () => {
     try {
       const userCredential = await signInAnonymously(auth)
-      const joinerUid = userCredential.user.uid;
-      console.log('Id присоединившегося юзера = ', joinerUid)
-      console.log('Id игры = ', gameId)
+      const user = userCredential.user.uid;
+      console.log('Id присоединившегося юзера = ', user)
+      // console.log('Id игры = ', gameId)
 
 
-      let creatorInfo = await gameStore.getCreatorInfo(gameId)
-      console.log(creatorInfo)
+      let gameInfo = await gameStore.getGameInfo(gameId)
+      // console.log(creatorInfo)
 
 
-      if (creatorInfo.creatorUid === joinerUid) {
+      if (gameInfo.creatorUid === user) {
         console.log('Это создатель игры!')
-        authStore.setCreatorUid(creatorInfo.creatorUid)
+        authStore.setCreatorUid(gameInfo.creatorUid)
         setIsJoin(true)
         return
       }
 
+      if (gameInfo.joinerUid === user) {
+        console.log('Уже подключился к игре, в БД есть его id!')
+        authStore.setJoinerUid(gameInfo.joinerUid)
+        setIsJoin(true)
+        return
+      }
+
+
+
       // Каким цветом играет присоединившийся
-      let key = creatorInfo.whitePlayerUid == null ? 'whitePlayerUid' : 'blackPlayerUid'
+      let key = gameInfo.whitePlayerUid == null ? 'whitePlayerUid' : 'blackPlayerUid'
 
       // Обновляем документ игры, записывая UID текущего пользователя
       const gameRef = doc(db, "games", gameId)
       await updateDoc(gameRef, {
-        joinerUid: joinerUid,
-        [key]: joinerUid,
+        joinerUid: user,
+        [key]: user,
         status: 'playing',
         updatedAt: serverTimestamp()
       }).then(() => {
 
 
-        authStore.setJoinerUid(joinerUid)
+        authStore.setJoinerUid(user)
         gameStore.setCurrentGameId(gameId)
         setIsJoin(true)
 
-        console.log(`Пользователь ${joinerUid} успешно присоединился к игре ${gameId}`);
+        console.log(`Пользователь ${user} успешно присоединился к игре ${gameId}`);
       })
 
 

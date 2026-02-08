@@ -36,7 +36,7 @@ export const fb = {
   //   })
   // },
 
-  createFastOnlineGame: async (initialBoardFen) => {
+  createFastOnlineGame: async (initialBoardFen, creatorColor = 'w') => {
     const user = auth.currentUser
 
     console.log('user', user)
@@ -49,8 +49,8 @@ export const fb = {
           creatorUid: user.uid,
           joinerUid: null,
           status: 'waiting', // "waiting" (ожидание второго игрока), "playing", "finished", "cancelled"
-          whitePlayerUid: null, // Создатель пока играет белыми по умолчанию
-          blackPlayerUid: user.uid,
+          whitePlayerUid: creatorColor === 'w' ? user.uid: null,
+          blackPlayerUid: creatorColor === 'w' ? null : user.uid,
           isTimed: false,
           timeControl: null,
           whiteTimeLeft: null,
@@ -168,7 +168,7 @@ export const fb = {
       })
   },
 
-  getCreatorInfo: async (gameId) => {
+  getGameInfo: async (gameId) => {
     const gameRef = doc(db, "games", gameId) // Создаем ссылку на документ
     const gameSnap = await getDoc(gameRef) // Получаем документ
 
@@ -176,9 +176,11 @@ export const fb = {
       // Документ существует, теперь вы можете получить его данные
       const gameData = gameSnap.data()
       const creatorUid = gameData.creatorUid
+      const joinerUid = gameData.joinerUid
       const whitePlayerUid = gameData.whitePlayerUid
-      console.log("creatorUid из документа:", creatorUid)
-      return {creatorUid, whitePlayerUid}
+
+      // console.log("creatorUid из документа:", creatorUid)
+      return {creatorUid, whitePlayerUid, joinerUid}
     } else {
       // Документ не найден
       console.log("Документ игры не найден!")

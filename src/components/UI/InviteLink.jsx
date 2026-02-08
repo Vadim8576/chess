@@ -5,7 +5,6 @@ import closeIcon from "../../assets/icons/close-x.svg"
 import { COLORS } from "../../constants/gameInitial";
 import gameStore from "../../store/gameStore";
 import { observer } from "mobx-react-lite";
-import AppStore from "../../store/AppStore";
 import { useParams } from "react-router";
 
 const InviteLinkContainer = styled.div`
@@ -14,7 +13,7 @@ display: flex;
 justify-content: center;
 align-items: center;
 flex-direction: column;
-// width: 400px;
+min-width: 600px;
 // height: 60px;
 border: 1px #333 solid;
 // padding: 20px;
@@ -76,7 +75,7 @@ const InviteLink = observer(() => {
 
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(gameStore.inviteUrl)
+      await navigator.clipboard.writeText(gameStore.inviteLink)
       setIsCopied(true)
       // Сбрасываем статус через 2 сек
       setTimeout(() => setIsCopied(false), 2000)
@@ -107,7 +106,7 @@ const InviteLink = observer(() => {
 
       <InviteLinkWrapper $isCopied={isCopied}>
         {/* <p style={{ color: '#000', marginBottom: '10px' }}>Ссылка-приглашение:</p> */}
-        {isCopied ? 'Ссылка скопирована!' : gameStore.inviteUrl}
+        {isCopied ? 'Ссылка скопирована!' : gameStore.inviteLink}
       
       </InviteLinkWrapper>
 

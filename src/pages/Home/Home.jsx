@@ -60,8 +60,9 @@ font-weight: bold;
 
 
 const Home = observer(() => {
-  // const [inviteUrl, setInviteUrl] = useState(false)
+  // const [inviteLink, setInviteUrl] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [creatorColor, setCreatorColor] = useState('w')
 
   const navigate = useNavigate()
 
@@ -74,15 +75,15 @@ const Home = observer(() => {
 
   useEffect(() => {
     if (!isAuth) return
-    gameStore.createFastOnlineGame()
+    gameStore.createFastOnlineGame(creatorColor)
   }, [isAuth])
 
 
 
   useEffect(() => {
-    if (!gameStore.inviteUrl) return
+    if (!gameStore.inviteLink) return
     setIsLoading(false)
-  }, [gameStore.inviteUrl])
+  }, [gameStore.inviteLink])
 
 
 
@@ -110,8 +111,8 @@ const Home = observer(() => {
 
   const CreateButtonInside = observer(({ isLoading }) => {
 
-    if (isLoading && !gameStore.inviteUrl) return <Spinner scale={1} />
-    if (!isLoading && gameStore.inviteUrl) return 'В игру'
+    if (isLoading && !gameStore.inviteLink) return <Spinner scale={1} />
+    if (!isLoading && gameStore.inviteLink) return 'В игру'
     return <>Быстрая игра по сети</>
   })
 
@@ -123,12 +124,12 @@ const Home = observer(() => {
           Локальная игра
         </MenuButton>
         <MenuButton
-          onClick={(!isLoading && gameStore.inviteUrl) ? () => inviteGame() : () => createFastGame()}
+          onClick={(!isLoading && gameStore.inviteLink) ? () => inviteGame() : () => createFastGame()}
         >
-          {/* {(isLoading !== null && !inviteUrl) && isLoading ? <Spinner scale={1} /> : 'Быстрая игра по сети'} */}
+          {/* {(isLoading !== null && !inviteLink) && isLoading ? <Spinner scale={1} /> : 'Быстрая игра по сети'} */}
           <CreateButtonInside isLoading={isLoading} />
         </MenuButton>
-        {/* {inviteUrl && <InviteLink inviteUrl={inviteUrl} />} */}
+        {/* {inviteLink && <InviteLink inviteLink={inviteLink} />} */}
 
         <MenuButton onClick={RateGame}>
           Рейтинговая игра по сети

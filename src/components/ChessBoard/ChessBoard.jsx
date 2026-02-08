@@ -107,21 +107,21 @@ const ChessBoard = observer(() => {
 
 
 
-  const ShowSpinner = observer(() => {
-    if (AppStore.gameType === 'local') return null
+  // const ShowSpinner = observer(() => {
+  //   if (AppStore.gameType === 'local') return null
 
-    console.log('isLoading = ', gameStore.isLoading)
+  //   console.log('isLoading = ', gameStore.isLoading)
 
-    if (gameStore.isLoading) {
-      return (
-        <FullSizeWrapper>
-          <Spinner />
-        </FullSizeWrapper>
-      )
-    } else {
-      return null
-    }
-  })
+  //   if (gameStore.isLoading) {
+  //     return (
+  //       <FullSizeWrapper>
+  //         <Spinner />
+  //       </FullSizeWrapper>
+  //     )
+  //   } else {
+  //     return null
+  //   }
+  // })
 
 
   // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', AppStore.gameType)
@@ -147,11 +147,11 @@ const ChessBoard = observer(() => {
           highlightedCell={AppStore.cellInCheck}
         />
       )}
-      {(AppStore.gameType !== 'local' && gameStore.isLoading) && (
+      {/* {(AppStore.gameType !== 'local' && gameStore.isLoading) && (
         <FullSizeWrapper>
           <Spinner />
         </FullSizeWrapper>)
-      }
+      } */}
       <FiguresContainer
         handlePointerDown={handlePointerDownMemo}
         setDraggedFigure={setDraggedFigure}

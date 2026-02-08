@@ -8,6 +8,7 @@ import AppStore from '../store/AppStore';
 import InviteLink from '../components/UI/InviteLink';
 import { observer } from 'mobx-react-lite';
 import { COLORS } from '../constants/gameInitial';
+import Spinner from '../components/UI/Spinner';
 
 
 
@@ -32,7 +33,7 @@ const GameLobby = observer(() => {
 
   useEffect(() => {
     AppStore.setCurrentPage('lobby')
-    console.log(gameId, isJoin, gameStore.inviteUrl)
+    console.log(gameId, isJoin, gameStore.inviteLink)
     console.log('user id = ', authStore.creatorUid)
 
     // Если authStore.userId !== null - это создатель игры, либо приглашенный игрок уже подключился, не присоединяемя к игре (joinGame)
@@ -40,15 +41,27 @@ const GameLobby = observer(() => {
     joinGame()
   }, [authStore.creatorUid])
 
-  const inviteGame = () => navigate(`/fastgame/${gameId}`)
+  // const inviteGame = () => navigate(`/fastgame/${gameId}`)
 
   let show = null
-  if (authStore.creatorUid) {
+
+
+  if (authStore.creatorUid && gameStore?.gameData?.status === 'waiting') {
     show = 'invitationLink'
     gameStore.setInviteUrl(`${window.location.origin}/fastgame/${gameId}`)
+
+  } else if(!isJoin) {
+    show = 'loading'
   }
-  if (!authStore.creatorUid && !isJoin) show = 'loading'
-  if (!authStore.creatorUid && isJoin) show = 'inviteGame'
+
+
+
+  // if (!isJoin) {
+  //   show = 'loading'
+  // } else {
+  //   // show = 'inviteGame'
+  // }
+  // if (!authStore.creatorUid && isJoin) show = 'inviteGame'
 
 
 
@@ -56,8 +69,9 @@ const GameLobby = observer(() => {
     <LobbyWrapper>
       {{
         'invitationLink': <InviteLink />,
-        'loading': <div>...LOADING</div>,
-        'inviteGame': <button onClick={inviteGame}>В игру</button>
+        'loading': <Spinner scale={1.5} />,
+        // 'loading': <div>...LOADING</div>,
+        // 'inviteGame': <button onClick={inviteGame}>В игру</button>
       }[show]}
     </LobbyWrapper>
   )

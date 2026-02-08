@@ -14,7 +14,7 @@ class GameStore {
   // fastOnlineGameId = '65NH7uPgvKw44ft4euD4'
 
   gameData = null
-  inviteUrl = null
+  inviteLink = null
   isLoading = true
 
 
@@ -33,7 +33,7 @@ class GameStore {
 
   setInviteUrl = action((url) => {
     
-    this.inviteUrl = url === null ? null : url
+    this.inviteLink = url === null ? null : url
     // console.log(this.gameData)
   })
 
@@ -54,11 +54,11 @@ class GameStore {
     this.isLoading = isLoading
   })
 
-  createFastOnlineGame = action(async () => {
+  createFastOnlineGame = action(async (creatorColor) => {
     // const chess = AppStore.createNewChess()
     // const fen = chess.fen()
     const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
-    const gameId = await fb.createFastOnlineGame(fen)
+    const gameId = await fb.createFastOnlineGame(fen, creatorColor)
     this.setCurrentGameId(gameId)
     this.setFastOnlineGameId(gameId)
     this.setInviteUrl(`${window.location.origin}/fastgame/${gameId}`)
@@ -111,8 +111,8 @@ class GameStore {
   })
 
 
-  async getCreatorInfo(gameId) {
-    return await fb.getCreatorInfo(gameId)
+  async getGameInfo(gameId) {
+    return await fb.getGameInfo(gameId)
   }
 
 
