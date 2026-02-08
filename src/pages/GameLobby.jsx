@@ -25,24 +25,40 @@ const GameLobby = observer(() => {
   const { gameId } = useParams() // Из URL: /game/:gameId
 
   const { isJoin, joinGame } = useJoinGame(gameId)
+  
 
   const navigate = useNavigate()
 
 
   useEffect(() => {
     AppStore.setCurrentPage('lobby')
-    console.log(!gameId, isJoin, gameStore.inviteUrl)
+    console.log(gameId, isJoin, gameStore.inviteUrl)
+    console.log('user id = ', authStore.creatorUid)
 
-    // Если это создатель игры, не присоединяемя к игре (joinGame)
-    if (!gameId || isJoin || gameStore.inviteUrl || authStore.userId) return
+    // Если authStore.userId !== null - это создатель игры, либо приглашенный игрок уже подключился, не присоединяемя к игре (joinGame)
+    if (!gameId || isJoin || authStore.creatorUid !== null) return
     joinGame()
-  }, [])
+  }, [authStore.creatorUid])
 
   const inviteGame = () => navigate(`/fastgame/${gameId}`)
 
+  let show = null
+  if (authStore.creatorUid) {
+    show = 'invitationLink'
+    gameStore.setInviteUrl(`${window.location.origin}/fastgame/${gameId}`)
+  }
+  if (!authStore.creatorUid && !isJoin) show = 'loading'
+  if (!authStore.creatorUid && isJoin) show = 'inviteGame'
+
+
+
   return (
     <LobbyWrapper>
-      {gameStore.inviteUrl ? <InviteLink /> : !isJoin ? <div>...LOADING</div> : <button onClick={inviteGame}>В игру</button>} 
+      {{
+        'invitationLink': <InviteLink />,
+        'loading': <div>...LOADING</div>,
+        'inviteGame': <button onClick={inviteGame}>В игру</button>
+      }[show]}
     </LobbyWrapper>
   )
 

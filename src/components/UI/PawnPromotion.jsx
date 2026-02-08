@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import AppStore from '../../store/AppStore';
 import { COLORS, figure } from '../../constants/gameInitial';
-import CapturedFigure from './CapturedFigure';
+import CapturedFigure from '../boardElements/CapturedFigure';
 import closeIcon from "../../assets/icons/close-x.svg"
 
 const PromotionContainer = styled.div`
@@ -14,8 +14,9 @@ width: ${props => props.$width}px;
 height: ${props => props.$height}px;
 display: flex;
 flex-direction: column;
-border: 1px #666 solid;
-background-color: rgba(255, 255, 255, 1);
+border: 1px ${COLORS.neutral} solid;
+// background-color: rgba(255, 255, 255, 1);
+background-color: ${COLORS.background};
 z-index: 150;
 box-shadow: 5px 5px 10px rgba(0, 0, 0, .5);
 `
@@ -45,7 +46,7 @@ justify-content: space-around;
 align-items: center;
 // background-color: rgba(255, 255, 255, .8);
 // padding: 10px;
-border-top: 1px #999 solid;
+// border-top: 1px #999 solid;
 `
 const FigureWrapper = styled.div`
 display: flex;

@@ -34,7 +34,6 @@ const FiguresContainer = memo(observer(({
   isMoving
 }) => {
 
-  // console.log('BoardElements', AppStore.status)
 
 
   const figures = useMemo(() => {
@@ -63,7 +62,7 @@ const FiguresContainer = memo(observer(({
   }, [
     AppStore.board.cellSize,
     AppStore.whiteBottom,
-    AppStore.status,
+    AppStore.statusMessage,
     AppStore.chess
   ])
 

@@ -69,6 +69,7 @@ const ChessBoard = observer(() => {
     }
 
     AppStore.loadGameFromLocalStorage()
+    AppStore.loadStatusFromLocalStorage()
     AppStore.loadCapturedFiguresFromLocalStorage()
     AppStore.setSettingFromLocalStorage()
 

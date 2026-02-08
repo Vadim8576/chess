@@ -5,6 +5,8 @@ import closeIcon from "../../assets/icons/close-x.svg"
 import { COLORS } from "../../constants/gameInitial";
 import gameStore from "../../store/gameStore";
 import { observer } from "mobx-react-lite";
+import AppStore from "../../store/AppStore";
+import { useParams } from "react-router";
 
 const InviteLinkContainer = styled.div`
 position: relative;
@@ -70,6 +72,8 @@ height: 1.5rem;
 const InviteLink = observer(() => {
   const [isCopied, setIsCopied] = useState(false)
 
+  const { gameId } = useParams()
+
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(gameStore.inviteUrl)
@@ -81,15 +85,21 @@ const InviteLink = observer(() => {
     }
   }
 
+  const cancelGame = () => {
+    gameStore.removeGame(gameId)
+  }
+
+
+
   return (
     <InviteLinkContainer>
       <Header>
         <span>Ссылка-приглашение:</span>
         <div style={{display: 'flex', flexDirection: 'row'}}>
-          <CopyIconWrapper onClick={copyToClipboard} $isCopied={isCopied}>
+          <CopyIconWrapper onPointerDown={copyToClipboard} $isCopied={isCopied}>
             <Icon src={copyIcon} alt='copy' />
           </CopyIconWrapper>
-          <CopyIconWrapper>
+          <CopyIconWrapper onPointerDown={cancelGame}>
             <Icon src={closeIcon} alt='close' />
           </CopyIconWrapper>
         </div>

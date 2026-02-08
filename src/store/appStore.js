@@ -30,7 +30,8 @@ class AppStore {
   historyMoves = []
   historyList = []
   whiteBottom = true // true | false
-  status = ''
+  statusMessage = ''
+  gameStatus = 'playing'
 
   lastMoveCells = []
   possibleMoves = []
@@ -41,11 +42,6 @@ class AppStore {
   constructor() {
     makeAutoObservable(this)
   }
-
-
-
-
-
 
 
 
@@ -65,15 +61,12 @@ class AppStore {
       return
     }
 
-
     if (move.isPromotion()) {
       console.log(`Превращение: ${move.from} → ${move.to} (в ${move.promotion})`)
       this.setPromotion(moveSquares)
       return
     }
 
-
-    // const move = this.chess.move(moveSquares)
 
     // if (move && move.flags.includes('e')) {
     if (move && move.isEnPassant()) {
@@ -86,15 +79,7 @@ class AppStore {
 
     }
 
-
-
-    // AppStore.updateHistoryMoves(moveSquares)
-    // AppStore.updateHistoryList()
-
-
-
     this.makeMove(moveSquares)
-
 
     if (this.gameType === 'local') {
       this.saveGameToLocalStorage()
@@ -136,6 +121,7 @@ class AppStore {
     if (this.chess.inCheck() || this.chess.isCheckmate()) {
       const player = this.chess.turn() // чей сейчас ход
       const squareArr = this.chess.findPiece({ type: 'k', color: player }) // ищем клетку на котором король
+      console.log('Клетка с королем =', squareArr)
 
       if (squareArr.length !== 1) return
 
@@ -168,14 +154,17 @@ class AppStore {
   initVariables = action(() => {
     this.historyMoves = []
     this.historyList = []
-    this.status = ''
+    this.statusMessage = ''
   })
 
   loadGame(fen) {
-    this.chess = new Chess()
+    // this.chess = new Chess()
     this.chess.load(fen)
     gameStatus(this)
-    console.log('Создан новый объект Chess, в него загружен fen ', fen)
+    // console.log('Создан новый объект Chess, в него загружен fen ', fen)
+    console.log('загружен fen ', fen)
+    this.setLastMoveCells([])
+    this.updateKingCheckHighlight()
   }
 
   restartGame = action(() => {
@@ -185,6 +174,8 @@ class AppStore {
       this.initVariables()
       this.removeHightLightCells()
       this.resetCapturedFigures()
+      this.setGameStatus('playing')
+      localStorage.removeItem('LocalGameStatus')
       gameStatus(this)
     } catch (e) {
       console.log('Не удалось удалить fen из localStorage: ', e)
@@ -195,8 +186,14 @@ class AppStore {
     this.board = { ...this.board, ...board }
   })
 
-  setStatus = action((status) => {
-    this.status = status
+  setStatusMessage = action((statusMessage) => {
+    this.statusMessage = statusMessage
+  })
+
+
+  setGameStatus = action((status) => {
+    this.gameStatus = status
+    this.saveStatusLocalStorage(status)
   })
 
 
@@ -295,6 +292,32 @@ class AppStore {
 
 
 
+
+  saveStatusLocalStorage(gameStatus) {
+    try {
+      localStorage.setItem('LocalGameStatus', JSON.stringify(gameStatus))
+    } catch (e) {
+      console.log('Не удалось сохранить статус в localStorage: ', e)
+    }
+  }
+
+
+  loadStatusFromLocalStorage = action(() => {
+
+    const gameStatus = localStorage.getItem('LocalGameStatus')
+
+    console.log('Статус из локал стораж ', gameStatus)
+
+    if (gameStatus === 'finished') {
+      this.setGameStatus('finished')
+      this.setStatusMessage('Игра завершена!')
+    }
+
+  })
+
+
+
+
   saveGameToLocalStorage() {
     const fen = this.chess.fen()
     try {
@@ -306,8 +329,13 @@ class AppStore {
 
   loadGameFromLocalStorage = action(() => {
     const fen = localStorage.getItem('ChessFen')
-    // if (fen) this.loadGame(JSON.parse(fen))
-    if (fen) this.loadGame('rnbqkbnr/p1P1pppp/8/8/8/8/PPp1PPPP/RNBQKBNR b KQkq - 0 1')
+    if (fen) this.loadGame(JSON.parse(fen))
+
+    const promotion = 'rnbqkbnr/p1P1pppp/8/8/8/8/PPp1PPPP/RNBQKBNR b KQkq - 0 1'
+    const pat = '7k/5Q2/6K1/8/8/8/8/8 b - - 19 10'
+
+    // if (fen) this.loadGame(fen)
+    // if (fen) this.loadGame(pat)
   })
 
   saveSettingToLocalStorage(setting) {

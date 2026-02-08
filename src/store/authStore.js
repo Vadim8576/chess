@@ -6,7 +6,9 @@ import { fb } from "../api/firebase"
 
 class Auth {
 
-  userId = null
+  creatorUid = null
+  joinerUid = null
+
 
   // newUserCreated = 'no' // 'yes', 'no' или 'error'
   // isLogIn = false
@@ -18,8 +20,12 @@ class Auth {
 
 
 
-  setUserId = action((id) => {
-    this.userId = id
+  setCreatorUid = action((id) => {
+    this.creatorUid = id
+  })
+
+  setJoinerUid = action((id) => {
+    this.joinerUid = id
   })
 
 

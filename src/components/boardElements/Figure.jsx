@@ -86,9 +86,9 @@ const Figure = memo(observer(({
 
 	return (
 		<ImgWrapper
-			$pointerEvents={pointerEvents}
+			$pointerEvents={AppStore.gameStatus === 'playing' ? pointerEvents : 'none'}
 			onPointerDown={onPointerDown}
-			$cursor={'grab'}
+			$cursor={AppStore.gameStatus === 'playing' && 'grab'}
 			$width={cellSize}
 			$height={cellSize}
 			$top={top}

@@ -14,12 +14,18 @@ export const useFigureDrag = (
   setDraggedFigure,
   setIsMoving
 ) => {
+
   const [isDragging, setIsDragging] = useState(false)
   const [grabCell, setGrabCell] = useState(null)
   const [position, setPosition] = useState(null)
   const [highlightedCell, setHighlightedCell] = useState({})
 
   const handlePointerDown = useCallback((e, currentFigureSquare) => {
+
+    console.log(AppStore.gameStatus)
+
+    if (AppStore.gameStatus === 'finished') return
+
     const startX = AppStore.board.x
     const startY = AppStore.board.y
     const x = e.clientX - startX
@@ -194,11 +200,11 @@ export const useFigureDrag = (
 
 
     console.log(capturedFigure)
-    
 
 
 
-    AppStore.checkingMove(capturedFigure, {startSquare, finishSquare}) // Сделать ход
+
+    AppStore.checkingMove(capturedFigure, { startSquare, finishSquare }) // Сделать ход
 
     // // если присутствует flags 'e', произошло взятие на проходе
     // if (move && move.flags.includes('e')) {

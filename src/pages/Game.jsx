@@ -9,7 +9,7 @@ import Widget from '../widgets/Widget';
 import GameStatus from '../widgets/GameStatus';
 import gameStore from '../store/gameStore';
 import { observer } from 'mobx-react-lite';
-import PawnPromotion from '../components/boardElements/PawnPromotion';
+import PawnPromotion from '../components/UI/PawnPromotion';
 
 
 const PageContainer = styled.div`

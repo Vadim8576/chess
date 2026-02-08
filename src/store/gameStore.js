@@ -25,7 +25,7 @@ class GameStore {
 
 
   initAuthListener() {
-    fb.initAuthListener(this.setIsLoading, authStore.setUserId)
+    // fb.initAuthListener(this.setIsLoading, authStore.setUserId)
   }
 
   
@@ -43,14 +43,14 @@ class GameStore {
 
   setGameData = action((data) => {
     this.gameData = { ...data }
-    console.log(this.gameData)
+    // console.log(this.gameData)
 
     this.loadGame(this.gameData.boardState)
   })
 
   // Оставить стерлочную функцию, чтобы не терялся контекст
   setIsLoading = action((isLoading) => {
-    console.log('this.isLoading = ', this.isLoading)
+    // console.log('this.isLoading = ', this.isLoading)
     this.isLoading = isLoading
   })
 
@@ -61,6 +61,7 @@ class GameStore {
     const gameId = await fb.createFastOnlineGame(fen)
     this.setCurrentGameId(gameId)
     this.setFastOnlineGameId(gameId)
+    this.setInviteUrl(`${window.location.origin}/fastgame/${gameId}`)
   })
 
   setCurrentGameId = action((gameId) => {
@@ -108,6 +109,14 @@ class GameStore {
     const list = await fb.getAllGamesId()
     this.setFastGameList(list)
   })
+
+
+  async getCreatorId(gameId) {
+    return await fb.getCreatorId(gameId)
+  }
+
+
+
 
 }
 

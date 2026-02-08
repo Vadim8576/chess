@@ -7,6 +7,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   getFirestore,
   onSnapshot,
@@ -27,13 +28,13 @@ export const db = getFirestore(app)
 
 export const fb = {
 
-  initAuthListener: (setIsLoading, setUserId) => {
-    setIsLoading(true)
-    auth.onAuthStateChanged((user) => {
-      setUserId(user.uid)
-      setIsLoading(false)
-    })
-  },
+  // initAuthListener: (setIsLoading, setUserId) => {
+  //   setIsLoading(true)
+  //   auth.onAuthStateChanged((user) => {
+  //     setUserId(user.uid)
+  //     setIsLoading(false)
+  //   })
+  // },
 
   createFastOnlineGame: async (initialBoardFen) => {
     const user = auth.currentUser
@@ -102,7 +103,7 @@ export const fb = {
           }
 
           const gameData = docSnapshot.data()
-          console.log("Current game data:", gameData)
+          // console.log("Current game data:", gameData)
           setIsLoading(false)
           setGameData(gameData)
 
@@ -156,7 +157,7 @@ export const fb = {
 
 
   removeGame: (id) => {
-    
+
     const docRef = doc(db, 'games', id)
     deleteDoc(docRef)
       .then(() => {
@@ -167,6 +168,23 @@ export const fb = {
       })
   },
 
+  getCreatorId: async (gameId) => {
+    const gameRef = doc(db, "games", gameId) // Создаем ссылку на документ
+    const gameSnap = await getDoc(gameRef) // Получаем документ
+
+    if (gameSnap.exists()) {
+      // Документ существует, теперь вы можете получить его данные
+      const gameData = gameSnap.data()
+      const creatorUid = gameData.creatorUid
+      console.log("creatorUid из документа:", creatorUid)
+      return creatorUid
+    } else {
+      // Документ не найден
+      console.log("Документ игры не найден!")
+    }
+
+    return null
+  },
 
 
 

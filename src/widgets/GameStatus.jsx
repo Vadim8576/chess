@@ -39,7 +39,7 @@ const GameStatus = observer(() => {
 				?
 				'...'
 				:
-				<>{AppStore.status}</>
+				<>{AppStore.statusMessage}</>
 			}
 		</Status>
 	)

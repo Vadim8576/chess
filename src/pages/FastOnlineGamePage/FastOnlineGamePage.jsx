@@ -22,8 +22,7 @@ const FastOnlineGamePage = observer(() => {
 
 	useEffect(() => {
 		let unsubscribe
-		if (gameId && authStore.userId) {
-			console.log('setCurrentGameId(gameId) gameId = ', gameId)
+		if (gameId && authStore.creatorUid || authStore.joinerUid) {
 			gameStore.setCurrentGameId(gameId)
 			unsubscribe = gameStore.gameSubscribe(gameId)
 		}
@@ -33,8 +32,9 @@ const FastOnlineGamePage = observer(() => {
 				unsubscribe()
 			}
 		};
-	}, [authStore.userId, gameId])
+	}, [gameId, authStore.creatorUid, authStore.joinerUid])
 
+	console.log('Статус игры: ', gameStore?.gameData?.status)
 
 
 

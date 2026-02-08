@@ -44,6 +44,8 @@ font-size: 2.2vmin;
 cursor: pointer;
 margin-bottom: 10px;
 // border-radius: 5px;
+color: ${COLORS.background};
+background-color: ${COLORS.secondary};
 &:hover {
   background-color: ${COLORS.errorCell};
 }
@@ -78,20 +80,19 @@ const Home = observer(() => {
 
 
   useEffect(() => {
+    if (!gameStore.inviteUrl) return
     setIsLoading(false)
-    if (!gameStore.currentGameId || gameStore.currentGameId === 'local') {
-      gameStore.setInviteUrl(null)
-    } else {
-      gameStore.setInviteUrl(`${window.location.origin}/fastgame/${gameStore.currentGameId}`)
-    }
-  }, [gameStore.currentGameId])
+  }, [gameStore.inviteUrl])
 
 
 
 
-  const localGame = () => navigate('/local')
+  const localGame = () => {
+  
+    navigate('/local')
+  }
 
-  const inviteGame = () => {
+  const inviteGame = async () => {
     // setInviteUrl(null)
     // navigate(`/fastgame/${gameStore.fastOnlineGameId}`)
     navigate(`/fastgame/${gameStore.fastOnlineGameId}`)
@@ -122,7 +123,7 @@ const Home = observer(() => {
           Локальная игра
         </MenuButton>
         <MenuButton
-          onClick={(!isLoading && gameStore.inviteUrl) ? () => inviteGame()  : () => createFastGame()}
+          onClick={(!isLoading && gameStore.inviteUrl) ? () => inviteGame() : () => createFastGame()}
         >
           {/* {(isLoading !== null && !inviteUrl) && isLoading ? <Spinner scale={1} /> : 'Быстрая игра по сети'} */}
           <CreateButtonInside isLoading={isLoading} />

@@ -7,6 +7,7 @@ import Footer from "./pages/Footer";
 import RateGamePage from "./pages/RateGamePage/RateGamePage";
 import GameLobby from "./pages/GameLobby";
 import GameList from "./pages/GameList";
+import { COLORS } from "./constants/gameInitial";
 
 
 
@@ -17,7 +18,8 @@ const Layout = () => {
       display: 'flex',
       flexDirection: 'column',
       width: '100%',
-      height: '100%'
+      height: '100%',
+      backgroundColor: COLORS.background
     }}>
       <Header />
       <main style={{

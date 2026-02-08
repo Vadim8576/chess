@@ -15,13 +15,12 @@ export const useAuth = () => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // Пользователь вошел в систему (анонимно или иным способом)
-        authStore.setUserId(user.uid)
+        authStore.setCreatorUid(user.uid)
         setIsAuth(true)
         console.log("Пользователь вошел в систему:", user.uid)
       } else {
         // Пользователь вышел из системы
-        setUserId(null)
-        authStore.setUserId(null)
+        authStore.setCreatorUid(null)
         console.log("Пользователь вышел из системы.")
         // Попытка анонимного входа, если пользователь не вошел
         signInAnonymously(auth)
