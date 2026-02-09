@@ -47,7 +47,7 @@ margin-bottom: 10px;
 color: ${COLORS.background};
 background-color: ${COLORS.secondary};
 &:hover {
-  background-color: ${COLORS.errorCell};
+  background-color: ${COLORS.primary};
 }
 `
 

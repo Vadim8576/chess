@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import AppStore from '../../store/AppStore';
 
 
 const RateGamePage = () => {
