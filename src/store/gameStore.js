@@ -14,6 +14,8 @@ class GameStore {
   // fastOnlineGameId = null
   // fastOnlineGameId = '65NH7uPgvKw44ft4euD4'
 
+  yourColor = null
+
   gameData = null
   inviteLink = null
   isLoading = true
@@ -42,12 +44,42 @@ class GameStore {
     this.isPlay = isPlay
   })
 
+  setYourColor = action((color) => {
+    this.yourColor = color
+  })
+
   setGameData = action((data) => {
     this.gameData = { ...data }
     // console.log(this.gameData)
 
     AppStore.loadGame(this.gameData.boardState)
     // this.loadGame(this.gameData.boardState)
+
+
+    // console.log('------------------')
+    // console.log('creator id', authStore.creatorUid)
+    // console.log('joiner id', authStore.joinerUid)
+    // console.log('id black player', this.gameData.blackPlayerUid)
+    // console.log('id white player', this.gameData.whitePlayerUid)
+    // console.log('------------------')
+
+    // Определяем цвет текущего игрока
+    if (authStore.creatorUid) {
+      if (authStore.creatorUid === this.gameData.whitePlayerUid) {
+        this.setYourColor('w')
+      } else if (authStore.creatorUid === this.gameData.blackPlayerUid) {
+        this.setYourColor('b')
+        this.yourColor = 'b'
+      }
+    } else {
+      if (authStore.joinerUid === this.gameData.whitePlayerUid) {
+        this.setYourColor('w')
+      } else if (authStore.joinerUid === this.gameData.blackPlayerUid) {
+        this.setYourColor('b')
+      }
+    }
+
+
 
 
     // не подсвечиваем последний сетевой ход, если сейчас локальная игра
@@ -61,9 +93,9 @@ class GameStore {
 
     // console.log(this.gameData.lastMove)
     // console.log(toJS(first), toJS(second))
-    console.log(toJS(lastMoveCells))
+    // console.log(toJS(lastMoveCells))
 
-    
+
     AppStore.setLastMoveCells(toJS(lastMoveCells))
   })
 

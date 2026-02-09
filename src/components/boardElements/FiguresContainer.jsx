@@ -5,6 +5,7 @@ import AppStore from "../../store/AppStore";
 import Figure from "./Figure"
 import { getSrc } from "../../utils/getSrc";
 import { files, ranks } from "../../constants/gameInitial";
+import gameStore from "../../store/gameStore";
 
 
 const ElementsWrapper = styled.div`
@@ -37,6 +38,8 @@ const FiguresContainer = memo(observer(({
 
 
   const figures = useMemo(() => {
+
+
     if (!AppStore.chess) return
     const turn = AppStore.chess.turn()
     const board = AppStore.chess.board()
@@ -53,8 +56,12 @@ const FiguresContainer = memo(observer(({
           id: `${file}_${rank}`,
           top: AppStore.board.cellSize * y,
           left: AppStore.board.cellSize * x,
-          pointerEvents: (currentFigure.color !== turn) ? 'none' : 'auto'
+          pointerEvents: AppStore.gameType === 'local'
+            ? (currentFigure.color !== turn ? 'none' : 'auto')
+            : (currentFigure.color !== turn || gameStore.yourColor !== turn ? 'none' : 'auto')
         }
+
+        console.log(state)
         figure.push(state)
       })
     })

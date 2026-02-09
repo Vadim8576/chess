@@ -1,7 +1,7 @@
 export const gameStatus = (AppStore) => {
   if(!AppStore.chess) return
   const player = AppStore.chess.turn()
-  console.log('gameStatus!!!!!!!!!!!!!!!!', player)
+  // console.log('gameStatus!!!!!!!!!!!!!!!!', player)
   AppStore.setStatusMessage(`Ход ${player === 'w' ? 'белых' : 'чёрных'}!`)
 
   if (AppStore.chess.inCheck()) {

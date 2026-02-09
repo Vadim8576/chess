@@ -97,11 +97,11 @@ export const fb = {
           const isFromCache = docSnapshot.metadata.fromCache;
           const hasPendingWrites = docSnapshot.metadata.hasPendingWrites;
 
-          console.log(`Получен Snapshot: isFromCache=${isFromCache}, hasPendingWrites=${hasPendingWrites}`);
+          // console.log(`Получен Snapshot: isFromCache=${isFromCache}, hasPendingWrites=${hasPendingWrites}`);
 
 
           if (!isFromCache && !hasPendingWrites) {
-            console.log('Данные получены с сервера и готовы к отображению.')
+            console.log('Данные получены')
           }
 
           const gameData = docSnapshot.data()

@@ -28,13 +28,13 @@ const GameLobby = observer(() => {
   const { isJoin, joinGame } = useJoinGame(gameId)
   
 
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
 
   useEffect(() => {
     AppStore.setCurrentPage('lobby')
-    console.log(gameId, isJoin, gameStore.inviteLink)
-    console.log('user id = ', authStore.creatorUid)
+    // console.log(gameId, isJoin, gameStore.inviteLink)
+    // console.log('user id = ', authStore.creatorUid)
 
     // Если authStore.userId !== null - это создатель игры, либо приглашенный игрок уже подключился, не присоединяемя к игре (joinGame)
     if (!gameId || isJoin || authStore.creatorUid !== null) return

@@ -51,8 +51,8 @@ class AppStore {
     const { startSquare, finishSquare } = moveSquares
     const possibleMoves = this.chess.moves({ verbose: true })
 
-    console.log(startSquare, finishSquare)
-    console.log(toJS(possibleMoves))
+    // console.log(startSquare, finishSquare)
+    // console.log(toJS(possibleMoves))
 
     const move = possibleMoves.find(m => m.from === startSquare && m.to === finishSquare)
 
@@ -166,7 +166,7 @@ class AppStore {
   })
 
   loadGame(fen) {
-    this.chess = new Chess()
+    // this.chess = new Chess()
     this.chess.load(fen)
     gameStatus(this)
     // console.log('Создан новый объект Chess, в него загружен fen ', fen)
@@ -210,7 +210,7 @@ class AppStore {
     this.lastMoveCells = cells
 
 
-    console.log(toJS(this.lastMoveCells))
+    // console.log(toJS(this.lastMoveCells))
   })
 
   setPossibleMoves = action((cells) => {
