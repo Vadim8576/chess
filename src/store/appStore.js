@@ -166,7 +166,7 @@ class AppStore {
   })
 
   loadGame(fen) {
-    // this.chess = new Chess()
+    this.chess = new Chess()
     this.chess.load(fen)
     gameStatus(this)
     // console.log('Создан новый объект Chess, в него загружен fen ', fen)
@@ -373,8 +373,14 @@ class AppStore {
   })
 
   rotateBoard = action(() => {
-    this.whiteBottom = !this.whiteBottom
+    const whiteBottom = !this.whiteBottom
+    this.setWhiteBottom(whiteBottom)
     this.saveSettingToLocalStorage({ whiteBottom: this.whiteBottom })
+  })
+  
+  setWhiteBottom = action((bool) => {
+    this.whiteBottom = bool
+    // this.saveSettingToLocalStorage({ whiteBottom: this.whiteBottom })
   })
 
 

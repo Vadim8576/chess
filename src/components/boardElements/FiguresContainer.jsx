@@ -58,10 +58,8 @@ const FiguresContainer = memo(observer(({
           left: AppStore.board.cellSize * x,
           pointerEvents: AppStore.gameType === 'local'
             ? (currentFigure.color !== turn ? 'none' : 'auto')
-            : (currentFigure.color !== turn || gameStore.yourColor !== turn ? 'none' : 'auto')
+            : (currentFigure.color !== turn || gameStore.currentPlayerColor !== turn ? 'none' : 'auto')
         }
-
-        console.log(state)
         figure.push(state)
       })
     })

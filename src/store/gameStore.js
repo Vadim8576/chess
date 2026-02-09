@@ -14,7 +14,7 @@ class GameStore {
   // fastOnlineGameId = null
   // fastOnlineGameId = '65NH7uPgvKw44ft4euD4'
 
-  yourColor = null
+  currentPlayerColor = null
 
   gameData = null
   inviteLink = null
@@ -44,8 +44,8 @@ class GameStore {
     this.isPlay = isPlay
   })
 
-  setYourColor = action((color) => {
-    this.yourColor = color
+  setCurrentPlayerColor = action((color) => {
+    this.currentPlayerColor = color
   })
 
   setGameData = action((data) => {
@@ -66,16 +66,19 @@ class GameStore {
     // Определяем цвет текущего игрока
     if (authStore.creatorUid) {
       if (authStore.creatorUid === this.gameData.whitePlayerUid) {
-        this.setYourColor('w')
+        this.setCurrentPlayerColor('w')
+        AppStore.setWhiteBottom(true)
       } else if (authStore.creatorUid === this.gameData.blackPlayerUid) {
-        this.setYourColor('b')
-        this.yourColor = 'b'
+        this.setCurrentPlayerColor('b')
+        AppStore.setWhiteBottom(false)
       }
     } else {
       if (authStore.joinerUid === this.gameData.whitePlayerUid) {
-        this.setYourColor('w')
+        this.setCurrentPlayerColor('w')
+        AppStore.setWhiteBottom(true)
       } else if (authStore.joinerUid === this.gameData.blackPlayerUid) {
-        this.setYourColor('b')
+        this.setCurrentPlayerColor('b')
+        AppStore.setWhiteBottom(false)
       }
     }
 
