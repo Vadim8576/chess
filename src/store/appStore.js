@@ -61,11 +61,7 @@ class AppStore {
       return
     }
 
-    if (move.isPromotion()) {
-      console.log(`Превращение: ${move.from} → ${move.to} (в ${move.promotion})`)
-      this.setPromotion(moveSquares)
-      return
-    }
+
 
 
     // if (move && move.flags.includes('e')) {
@@ -75,24 +71,30 @@ class AppStore {
         type: 'p',
         color: move.color === 'w' ? 'b' : 'w'
       }
-
-
     }
 
-    this.makeMove(moveSquares)
+    const moveSquaresWithCapturedFigure = { ...moveSquares, capturedFigure }
+
+    if (move.isPromotion()) {
+      console.log(`Превращение: ${move.from} → ${move.to} (в ${move.promotion})`)
+      this.setPromotion(moveSquaresWithCapturedFigure)
+      return
+    }
+
+    this.makeMove(moveSquaresWithCapturedFigure)
 
   })
 
 
 
   makeMove = action((moveSquares, promoteTo = undefined) => {
-    const { startSquare, finishSquare } = moveSquares
+    const { startSquare, finishSquare, capturedFigure } = moveSquares
 
     console.log('Ход')
     this.chess.move({
       from: startSquare,
       to: finishSquare,
-      promotion: promoteTo // 'q', 'r', 'b' или 'n'
+      promotion: promoteTo // 'q', 'r', 'b', 'n' || undefined
     })
 
     const lastMove = `${startSquare}${finishSquare}`
@@ -109,6 +111,7 @@ class AppStore {
       }
       return
     }
+
 
     gameStore.updateBoard(lastMove) // обновить доску в Firebase
   })
@@ -163,7 +166,7 @@ class AppStore {
   })
 
   loadGame(fen) {
-    // this.chess = new Chess()
+    this.chess = new Chess()
     this.chess.load(fen)
     gameStatus(this)
     // console.log('Создан новый объект Chess, в него загружен fen ', fen)
@@ -173,15 +176,15 @@ class AppStore {
   }
 
   restartGame = action(() => {
+    localStorage.removeItem('ChessFen')
+    this.chess = new Chess()
+    this.initVariables()
+    this.removeHightLightCells()
+    this.resetCapturedFigures()
+    this.setGameStatus('playing')
+    gameStatus(this)
     try {
-      localStorage.removeItem('ChessFen')
-      this.chess = new Chess()
-      this.initVariables()
-      this.removeHightLightCells()
-      this.resetCapturedFigures()
-      this.setGameStatus('playing')
       localStorage.removeItem('LocalGameStatus')
-      gameStatus(this)
     } catch (e) {
       console.log('Не удалось удалить fen из localStorage: ', e)
     }
@@ -338,10 +341,10 @@ class AppStore {
     const fen = localStorage.getItem('ChessFen')
     if (fen) this.loadGame(JSON.parse(fen))
 
-    const promotion = 'rnbqkbnr/p1P1pppp/8/8/8/8/PPp1PPPP/RNBQKBNR b KQkq - 0 1'
-    const pat = '7k/5Q2/6K1/8/8/8/8/8 b - - 19 10'
+    // const promotion = 'rnbqkbnr/pp1P1ppp/8/8/8/8/PPp1PPPP/RNBQKBNR w KQkq - 0 1'
+    // const pat = '7k/5Q2/6K1/8/8/8/8/8 b - - 19 10'
 
-    // if (fen) this.loadGame(fen)
+    // if (promotion) this.loadGame(promotion)
     // if (fen) this.loadGame(pat)
   })
 

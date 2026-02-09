@@ -46,11 +46,12 @@ class GameStore {
     this.gameData = { ...data }
     // console.log(this.gameData)
 
-    this.loadGame(this.gameData.boardState)
+    AppStore.loadGame(this.gameData.boardState)
+    // this.loadGame(this.gameData.boardState)
 
 
-
-    if (!this.gameData.lastMove) return
+    // не подсвечиваем последний сетевой ход, если сейчас локальная игра
+    if (!this.gameData.lastMove || AppStore.gameType === 'local') return
 
     const first = this.gameData.lastMove.slice(0, 2)
     const second = this.gameData.lastMove.slice(2, 4)
@@ -62,7 +63,7 @@ class GameStore {
     // console.log(toJS(first), toJS(second))
     console.log(toJS(lastMoveCells))
 
-
+    
     AppStore.setLastMoveCells(toJS(lastMoveCells))
   })
 
@@ -92,9 +93,9 @@ class GameStore {
     console.log('fastOnlineGame Id = ', this.fastOnlineGameId)
   })
 
-  loadGame = action((fen) => {
-    AppStore.loadGame(fen)
-  })
+  // loadGame = action((fen) => {
+  //   AppStore.loadGame(fen)
+  // })
 
   gameSubscribe = action((gameId) => {
     this.setIsLoading(true)

@@ -25,10 +25,12 @@ const FastOnlineGamePage = observer(() => {
 		if (gameId && authStore.creatorUid || authStore.joinerUid) {
 			gameStore.setCurrentGameId(gameId)
 			unsubscribe = gameStore.gameSubscribe(gameId)
+			console.log('FastOnlineGamePage - Подписка на игру')
 		}
 
 		return () => {
 			if (unsubscribe) {
+				console.log('FastOnlineGamePage - Отписка от игры')
 				unsubscribe()
 			}
 		};

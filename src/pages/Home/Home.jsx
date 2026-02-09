@@ -89,7 +89,7 @@ const Home = observer(() => {
 
 
   const localGame = () => {
-  
+
     navigate('/local')
   }
 
@@ -124,7 +124,11 @@ const Home = observer(() => {
           Локальная игра
         </MenuButton>
         <MenuButton
-          onClick={(!isLoading && gameStore.inviteLink) ? () => inviteGame() : () => createFastGame()}
+          onClick={
+            (!isLoading && gameStore.inviteLink)
+              ? () => inviteGame()
+              : () => createFastGame()
+          }
         >
           {/* {(isLoading !== null && !inviteLink) && isLoading ? <Spinner scale={1} /> : 'Быстрая игра по сети'} */}
           <CreateButtonInside isLoading={isLoading} />

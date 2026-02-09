@@ -205,7 +205,7 @@ export const useFigureDrag = (
     let capturedFigure = AppStore.chess.board()[row][col] // фигура на клетке
 
 
-    console.log(capturedFigure)
+    console.log('capturedFigure = ', capturedFigure)
 
 
 

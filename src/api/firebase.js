@@ -113,10 +113,11 @@ export const fb = {
 
           console.log("Документ был удален или никогда не существовал!")
         }
-        return unsubscribe
+        
       }, (error) => {
         console.error("Не удалось прослушать документ:", error)
       })
+      return unsubscribe
     }
   },
 
