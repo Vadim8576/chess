@@ -4,6 +4,7 @@ import app from './firebaseConfig';
 import { getAuth, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import {
   addDoc,
+  arrayUnion,
   collection,
   deleteDoc,
   doc,
@@ -51,12 +52,13 @@ export const fb = {
           status: 'waiting', // "waiting" (ожидание второго игрока), "playing", "finished", "cancelled"
           whitePlayerUid: creatorColor === 'w' ? user.uid: null,
           blackPlayerUid: creatorColor === 'w' ? null : user.uid,
-          isTimed: false,
-          timeControl: null,
+          // isTimed: false,
+          // timeControl: null,
           whiteTimeLeft: null,
           blackTimeLeft: null,
           boardState: initialBoardFen,
           // currentTurn: 'white',
+          lastMove: null,
           movesHistory: [],
           lastMoveTimestamp: new Date(),
           winnerUid: null,
@@ -119,7 +121,7 @@ export const fb = {
   },
 
 
-  updateBoard: (gameId, newBoardState) => {
+  updateBoard: (gameId, newBoardState, lastMove) => {
     const user = auth.currentUser
     console.log('gameId', gameId)
     console.log('user.uid', user.uid)
@@ -127,13 +129,15 @@ export const fb = {
       const gameRef = doc(db, "games", gameId)
 
       updateDoc(gameRef, {
-        boardState: newBoardState
+        boardState: newBoardState,
+        lastMove,
+        movesHistory: arrayUnion(lastMove)
       })
         .then(() => {
-          console.log("Поле boardState успешно обновлено!")
+          console.log("Поля успешно обновлены!")
         })
         .catch((error) => {
-          console.error("Ошибка при обновлении boardState:", error)
+          console.error("Ошибка при обновлении полей:", error)
         });
     }
 

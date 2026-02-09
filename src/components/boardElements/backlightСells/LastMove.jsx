@@ -28,6 +28,8 @@ pointer-events: none;
 
 
 const LastMove = observer(({ cell }) => {
+
+  console.log(cell)
   
   const colTemp = cell.col
   const rowTemp = cell.row

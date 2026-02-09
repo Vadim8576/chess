@@ -70,12 +70,12 @@ export const useFigureDrag = (
 
     setGrabCell({ col, row })
 
-    AppStore.setLastMoveCells([{
-      cell: {
+    AppStore.setLastMoveCells([
+      {
         col: col,
         row: row
       }
-    }])
+    ])
 
     setHighlightedCell({
       cell: {
@@ -188,9 +188,15 @@ export const useFigureDrag = (
 
 
     // Успешный ход------------------------------------------------------
+
+    // AppStore.setLastMoveCells([
+    //   { cell: { col: startCell.col, row: startCell.row } },
+    //   { cell: { col: col, row: row } }
+    // ])
+
     AppStore.setLastMoveCells([
-      { cell: { col: startCell.col, row: startCell.row } },
-      { cell: { col: col, row: row } }
+      { col: startCell.col, row: startCell.row },
+      { col: col, row: row }
     ])
 
     AppStore.setPossibleMoves([])

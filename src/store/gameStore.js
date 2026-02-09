@@ -1,7 +1,8 @@
-import { action, makeAutoObservable } from "mobx";
+import { action, makeAutoObservable, toJS } from "mobx";
 import { fb } from "../api/firebase"
 import authStore from "./authStore";
 import AppStore from "./AppStore";
+import { squareToIndices } from "../utils/squareToIndices";
 
 
 
@@ -28,11 +29,11 @@ class GameStore {
     // fb.initAuthListener(this.setIsLoading, authStore.setUserId)
   }
 
-  
+
 
 
   setInviteUrl = action((url) => {
-    
+
     this.inviteLink = url === null ? null : url
     // console.log(this.gameData)
   })
@@ -46,6 +47,23 @@ class GameStore {
     // console.log(this.gameData)
 
     this.loadGame(this.gameData.boardState)
+
+
+
+    if (!this.gameData.lastMove) return
+
+    const first = this.gameData.lastMove.slice(0, 2)
+    const second = this.gameData.lastMove.slice(2, 4)
+    const from = squareToIndices(first)
+    const to = squareToIndices(second)
+    const lastMoveCells = [{ ...from }, { ...to }]
+
+    // console.log(this.gameData.lastMove)
+    // console.log(toJS(first), toJS(second))
+    console.log(toJS(lastMoveCells))
+
+
+    AppStore.setLastMoveCells(toJS(lastMoveCells))
   })
 
   // Оставить стерлочную функцию, чтобы не терялся контекст
@@ -91,9 +109,9 @@ class GameStore {
   //   return fb.gameSubscribe('65NH7uPgvKw44ft4euD4', this.loadGame, this.setIsLoading)
   // }
 
-  updateBoard() {
+  updateBoard(lastMove) {
     const newBoardState = AppStore.chess.fen()
-    fb.updateBoard(this.currentGameId, newBoardState)
+    fb.updateBoard(this.currentGameId, newBoardState, lastMove)
   }
 
   removeGame(id) {

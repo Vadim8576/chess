@@ -81,14 +81,6 @@ class AppStore {
 
     this.makeMove(moveSquares)
 
-    if (this.gameType === 'local') {
-      this.saveGameToLocalStorage()
-      if (capturedFigure != null || capturedFigure != undefined) {
-        this.addCapturedFigures(capturedFigure.color, `${capturedFigure.type}${capturedFigure.color}`)
-      }
-      return
-    }
-    gameStore.updateBoard() // обновить доску в Firebase
   })
 
 
@@ -103,9 +95,22 @@ class AppStore {
       promotion: promoteTo // 'q', 'r', 'b' или 'n'
     })
 
+    const lastMove = `${startSquare}${finishSquare}`
+
     this.updateKingCheckHighlight()
     gameStatus(this)
     this.setPromotion(null)
+
+
+    if (this.gameType === 'local') {
+      this.saveGameToLocalStorage()
+      if (capturedFigure != null || capturedFigure != undefined) {
+        this.addCapturedFigures(capturedFigure.color, `${capturedFigure.type}${capturedFigure.color}`)
+      }
+      return
+    }
+
+    gameStore.updateBoard(lastMove) // обновить доску в Firebase
   })
 
 
@@ -200,7 +205,9 @@ class AppStore {
 
   setLastMoveCells = action((cells) => {
     this.lastMoveCells = cells
-    // console.log(toJS(this.lastMoveCells))
+
+
+    console.log(toJS(this.lastMoveCells))
   })
 
   setPossibleMoves = action((cells) => {

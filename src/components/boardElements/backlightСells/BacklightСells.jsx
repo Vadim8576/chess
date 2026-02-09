@@ -28,7 +28,7 @@ const BacklightCells = memo(observer(({
       {AppStore.lastMoveCells.length > 0 && AppStore.lastMoveCells.map(lastMove => (
         <LastMove
           key={crypto.randomUUID()}
-          cell={lastMove.cell}
+          cell={lastMove}
         />
       ))}
     </>
