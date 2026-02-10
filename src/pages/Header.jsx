@@ -6,6 +6,7 @@ import AppStore from "../store/AppStore";
 import { gameStatus } from "../utils/gameStatus";
 import { NavLink, useNavigate } from "react-router";
 import gameStore from "../store/gameStore";
+import Button from "../components/UI/Button";
 
 
 const HeaderLine = styled.div`
@@ -19,24 +20,6 @@ padding: 10px 30px;
 background-color: ${COLORS.primary};
 // margin-bottom: 20px;
 `;
-
-const RestartButton = styled.button`
-  padding: 8px;
-  border: 1px #999 solid;
-  border-radius: 5px;
-  background-color: ${props => props.color};
-  color: #fff;
-  text-transform: uppercase;
-  opacity: .7;
-  cursor: pointer;
-  margin-left: 10px;
-  font-weight: bold;
-  font-size: 1.5vmin;
-`
-
-
-
-
 
 
 const Header = observer(() => {
@@ -87,23 +70,30 @@ const Header = observer(() => {
 
         {
           AppStore.currentPage === 'local' && (
-            <RestartButton
-              color={'green'}
-              onMouseDown={restartGame}
-            >
-              New game
-            </RestartButton>
+            // <RestartButton
+            //   color={'green'}
+            //   onMouseDown={restartGame}
+            // >
+            //   New game
+            // </RestartButton>
+            <Button
+              text={'New game'}
+              color={'white'}
+              backgrounColor={'green'}
+              onClick={restartGame}
+            />
+
           )
         }
 
         {
           (AppStore.currentPage === 'local' || AppStore.currentPage === 'fastgame') && (
-            <RestartButton
-              color={'blue'}
-              onMouseDown={rotateBoard}
-            >
-              Rotate
-            </RestartButton>
+            <Button
+              text={'Rotate'}
+              color={'white'}
+              backgrounColor={'blue'}
+              onClick={rotateBoard}
+            />
           )
         }
 

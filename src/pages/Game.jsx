@@ -10,6 +10,7 @@ import GameStatus from '../widgets/GameStatus';
 import gameStore from '../store/gameStore';
 import { observer } from 'mobx-react-lite';
 import PawnPromotion from '../components/UI/PawnPromotion';
+import Dialog from '../components/UI/Dialog';
 
 
 const PageContainer = styled.div`
@@ -65,7 +66,7 @@ grid-row: 11 / 12;
 
 const Game = observer(() => {
 
-  const [cellSize, setCellSize] = useState(null)
+	const [cellSize, setCellSize] = useState(null)
 	const { width, height } = useWindowResizeThrottle(300)
 
 	useEffect(() => {
@@ -101,21 +102,30 @@ const Game = observer(() => {
 
 
 
-  
 
-  return (
-    <PageContainer>
+
+	return (
+		<PageContainer>
 			{/* <Header /> */}
 			<PageContentWrapper>
 				{cellSize && <Grid $size={cellSize * 12}>
-					{AppStore.promotion !== null && <PawnPromotion />}
 					<CapturedAreaBlack>
 						<CapturedArea player={AppStore.whiteBottom ? 'w' : 'b'} side={'up'} />
 					</CapturedAreaBlack>
 					<CapturedAreaWhite>
-						<CapturedArea player={AppStore.whiteBottom ? 'b' : 'w'}  side={'down'}/>
+						<CapturedArea player={AppStore.whiteBottom ? 'b' : 'w'} side={'down'} />
 					</CapturedAreaWhite>
+
 					<ChessBoardContainer windowSize={{ width, height }} />
+
+					{AppStore.promotion !== null && <PawnPromotion />}
+
+
+
+					<Dialog content={'Предложить ничью?'} />
+
+					{/* <PawnPromotion /> */}
+
 					<Status>
 						<Widget title={{
 							title: 'Статус игры',
@@ -142,7 +152,7 @@ const Game = observer(() => {
 			</PageContentWrapper>
 			{/* <Footer /> */}
 		</PageContainer>
-  )
+	)
 })
 
 export default Game

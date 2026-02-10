@@ -1,5 +1,5 @@
 export const HEADER_HEIGHT = 50
-export const FOOTER_HEIGHT = 50
+export const FOOTER_HEIGHT = 20
 export const GRID_MIN_HEIGHT = 500 // body {min-height: 500px;}
 
 // export const COLORS = {
