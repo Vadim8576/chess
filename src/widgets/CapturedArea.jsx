@@ -7,6 +7,7 @@ import { toJS } from 'mobx';
 import gameStore from "../store/gameStore";
 import { useEffect } from "react";
 import { useState } from "react";
+import { useCapturedFiguresFilter } from "../hooks/useCapturedFiguresFilter";
 
 
 // const Wrapper = styled.div`
@@ -42,28 +43,24 @@ align-content: center;
 
 const CapturedArea = observer(({ player, side }) => {
 
-  // console.log('!!!!!CapturedArea')
-  // console.log(gameStore.isLoading)
-  // console.log(AppStore.gameType)
-  // console.log(AppStore.gameType !== 'local' && gameStore.isLoading)
+  // if(gameStore.isLoading) return null
+  // if(AppStore.gameType !== 'local' && gameStore.isLoading) return null
+
+  // const capturedFigures = AppStore.gameType === 'local'
+  //   ? useCapturedFiguresFilter(AppStore.capturedFigures, player)
+  //   : useCapturedFiguresFilter(gameStore.gameData.capturedFigures, player)
   
+  const capturedFigures = useCapturedFiguresFilter(AppStore.capturedFigures, player)
 
-  if(AppStore.gameType !== 'local' && gameStore.isLoading) return null
 
-  const capturedFigures = { ...AppStore.capturedFigures[gameStore.currentGameId] }
 
-  // console.log(side, player)
+  if (!capturedFigures || capturedFigures.length === 0) return null
+
   // console.log(toJS(capturedFigures))
-
-  if (!capturedFigures) return null
-  if (!(player in capturedFigures)) return null
-  // console.log('CapturedArea!!!!!!')
-
-  const figureList = AppStore.capturedFigures[gameStore.currentGameId][player] // player 'w' || 'b'
 
   return (
     <>
-      {figureList && figureList.map((cf, key) => {
+      {capturedFigures.map((cf, key) => {
         return (
           <CapturedFigure
             key={key}

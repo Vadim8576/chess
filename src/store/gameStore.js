@@ -56,11 +56,19 @@ class GameStore {
     // this.loadGame(this.gameData.boardState)
 
 
+    
+
+    if (this.gameData.capturedFigures.length > 0) {
+      const capturedFigures = this.gameData.capturedFigures.map(cf => cf.split('/')[0]) // Обрезаем Id
+      AppStore.setCapturedFigures(capturedFigures)
+    }
+
     // console.log('------------------')
     // console.log('creator id', authStore.creatorUid)
     // console.log('joiner id', authStore.joinerUid)
     // console.log('id black player', this.gameData.blackPlayerUid)
     // console.log('id white player', this.gameData.whitePlayerUid)
+    // console.log('capturedFigures', this.gameData.capturedFigures)
     // console.log('------------------')
 
     // Определяем цвет текущего игрока
@@ -88,8 +96,9 @@ class GameStore {
     // не подсвечиваем последний сетевой ход, если сейчас локальная игра
     if (!this.gameData.lastMove || AppStore.gameType === 'local') return
 
-    const first = this.gameData.lastMove.slice(0, 2)
-    const second = this.gameData.lastMove.slice(2, 4)
+    const lastMove = this.gameData.lastMove.split('/')[0] // Удаляем id
+    const first = lastMove.slice(0, 2)
+    const second = lastMove.slice(2, 4)
     const from = squareToIndices(first)
     const to = squareToIndices(second)
     const lastMoveCells = [{ ...from }, { ...to }]
@@ -145,9 +154,9 @@ class GameStore {
   //   return fb.gameSubscribe('65NH7uPgvKw44ft4euD4', this.loadGame, this.setIsLoading)
   // }
 
-  updateBoard(lastMove) {
+  updateBoard(data) {
     const newBoardState = AppStore.chess.fen()
-    fb.updateBoard(this.currentGameId, newBoardState, lastMove)
+    fb.updateBoard(this.currentGameId, { ...data, newBoardState })
   }
 
   removeGame(id) {

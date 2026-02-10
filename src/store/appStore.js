@@ -24,7 +24,7 @@ class AppStore {
   //   'w': [],
   //   'b': []
   // }
-  capturedFigures = {}
+  capturedFigures = []
   promotion = null
 
   historyMoves = []
@@ -97,23 +97,30 @@ class AppStore {
       promotion: promoteTo // 'q', 'r', 'b', 'n' || undefined
     })
 
-    const lastMove = `${startSquare}${finishSquare}`
-
+    
     this.updateKingCheckHighlight()
     gameStatus(this)
     this.setPromotion(null)
-
+    
 
     if (this.gameType === 'local') {
       this.saveGameToLocalStorage()
       if (capturedFigure != null || capturedFigure != undefined) {
-        this.addCapturedFigures(capturedFigure.color, `${capturedFigure.type}${capturedFigure.color}`)
+        this.addCapturedFigures(`${capturedFigure.type}${capturedFigure.color}`)
       }
       return
+    } else {
+      const id = Date.now() // В БД сохраняются только уникальные значения. // Делаем capturedFigure условно уникальным
+      const capturedFigureString = capturedFigure ? `${capturedFigure.type}${capturedFigure.color}/${id}` : null
+
+      const lastMove = `${startSquare}${finishSquare}/${id}`
+      let data = { lastMove, capturedFigure: capturedFigureString } 
+
+ 
+      gameStore.updateBoard(data) // обновить доску в Firebase
     }
 
 
-    gameStore.updateBoard(lastMove) // обновить доску в Firebase
   })
 
 
@@ -180,7 +187,7 @@ class AppStore {
     this.chess = new Chess()
     this.initVariables()
     this.removeHightLightCells()
-    this.resetCapturedFigures()
+    this.setCapturedFigures([])
     this.setGameStatus('playing')
     gameStatus(this)
     try {
@@ -234,48 +241,56 @@ class AppStore {
 
 
   //Взятые фигуры
-  addCapturedFigures = action((color, figure) => {
+  addCapturedFigures = action((capturedFigure) => {
 
-    console.log('currentGameId = ', gameStore.currentGameId)
-    console.log('color = ', color)
-    console.log('figure = ', figure)
-    console.log(toJS(this.capturedFigures))
+    // console.log('currentGameId = ', gameStore.currentGameId)
+    // console.log('color = ', color)
+    // console.log(toJS(this.capturedFigures))
 
-    const gameId = gameStore.currentGameId;
+    // const gameId = gameStore.currentGameId;
 
-    this.capturedFigures = {
-      ...this.capturedFigures,
-      [gameId]: {
-        ...this.capturedFigures[gameId],
-        [color]: [
-          ...(this.capturedFigures[gameId]?.[color] || []),
-          figure
-        ]
-      }
-    }
+    // this.capturedFigures = {
+    //   ...this.capturedFigures,
+    //   [gameId]: {
+    //     ...this.capturedFigures[gameId],
+    //     [color]: [
+    //       ...(this.capturedFigures[gameId]?.[color] || []),
+    //       figure
+    //     ]
+    //   }
+    // }
 
+    //   console.log('figure = ', figure)
 
-    console.log(toJS(this.capturedFigures))
-
-    this.saveCapturedFiguresToLocalStorage()
-  })
+    //   this.setCapturedFigures(figure)
 
 
-  resetCapturedFigures = action(() => {
 
-    if (this.capturedFigures[gameStore.currentGameId]) delete this.capturedFigures[gameStore.currentGameId]
+    //   this.saveCapturedFiguresToLocalStorage()
 
-    console.log(toJS(this.capturedFigures))
-    // this.capturedFigures[gameStore.currentGameId] = {}
-
+    this.capturedFigures = [...this.capturedFigures, capturedFigure]
     console.log(toJS(this.capturedFigures))
     this.saveCapturedFiguresToLocalStorage()
   })
 
-  setCapturedFigures = action((capturedFigures) => {
+
+  // resetCapturedFigures = action(() => {
+
+  //   // if (this.capturedFigures[gameStore.currentGameId]) delete this.capturedFigures[gameStore.currentGameId]
+
+  //   // console.log(toJS(this.capturedFigures))
+  //   // this.capturedFigures[gameStore.currentGameId] = {}
+
+  //   // console.log(toJS(this.capturedFigures))
+  //   this.setCapturedFigures = []
+  //   this.saveCapturedFiguresToLocalStorage()
+  // })
+
+  setCapturedFigures = action((capturedFigure) => {
     // this.capturedFigures[gameStore.currentGameId] = capturedFigures
-    this.capturedFigures = { ...capturedFigures }
-
+    this.capturedFigures = capturedFigure
+    console.log(toJS(this.capturedFigures))
+    if(this.gameType === 'local') this.saveCapturedFiguresToLocalStorage()
   })
 
   saveCapturedFiguresToLocalStorage() {
@@ -377,7 +392,7 @@ class AppStore {
     this.setWhiteBottom(whiteBottom)
     this.saveSettingToLocalStorage({ whiteBottom: this.whiteBottom })
   })
-  
+
   setWhiteBottom = action((bool) => {
     this.whiteBottom = bool
     // this.saveSettingToLocalStorage({ whiteBottom: this.whiteBottom })

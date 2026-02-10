@@ -50,7 +50,7 @@ export const fb = {
           creatorUid: user.uid,
           joinerUid: null,
           status: 'waiting', // "waiting" (ожидание второго игрока), "playing", "finished", "cancelled"
-          whitePlayerUid: creatorColor === 'w' ? user.uid: null,
+          whitePlayerUid: creatorColor === 'w' ? user.uid : null,
           blackPlayerUid: creatorColor === 'w' ? null : user.uid,
           // isTimed: false,
           // timeControl: null,
@@ -60,6 +60,7 @@ export const fb = {
           // currentTurn: 'white',
           lastMove: null,
           movesHistory: [],
+          capturedFigures: [],
           lastMoveTimestamp: new Date(),
           winnerUid: null,
           loserUid: null,
@@ -113,7 +114,7 @@ export const fb = {
 
           console.log("Документ был удален или никогда не существовал!")
         }
-        
+
       }, (error) => {
         console.error("Не удалось прослушать документ:", error)
       })
@@ -122,18 +123,36 @@ export const fb = {
   },
 
 
-  updateBoard: (gameId, newBoardState, lastMove) => {
+  updateBoard: (gameId, data) => {
     const user = auth.currentUser
     console.log('gameId', gameId)
     console.log('user.uid', user.uid)
     if (user) {
       const gameRef = doc(db, "games", gameId)
 
-      updateDoc(gameRef, {
-        boardState: newBoardState,
-        lastMove,
-        movesHistory: arrayUnion(lastMove)
-      })
+
+
+
+      console.log(data.capturedFigure)
+      
+
+      const newData = data.capturedFigure
+        ? {
+          boardState: data.newBoardState,
+          lastMove: data.lastMove,
+          movesHistory: arrayUnion(data.lastMove),
+          capturedFigures: arrayUnion(data.capturedFigure)
+        }
+        : {
+          boardState: data.newBoardState,
+          lastMove: data.lastMove,
+          movesHistory: arrayUnion(data.lastMove)
+        }
+
+
+        console.log('newDate = ', newData)
+
+      updateDoc(gameRef, newData)
         .then(() => {
           console.log("Поля успешно обновлены!")
         })
@@ -185,7 +204,7 @@ export const fb = {
       const whitePlayerUid = gameData.whitePlayerUid
 
       // console.log("creatorUid из документа:", creatorUid)
-      return {creatorUid, whitePlayerUid, joinerUid}
+      return { creatorUid, whitePlayerUid, joinerUid }
     } else {
       // Документ не найден
       console.log("Документ игры не найден!")
