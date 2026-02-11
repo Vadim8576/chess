@@ -64,9 +64,16 @@ grid-column: 1 / 9;
 grid-row: 11 / 12;
 `
 
+
+
+
+
+
 const Game = observer(() => {
 
 	const [cellSize, setCellSize] = useState(null)
+	// const [cellSize, setCellSize] = useState(null)
+
 	const { width, height } = useWindowResizeThrottle(300)
 
 	useEffect(() => {
@@ -102,7 +109,19 @@ const Game = observer(() => {
 
 
 
+	const dialog = {
+		'resignation': {
+			text: 'Хотите сдаться?',
+			action: () => { console.log('Сдался') }
+		},
+		'drawOffer': {
+			text: 'Предложить ничью?',
+			action: () => { console.log('Предложил ничью') }
+		}
+	}
 
+	const dialogType = 'resignation'
+	// const dialogType = 'drawOffer'
 
 	return (
 		<PageContainer>
@@ -121,8 +140,7 @@ const Game = observer(() => {
 					{AppStore.promotion !== null && <PawnPromotion />}
 
 
-
-					<Dialog content={'Предложить ничью?'} />
+					<Dialog dialog={dialog[dialogType]} />
 
 					{/* <PawnPromotion /> */}
 

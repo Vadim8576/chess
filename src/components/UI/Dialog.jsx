@@ -4,9 +4,20 @@ import { observer } from 'mobx-react-lite';
 import { COLORS } from '../../constants/gameInitial';
 import closeIcon from "../../assets/icons/close-x.svg"
 import Button from './Button';
+import { useState } from 'react';
 
 
-const Container = styled.div`
+const CustomDialog = styled.div`
+position: absolute;
+top: ${props => props.$top}px;
+left: ${props => props.$left}px;
+width: ${props => props.$width}px;
+height: ${props => props.$height}px;
+background-color: rgba(0, 0, 0, .4);
+z-index: 150;
+`
+
+const Wrapper = styled.div`
 position: absolute;
 top: ${props => props.$top}px;
 left: ${props => props.$left}px;
@@ -15,107 +26,102 @@ height: ${props => props.$height}px;
 display: flex;
 flex-direction: column;
 border: 1px ${COLORS.neutral} solid;
-// background-color: rgba(255, 255, 255, 1);
-background-color: ${COLORS.background};
-z-index: 150;
+background-color: rgba(255, 255, 255, .9);
+
 box-shadow: 5px 5px 10px rgba(0, 0, 0, .5);
+padding: 10px;
 `
 
-
 const IconWripper = styled.div`
+flex: 1; 
 display: flex;
 justify-content: flex-end;
 align-items: center;
-width: 100%;
-padding: 5px;
 `
 
 const Icon = styled.img`
-// position: absolute;
-// top: 5px;
-// right: 5px;
-width: 1.5rem;
-height: 1.5rem;
+width: ${props => props.width}px;
+height: ${props => props.height}px;
 cursor: pointer;
 &:hover {
-  background-color: ${COLORS.errorCell};
+  background-color: ${COLORS.secondary};
 }
 `
 
 const Row = styled.div`
-// position: relative;
-// top: ${props => props.$top}px;
-// left: ${props => props.$left}px;
-// width: ${props => props.$width}px;
-// height: ${props => props.$height}px;
-width: 100%;
-// height: 50%;
+flex: 2; 
 display: flex;
 justify-content: center;
 align-items: center;
-// background-color: rgba(255, 255, 255, .8);
-// padding: 10px;
-// border-top: 1px #999 solid;
-padding: 5px;
+padding-right: 10px;
 `
-const FigureWrapper = styled.div`
-display: flex;
-justify-content: center;
-align-items: center;
-width: ${props => props.$width - 10}px;
-height: ${props => props.$height - 10}px;
-cursor: pointer;
-user-select: none;
-touch-action: none;
-&:hover {
-  background-color: ${COLORS.possibleCell};
-  // transform: scale(1.05);
-  // box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-`;
 
 const Message = styled.div`
 font-size: 1.8vmin;
-// font-weight: bold;
+padding: 0 0 10px 0;
+font-weight: bold;
+margin-left: 10px;
 `
 
 
-const Dialog = observer(({ content }) => {
+const Dialog = observer(({ dialog }) => {
+
+  const [isShow, setIsShow] = useState(true)
+
+  if (!isShow) return null
+
   const cellSize = AppStore?.board?.cellSize
 
+  const okButtonHandler = () => {
+    dialog.action()
+    setIsShow(false)
+  }
+
+  const cancelButtonHandler = () => {
+    setIsShow(false)
+  }
 
   return (
-    <Container
-      $top={cellSize * 4}
-      $left={cellSize * 1}
-      $width={cellSize * 6}
-      $height={cellSize * 4}
+    <CustomDialog
+      $top={cellSize * 2}
+      $left={0}
+      $width={cellSize * 8}
+      $height={cellSize * 8}
     >
-      <IconWripper>
-        <Icon
-          src={closeIcon}
-          alt='close'
-          onPointerDown={close}
-        />
-      </IconWripper>
-      <Row>
-        <Message>{content}</Message>
-      </Row>
-      <Row>
-        <Button
-          text={'Да'}
-          color={'white'}
-          backgrounColor={'green'}
-          onClick={null}
-        />
-        <Button
-          text={'Отмена'}
-          color={'white'}
-          backgrounColor={'red'}
-          onClick={null}
-        />
-      </Row>
-    </Container >
+      <Wrapper
+        $top={cellSize * 2.5}
+        $left={cellSize * 1}
+        $width={cellSize * 6}
+        $height={cellSize * 3}
+      >
+        <IconWripper>
+          <Icon
+            width={cellSize / 2}
+            height={cellSize / 2}
+            src={closeIcon}
+            alt='close'
+            onClick={cancelButtonHandler}
+          />
+        </IconWripper>
+        <Row>
+          <Message>{dialog.text}</Message>
+        </Row>
+        <Row>
+          <Button
+            text={'Да'}
+            color={COLORS.background}
+            backgroundColor={COLORS.secondary}
+            onClick={okButtonHandler}
+          />
+          <Button
+            text={'Отмена'}
+            color={COLORS.background}
+            backgroundColor={COLORS.errorCell}
+            onClick={cancelButtonHandler}
+          />
+        </Row>
+      </Wrapper >
+    </CustomDialog>
   )
 })
 

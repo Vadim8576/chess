@@ -174,9 +174,8 @@ class AppStore {
 
   loadGame(fen) {
     this.chess = new Chess()
-    this.chess.load(fen)
+    if (fen) this.chess.load(fen)
     gameStatus(this)
-    // console.log('Создан новый объект Chess, в него загружен fen ', fen)
     console.log('загружен fen ', fen)
     this.setLastMoveCells([])
     this.updateKingCheckHighlight()
@@ -354,7 +353,7 @@ class AppStore {
 
   loadGameFromLocalStorage = action(() => {
     const fen = localStorage.getItem('ChessFen')
-    if (fen) this.loadGame(JSON.parse(fen))
+    this.loadGame(JSON.parse(fen))
 
     // const promotion = 'rnbqkbnr/pp1P1ppp/8/8/8/8/PPp1PPPP/RNBQKBNR w KQkq - 0 1'
     // const pat = '7k/5Q2/6K1/8/8/8/8/8 b - - 19 10'

@@ -79,7 +79,7 @@ const Header = observer(() => {
             <Button
               text={'New game'}
               color={'white'}
-              backgrounColor={'green'}
+              backgroundColor={'green'}
               onClick={restartGame}
             />
 
@@ -91,7 +91,7 @@ const Header = observer(() => {
             <Button
               text={'Rotate'}
               color={'white'}
-              backgrounColor={'blue'}
+              backgroundColor={'blue'}
               onClick={rotateBoard}
             />
           )
