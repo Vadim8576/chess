@@ -38,12 +38,6 @@ export const gameStatus = (AppStore) => {
     AppStore.setGameStatus('finished')
   }
 
-  if (AppStore.chess.isInsufficientMaterial()) {
-    const status = 'Ничья!5'
-    AppStore.setStatusMessage(status)
-    AppStore.setGameStatus('finished')
-  }
-
   if (AppStore.chess.isGameOver()) {
     console.log('Игра окончена!')
     AppStore.setGameStatus('finished')

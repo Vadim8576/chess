@@ -15,7 +15,7 @@ const Ul = styled.ul`
   `
 const Link = styled.a`
     -webkit-text-size-adjust: 100%;
-    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Open Sans,Helvetica Neue,blueprint-icons-16,sans-serif;
+    font-family: Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Open Sans,Helvetica Neue,blueprint-icons-16,sans-serif;
     font-size: 14px;
     font-weight: 400;
     letter-spacing: 0;
@@ -59,8 +59,8 @@ const Span = styled.span`
     color: #5f6b7c;
   `
 const Text = styled.span`
-         -webkit-text-size-adjust: 100%;
-    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Open Sans,Helvetica Neue,blueprint-icons-16,sans-serif;
+    -webkit-text-size-adjust: 100%;
+    font-family: Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Open Sans,Helvetica Neue,blueprint-icons-16,sans-serif;
     font-size: 14px;
     font-weight: 400;
     letter-spacing: 0;

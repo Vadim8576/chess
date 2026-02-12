@@ -26,7 +26,7 @@ const withWidget = () => {
     return function WithColumn({ title, ...restProps }) {
       return (
         <WidgetWrapper>
-          <Header title={title} />
+          {/* <Header title={title} /> */}
           {WrappedComponent ? (
             <WrappedComponent {...restProps} />
           ) : (

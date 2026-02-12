@@ -20,6 +20,8 @@ class GameStore {
   inviteLink = null
   isLoading = true
 
+  showDrawDialog = false
+
 
   constructor() {
     makeAutoObservable(this)
@@ -52,11 +54,49 @@ class GameStore {
     this.gameData = { ...data }
     // console.log(this.gameData)
 
+
+    if (this.gameData.drawOffer) {
+      const parts = this.gameData.drawOffer.split('-')
+      const userId = parts[0] // id
+      const draw = parts[1] // result
+
+      console.log(userId, draw)
+
+
+      const currentUserId = authStore.creatorUid || authStore.joinerUid
+
+      console.log(currentUserId)
+
+
+      // если в запросе ничьи не твой id, у тебя просят ничью
+      if (currentUserId !== userId) {
+        if (draw === 'draw') {
+          this.showDrawDialog = true // для показа диалога
+          return // если это запрос, показываем только диалог
+        }
+
+        if (draw === 'ok') { // Соперник согласился на ничью
+          console.log('Соперник согласился на ничью')
+        }
+
+        if (draw === 'cancel') { // Соперник отказал в ниьей
+          console.log('Соперник отказал в ниьей')
+        }
+      }
+
+
+
+      return
+    }
+
+
+
+
+
+
     AppStore.loadGame(this.gameData.boardState)
     // this.loadGame(this.gameData.boardState)
 
-
-    
 
     if (this.gameData.capturedFigures.length > 0) {
       const capturedFigures = this.gameData.capturedFigures.map(cf => cf.split('/')[0]) // Обрезаем Id
@@ -178,6 +218,10 @@ class GameStore {
     return await fb.getGameInfo(gameId)
   }
 
+
+  drawOffer(draw) {
+    fb.drawOffer(this.currentGameId, draw)
+  }
 
 
 

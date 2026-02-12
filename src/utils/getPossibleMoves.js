@@ -12,7 +12,7 @@ export const getPossibleMoves = (AppStore, grabFigureSquare) => {
     if (movesTemp.length < 1) {
       console.log('Нет доступного хода для этой фигуры!')
     }
-    console.log(movesTemp)
+    // console.log(movesTemp)
 
     
     const moves = [...movesTemp, {to: grabFigureSquare, promotion: undefined}] // Добавляем клетку, с которой взяли фигуру, для ее подсветки

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import useWindowResizeThrottle from '../hooks/useWindowResizeThrottle';
 import { COLORS, FOOTER_HEIGHT, HEADER_HEIGHT } from '../constants/gameInitial';
@@ -7,10 +7,14 @@ import CapturedArea from '../widgets/CapturedArea';
 import ChessBoardContainer from './ChessBoardContainer';
 import Widget from '../widgets/Widget';
 import GameStatus from '../widgets/GameStatus';
-import gameStore from '../store/gameStore';
 import { observer } from 'mobx-react-lite';
 import PawnPromotion from '../components/UI/PawnPromotion';
 import Dialog from '../components/UI/Dialog';
+import Menu from '../components/UI/Menu';
+import ChessClock from '../components/boardElements/ChessClock';
+import Timer from '../components/UI/Timer';
+import Button from '../components/UI/Button';
+import gameStore from '../store/gameStore';
 
 
 const PageContainer = styled.div`
@@ -24,7 +28,6 @@ display: flex;
 justify-content: center;
 align-items: center;
 width: 100%;
-// height: calc(100% - ${HEADER_HEIGHT}px - ${FOOTER_HEIGHT}px);
 height: 100%;
 `
 
@@ -35,34 +38,61 @@ grid-template-columns: repeat(12, 1fr);
 grid-template-rows: repeat(12, 1fr);
 width: ${props => props.$size}px;
 height: ${props => props.$size}px;
-// width: 450px;
-// height: 450px;
-// min-width: 450px;
-// min-height: 450px;
 aspect-ratio: 1 / 1;
 `
-const Status = styled.div`
-grid-column: 9 / 13;
-grid-row: 3 / 5;
-`
+
 const History = styled.div`
 grid-column: 9 / 13;
 grid-row: 6 / 11;
 `
-const CapturedAreaBlack = styled.div`
+const CapturedAreaUp = styled.div`
 display: grid;
 grid-template-columns: repeat(16, 1fr);
 grid-template-rows: repeat(1, 1fr);
 grid-column: 1 / 9;
 grid-row: 2 / 3;
 `
-const CapturedAreaWhite = styled.div`
+const CapturedAreaDown = styled.div`
 display: grid;
 grid-template-columns: repeat(16, 1fr);
 grid-template-rows: repeat(1, 1fr);
 grid-column: 1 / 9;
 grid-row: 11 / 12;
 `
+
+const Status = styled.div`
+grid-column: 9 / 13;
+grid-row: 3 / 5;
+`
+
+const ClockTop = styled.div`
+grid-column: 9 / 13;
+grid-row: 5 / 6;
+max-height: 100%;
+overflow: hidden;
+`
+
+const ClockBottom = styled.div`
+grid-column: 9 / 13;
+grid-row: 10 / 11;
+max-height: 100%;
+overflow: hidden;
+`
+
+const Button1 = styled.div`
+grid-column: 9 / 13;
+grid-row: 7 / 8;
+max-height: 100%;
+overflow: hidden;
+`
+
+const Button2 = styled.div`
+grid-column: 9 / 13;
+grid-row: 8 / 9;
+max-height: 100%;
+overflow: hidden;
+`
+
 
 
 
@@ -71,8 +101,10 @@ grid-row: 11 / 12;
 
 const Game = observer(() => {
 
+	const [dialogType, setDialogType] = useState(null) // null || 'resignation' || 'drawOffer'
+	// const [dialog, setDialog] = useState(null)
+	const [showDialog, setShowDialog] = useState(false)
 	const [cellSize, setCellSize] = useState(null)
-	// const [cellSize, setCellSize] = useState(null)
 
 	const { width, height } = useWindowResizeThrottle(300)
 
@@ -100,49 +132,79 @@ const Game = observer(() => {
 
 
 
-	useEffect(() => {
-		// ['e2e4', 'e7e5', 'f1c4', 'd7d6'].forEach(move => AppStore.chess.move(move))
-
-		// AppStore.chess.load('rnbqkbnr/pp1P1ppp/8/8/8/8/PPp1PPPP/RNBQKBNR w KQkq - 0 1')
-		// AppStore.chess.load('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2')
-	}, [width, height])
 
 
 
 	const dialog = {
 		'resignation': {
 			text: 'Хотите сдаться?',
-			action: () => { console.log('Сдался') }
+			onOk: () => {
+				console.log('Сдался')
+				setShowDialog(false)
+
+			},
+			onCancel: () => {
+				console.log('Отмена')
+				setShowDialog(false)
+			}
 		},
+
 		'drawOffer': {
 			text: 'Предложить ничью?',
-			action: () => { console.log('Предложил ничью') }
+			onOk: () => {
+				console.log('Предложил ничью')
+				setShowDialog(false)
+				gameStore.drawOffer('draw')
+			},
+			onCancel: () => {
+				console.log('Отмена')
+				setShowDialog(false)
+			}
+		},
+
+		'drawOfferAnswer': {
+			text: 'Соперник предлагает ничью. Хотите согласиться?',
+			onOk: () => {
+				console.log('Согласился')
+				setShowDialog(false)
+				gameStore.drawOffer('ok')
+			},
+			onCancel: () => {
+				console.log('Не согласился')
+				setShowDialog(false)
+				gameStore.drawOffer('cancel')
+			}
 		}
 	}
 
-	const dialogType = 'resignation'
-	// const dialogType = 'drawOffer'
+
+
+	useEffect(() => {
+		if (gameStore.gameData.drawOffer.split('-')[1] === 'draw') {
+			setDialogType('drawOfferAnswer')
+		}
+
+	}, [gameStore.drawOffer])
+
+
+
+	
+
+
 
 	return (
 		<PageContainer>
-			{/* <Header /> */}
 			<PageContentWrapper>
 				{cellSize && <Grid $size={cellSize * 12}>
-					<CapturedAreaBlack>
-						<CapturedArea player={AppStore.whiteBottom ? 'w' : 'b'} side={'up'} />
-					</CapturedAreaBlack>
-					<CapturedAreaWhite>
-						<CapturedArea player={AppStore.whiteBottom ? 'b' : 'w'} side={'down'} />
-					</CapturedAreaWhite>
+					<CapturedAreaUp>
+						<CapturedArea player={AppStore.whiteBottom ? 'w' : 'b'} />
+					</CapturedAreaUp>
+					<CapturedAreaDown>
+						<CapturedArea player={AppStore.whiteBottom ? 'b' : 'w'} />
+					</CapturedAreaDown>
 
 					<ChessBoardContainer windowSize={{ width, height }} />
 
-					{AppStore.promotion !== null && <PawnPromotion />}
-
-
-					<Dialog dialog={dialog[dialogType]} />
-
-					{/* <PawnPromotion /> */}
 
 					<Status>
 						<Widget title={{
@@ -154,6 +216,36 @@ const Game = observer(() => {
 							<GameStatus />
 						</Widget>
 					</Status>
+
+
+					<ClockTop>
+						<Timer maxTime={AppStore.whiteBottom ? 300 : 600} />
+					</ClockTop>
+
+
+
+					<Button1>
+						<Button text={'Ничья?'} onClick={
+							() => {
+								setShowDialog(true)
+								setDialogType('drawOffer')
+							}}
+						/>
+					</Button1>
+					<Button2>
+						<Button text={'Сдаться!'} onClick={
+							() => {
+								setShowDialog(true)
+								setDialogType('resignation')
+							}}
+						/>
+					</Button2>
+
+					<ClockBottom>
+						<Timer maxTime={AppStore.whiteBottom ? 600 : 300} />
+					</ClockBottom>
+
+
 					{/* <ChessClock /> */}
 					{/* <History>
 						<Widget title={{
@@ -165,10 +257,19 @@ const Game = observer(() => {
 							<HistoryList />
 						</Widget>
 					</History> */}
+
+					{AppStore.promotion !== null && <PawnPromotion />}
+
+					{showDialog && <Dialog dialog={dialog[dialogType]} />}
+
+					{gameStore.showDrawDialog && <Dialog dialog={dialog[dialogType]} />}
+
+					{/* <PawnPromotion /> */}
 				</Grid>}
+
 				{/* <Menu /> */}
+
 			</PageContentWrapper>
-			{/* <Footer /> */}
 		</PageContainer>
 	)
 })

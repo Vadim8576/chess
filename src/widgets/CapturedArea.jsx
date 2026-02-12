@@ -41,7 +41,7 @@ align-content: center;
 
 
 
-const CapturedArea = observer(({ player, side }) => {
+const CapturedArea = observer(({ player }) => {
 
   // if(gameStore.isLoading) return null
   // if(AppStore.gameType !== 'local' && gameStore.isLoading) return null

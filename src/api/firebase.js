@@ -64,7 +64,7 @@ export const fb = {
           lastMoveTimestamp: new Date(),
           winnerUid: null,
           loserUid: null,
-          drawOffer: null,
+          drawOffer: null, // id предложившего || 'ok' - согласие другой стороны
           createdAt: new Date(),
           updatedAt: new Date()
         }
@@ -81,6 +81,7 @@ export const fb = {
     }
 
   },
+
 
 
 
@@ -123,6 +124,27 @@ export const fb = {
   },
 
 
+
+  drawOffer: (gameId, draw) => {
+    const user = auth.currentUser
+    if (user) {
+      const gameRef = doc(db, "games", gameId)
+
+      updateDoc(gameRef, {
+        drawOffer: `${user.uid}-${draw}`
+
+      })
+        .then(() => {
+          console.log("Поля успешно обновлены!")
+        })
+        .catch((error) => {
+          console.error("Ошибка при обновлении полей:", error)
+        });
+    }
+
+  },
+
+
   updateBoard: (gameId, data) => {
     const user = auth.currentUser
     console.log('gameId', gameId)
@@ -134,7 +156,7 @@ export const fb = {
 
 
       console.log(data.capturedFigure)
-      
+
 
       const newData = data.capturedFigure
         ? {
@@ -150,7 +172,7 @@ export const fb = {
         }
 
 
-        console.log('newDate = ', newData)
+      console.log('newDate = ', newData)
 
       updateDoc(gameRef, newData)
         .then(() => {

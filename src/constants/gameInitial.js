@@ -20,7 +20,8 @@ export const COLORS = {
   errorCell: '#d15050',
   accessibleСell: '#606c38',
   blackCell: '#b58863',
-  whiteCell: '#f0d9b5'
+  whiteCell: '#f0d9b5',
+  text: '#242424'
 }
 
 
