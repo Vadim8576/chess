@@ -21,6 +21,7 @@ class GameStore {
   isLoading = true
 
   showDrawDialog = false
+  drawRequest = false
 
 
   constructor() {
@@ -34,6 +35,9 @@ class GameStore {
   }
 
 
+  setDrawRequest = action((bool) => {
+    this.drawRequest = bool
+  })
 
 
   setInviteUrl = action((url) => {
@@ -50,48 +54,17 @@ class GameStore {
     this.currentPlayerColor = color
   })
 
+  setShowDrawDialog = action((bool) => {
+    this.showDrawDialog = bool
+  })
+
+
+
   setGameData = action((data) => {
     this.gameData = { ...data }
     // console.log(this.gameData)
 
-
-    if (this.gameData.drawOffer) {
-      const parts = this.gameData.drawOffer.split('-')
-      const userId = parts[0] // id
-      const draw = parts[1] // result
-
-      console.log(userId, draw)
-
-
-      const currentUserId = authStore.creatorUid || authStore.joinerUid
-
-      console.log(currentUserId)
-
-
-      // если в запросе ничьи не твой id, у тебя просят ничью
-      if (currentUserId !== userId) {
-        if (draw === 'draw') {
-          this.showDrawDialog = true // для показа диалога
-          return // если это запрос, показываем только диалог
-        }
-
-        if (draw === 'ok') { // Соперник согласился на ничью
-          console.log('Соперник согласился на ничью')
-        }
-
-        if (draw === 'cancel') { // Соперник отказал в ниьей
-          console.log('Соперник отказал в ниьей')
-        }
-      }
-
-
-
-      return
-    }
-
-
-
-
+    AppStore.setGameStatus(this.gameData.status)
 
 
     AppStore.loadGame(this.gameData.boardState)
@@ -131,6 +104,52 @@ class GameStore {
     }
 
 
+    if (this.gameData.drawOffer) { // Если в БД есть запись о ничьи (вопрос или ответ)
+      const parts = this.gameData.drawOffer.split('-')
+      const userId = parts[0] // id
+      const draw = parts[1] // result
+      const currentUserId = authStore.creatorUid || authStore.joinerUid
+
+      console.log(userId, draw)
+      console.log(currentUserId)
+
+      if (draw === 'ok' && this.gameData.status === 'agreed_draw') { // игра закончена - ничья по согласованию
+        console.log('игра закончена - ничья по согласованию')
+        // AppStore.setAgreedDraw(true)
+        AppStore.setStatusMessage('Ничья по соглашению!')
+        AppStore.setGameStatus('finished')
+        this.setIsLoading(false)
+        return
+      }
+
+      // если в запросе ничьи не твой id, у тебя просят ничью
+      if (currentUserId !== userId) {
+        if (draw === 'draw') {
+          this.setShowDrawDialog(true) // для показа диалога на подтверждение ничьи
+          console.log(draw, ' - Показать диалог')
+          return // если это запрос, показываем только диалог
+        }
+
+        if (draw === 'ok') { // Соперник согласился на ничью
+          console.log('Соперник согласился на ничью')
+          // AppStore.setAgreedDraw(true)
+        }
+
+        if (draw === 'cancel') { // Соперник отказался от ничьи
+          console.log('Соперник отказался от ничьи') // ЭТИ СООБЩЕНИЯ БУДУТ ОТОБРАЖАТЬСЯ В ЧАТЕ
+          this.setDrawRequest(false) // Активируем кнопку "Ничья?"
+        }
+      } else {
+        // Если не CANCEL - этот пользователь отправил запрос на ничью. Деактивируем кнопку "Ничья?".
+        // Если CANCEL - это тот, кто отказался, кнопку не деактивируем
+        if (draw === 'cancel') {
+          this.setDrawRequest(false)
+        } else {
+          this.setDrawRequest(true)
+        }
+      }
+      return
+    }
 
 
     // не подсвечиваем последний сетевой ход, если сейчас локальная игра
@@ -220,7 +239,7 @@ class GameStore {
 
 
   drawOffer(draw) {
-    fb.drawOffer(this.currentGameId, draw)
+    fb.drawOffer(this.currentGameId, draw, this.setDrawRequest)
   }
 
 

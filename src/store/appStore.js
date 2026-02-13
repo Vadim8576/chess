@@ -31,7 +31,8 @@ class AppStore {
   historyList = []
   whiteBottom = true // true | false
   statusMessage = ''
-  gameStatus = 'playing'
+  gameStatus = undefined //'playing'
+  agreedDraw = null
 
   lastMoveCells = []
   possibleMoves = []
@@ -44,6 +45,9 @@ class AppStore {
   }
 
 
+    setAgreedDraw = action((bool) => {
+      this.agreedDraw = bool
+    })
 
 
   checkingMove = action((capturedFigure, moveSquares) => {

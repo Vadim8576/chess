@@ -15,6 +15,7 @@ import ChessClock from '../components/boardElements/ChessClock';
 import Timer from '../components/UI/Timer';
 import Button from '../components/UI/Button';
 import gameStore from '../store/gameStore';
+import GameDialogs from '../components/GameDialogs';
 
 
 const PageContainer = styled.div`
@@ -102,8 +103,7 @@ overflow: hidden;
 const Game = observer(() => {
 
 	const [dialogType, setDialogType] = useState(null) // null || 'resignation' || 'drawOffer'
-	// const [dialog, setDialog] = useState(null)
-	const [showDialog, setShowDialog] = useState(false)
+	const [showDialog, setShowDialog] = useState(null)
 	const [cellSize, setCellSize] = useState(null)
 
 	const { width, height } = useWindowResizeThrottle(300)
@@ -135,60 +135,62 @@ const Game = observer(() => {
 
 
 
-	const dialog = {
-		'resignation': {
-			text: 'Хотите сдаться?',
-			onOk: () => {
-				console.log('Сдался')
-				setShowDialog(false)
+	// const dialog = {
+	// 	'resignation': {
+	// 		text: 'Хотите сдаться?',
+	// 		onOk: () => {
+	// 			console.log('Сдался')
+	// 			setShowDialog(false)
 
-			},
-			onCancel: () => {
-				console.log('Отмена')
-				setShowDialog(false)
-			}
-		},
+	// 		},
+	// 		onCancel: () => {
+	// 			console.log('Отмена')
+	// 			setShowDialog(false)
+	// 		}
+	// 	},
 
-		'drawOffer': {
-			text: 'Предложить ничью?',
-			onOk: () => {
-				console.log('Предложил ничью')
-				setShowDialog(false)
-				gameStore.drawOffer('draw')
-			},
-			onCancel: () => {
-				console.log('Отмена')
-				setShowDialog(false)
-			}
-		},
+	// 	'drawOffer': {
+	// 		text: 'Предложить ничью?',
+	// 		onOk: () => {
+	// 			console.log('Предложил ничью')
+	// 			setShowDialog(false)
+	// 			gameStore.drawOffer('draw')
+	// 		},
+	// 		onCancel: () => {
+	// 			console.log('Отмена')
+	// 			setShowDialog(false)
+	// 		}
+	// 	},
 
-		'drawOfferAnswer': {
-			text: 'Соперник предлагает ничью. Хотите согласиться?',
-			onOk: () => {
-				console.log('Согласился')
-				setShowDialog(false)
-				gameStore.drawOffer('ok')
-			},
-			onCancel: () => {
-				console.log('Не согласился')
-				setShowDialog(false)
-				gameStore.drawOffer('cancel')
-			}
-		}
-	}
-
-
-
-	useEffect(() => {
-		if (gameStore.gameData.drawOffer.split('-')[1] === 'draw') {
-			setDialogType('drawOfferAnswer')
-		}
-
-	}, [gameStore.drawOffer])
+	// 	'drawOfferAnswer': {
+	// 		text: 'Соперник предлагает ничью. Хотите согласиться?',
+	// 		onOk: () => {
+	// 			console.log('Согласился')
+	// 			setShowDialog(false)
+	// 			gameStore.drawOffer('ok')
+	// 		},
+	// 		onCancel: () => {
+	// 			console.log('Не согласился')
+	// 			setShowDialog(false)
+	// 			gameStore.drawOffer('cancel')
+	// 		}
+	// 	}
+	// }
 
 
 
-	
+	// useEffect(() => {
+	// 	if(!gameStore?.gameData?.drawOffer) return
+	// 	if (gameStore.gameData.drawOffer.split('-')[1] === 'draw') {
+	// 		setDialogType('drawOfferAnswer')
+	// 	}
+
+	// }, [gameStore.showDrawDialog])
+
+
+
+	console.log(gameStore.status)
+	console.log('showDialog = ', showDialog)
 
 
 
@@ -223,23 +225,29 @@ const Game = observer(() => {
 					</ClockTop>
 
 
-
-					<Button1>
-						<Button text={'Ничья?'} onClick={
-							() => {
-								setShowDialog(true)
-								setDialogType('drawOffer')
-							}}
-						/>
-					</Button1>
-					<Button2>
-						<Button text={'Сдаться!'} onClick={
-							() => {
-								setShowDialog(true)
-								setDialogType('resignation')
-							}}
-						/>
-					</Button2>
+					{(AppStore.gameStatus !== 'finished' && !gameStore.showDrawDialog) && (
+						<>
+							<Button1>
+								<Button
+									text={'Ничья?'}
+									onClick={() => {
+										setDialogType('drawOffer')
+										gameStore.setShowDrawDialog(true)
+									}}
+									inert={gameStore.drawRequest}
+								/>
+							</Button1>
+							<Button2>
+								<Button
+									text={'Сдаться!'}
+									onClick={() => {
+										setDialogType('resignation')
+										gameStore.setShowDrawDialog(true)
+									}}
+								/>
+							</Button2>
+						</>
+					)}
 
 					<ClockBottom>
 						<Timer maxTime={AppStore.whiteBottom ? 600 : 300} />
@@ -260,9 +268,14 @@ const Game = observer(() => {
 
 					{AppStore.promotion !== null && <PawnPromotion />}
 
-					{showDialog && <Dialog dialog={dialog[dialogType]} />}
+					{/* {showDialog && <Dialog dialog={dialog[dialogType]} />} */}
 
-					{gameStore.showDrawDialog && <Dialog dialog={dialog[dialogType]} />}
+					{gameStore.showDrawDialog && (
+						<GameDialogs
+							dialogType={dialogType}
+							setDialogType={setDialogType}
+						/>
+					)}
 
 					{/* <PawnPromotion /> */}
 				</Grid>}

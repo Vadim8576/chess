@@ -38,6 +38,12 @@ export const gameStatus = (AppStore) => {
     AppStore.setGameStatus('finished')
   }
 
+  if (AppStore.agreedDraw) {
+    const status = 'Ничья по соглашению!'
+    AppStore.setStatusMessage(status)
+    AppStore.setGameStatus('finished')
+  }
+
   if (AppStore.chess.isGameOver()) {
     console.log('Игра окончена!')
     AppStore.setGameStatus('finished')

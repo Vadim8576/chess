@@ -21,12 +21,13 @@ const CustomButton = styled.button`
   }
 `
 
-const Button = ({ text, color, backgroundColor, onClick }) => {
+const Button = ({ text, color, backgroundColor, onClick, inert = false}) => {
   return (
     <CustomButton
       // $backgroundColor={backgroundColor}
       color={color}
       onClick={onClick}
+      inert={inert}
     >
       {text}
     </CustomButton>

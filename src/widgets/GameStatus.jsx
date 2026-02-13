@@ -10,7 +10,7 @@ import { useEffect } from "react";
 
 
 const Status = styled.div`
-text-align: center;
+// text-align: center;
 display: flex;
 justify-content: flex-start;
 align-items: center;
@@ -29,13 +29,13 @@ const GameStatus = observer(() => {
 
 
 
-	// console.log(gameStore.isLoading)
+	console.log(gameStore.isLoading)
 
-	// console.log('GameStatus')
+	console.log('GameStatus ', AppStore.statusMessage)
 
 	return (
 		<Status>
-			{gameStore.isLoading && AppStore.gameType !== 'local'
+			{gameStore?.gameData?.status === 'waiting' && gameStore.isLoading && AppStore.gameType !== 'local'
 				?
 				'...'
 				:

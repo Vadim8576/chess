@@ -78,6 +78,8 @@ margin-left: 10px;
 
 const Dialog = observer(({ dialog = null }) => {
 
+  console.log(dialog)
+
   if (!dialog) return null
 
   const cellSize = AppStore?.board?.cellSize
@@ -94,7 +96,7 @@ const Dialog = observer(({ dialog = null }) => {
 
   return (
     <DialogContainer
-      onClick={cancelButtonHandler}
+      // onClick={cancelButtonHandler}
     >
       <DialogShadow
 

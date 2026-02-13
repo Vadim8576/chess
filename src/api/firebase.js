@@ -125,20 +125,32 @@ export const fb = {
 
 
 
-  drawOffer: (gameId, draw) => {
+  drawOffer: (gameId, draw, setDrawRequest) => {
     const user = auth.currentUser
     if (user) {
       const gameRef = doc(db, "games", gameId)
 
-      updateDoc(gameRef, {
-        drawOffer: `${user.uid}-${draw}`
 
-      })
+      let newDate
+
+      if (draw === 'ok') { // Если соперник согласился, игра finished  
+        newDate = {
+          drawOffer: `${user.uid}-${draw}`,
+          status: 'agreed_draw'
+        }
+      } else {   
+        newDate = {
+          drawOffer: `${user.uid}-${draw}`
+        }
+      }
+
+      updateDoc(gameRef, newDate)
         .then(() => {
-          console.log("Поля успешно обновлены!")
+          console.log("Поле drawOffer успешно обновлено!")
+          setDrawRequest(true) // устанавливаем флаг, что запрос на ничью отправлен (для деактивации кнопки запроса на ничью)
         })
         .catch((error) => {
-          console.error("Ошибка при обновлении полей:", error)
+          console.error("Ошибка при обновлении поля drawOffer:", error)
         });
     }
 

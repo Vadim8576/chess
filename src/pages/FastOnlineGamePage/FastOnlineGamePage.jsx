@@ -35,11 +35,13 @@ const FastOnlineGamePage = observer(() => {
 	}, [gameId, authStore.creatorUid, authStore.joinerUid])
 
 
+	const status = gameStore?.gameData?.status
+	console.log(status)
 
 	return (
 		<>
 			{
-				gameStore?.gameData?.status === 'playing'
+				(status !== undefined && status !== 'waiting' )
 					? <Game />
 					: <GameLobby />
 			}
