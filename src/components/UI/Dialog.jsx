@@ -78,7 +78,7 @@ margin-left: 10px;
 
 const Dialog = observer(({ dialog = null }) => {
 
-  console.log(dialog)
+  // console.log(dialog)
 
   if (!dialog) return null
 

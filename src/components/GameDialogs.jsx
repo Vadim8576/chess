@@ -18,6 +18,7 @@ const GameDialogs = observer(({ dialogType, setDialogType }) => {
         console.log('Сдался')
         setDialogType(null)
         gameStore.setShowDrawDialog(false)
+        gameStore.resign()
       },
       onCancel: () => {
         console.log('Отмена')
@@ -31,8 +32,8 @@ const GameDialogs = observer(({ dialogType, setDialogType }) => {
       onOk: () => {
         console.log('Предложил ничью')
         setDialogType(null)
-        gameStore.drawOffer('draw')
         gameStore.setShowDrawDialog(false)
+        gameStore.drawOffer('draw')
       },
       onCancel: () => {
         console.log('Отмена')

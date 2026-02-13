@@ -77,9 +77,7 @@ export const fb = {
         console.error('Ошибка при добавлении документа: ', e)
         throw e
       }
-
     }
-
   },
 
 
@@ -94,13 +92,8 @@ export const fb = {
 
       const unsubscribe = onSnapshot(gameRef, (docSnapshot) => {
         if (docSnapshot.exists()) {
-
-
           const isFromCache = docSnapshot.metadata.fromCache;
           const hasPendingWrites = docSnapshot.metadata.hasPendingWrites;
-
-          // console.log(`Получен Snapshot: isFromCache=${isFromCache}, hasPendingWrites=${hasPendingWrites}`);
-
 
           if (!isFromCache && !hasPendingWrites) {
             console.log('Данные получены')
@@ -110,7 +103,6 @@ export const fb = {
           // console.log("Current game data:", gameData)
           setIsLoading(false)
           setGameData(gameData)
-
         } else {
 
           console.log("Документ был удален или никогда не существовал!")
@@ -118,6 +110,7 @@ export const fb = {
 
       }, (error) => {
         console.error("Не удалось прослушать документ:", error)
+        setIsLoading(false)
       })
       return unsubscribe
     }
@@ -125,6 +118,8 @@ export const fb = {
 
 
 
+
+  // Предложить ничью
   drawOffer: (gameId, draw, setDrawRequest) => {
     const user = auth.currentUser
     if (user) {
@@ -138,7 +133,7 @@ export const fb = {
           drawOffer: `${user.uid}-${draw}`,
           status: 'agreed_draw'
         }
-      } else {   
+      } else {
         newDate = {
           drawOffer: `${user.uid}-${draw}`
         }
@@ -146,11 +141,39 @@ export const fb = {
 
       updateDoc(gameRef, newDate)
         .then(() => {
-          console.log("Поле drawOffer успешно обновлено!")
-          setDrawRequest(true) // устанавливаем флаг, что запрос на ничью отправлен (для деактивации кнопки запроса на ничью)
+          console.log("Поля успешно обновлены!")
+          // if (draw !== 'cancel') setDrawRequest(true) // устанавливаем флаг, что запрос на ничью отправлен (для деактивации кнопки запроса на ничью)
         })
         .catch((error) => {
-          console.error("Ошибка при обновлении поля drawOffer:", error)
+          setDrawRequest(false)
+          console.error("Ошибка при обновлении полей:", error)
+        });
+    }
+
+  },
+
+
+  // Сдаться
+  resign: (gameId) => {
+    const user = auth.currentUser
+    if (user) {
+      const gameRef = doc(db, "games", gameId)
+
+
+      const newDate = {
+        status: 'finished',
+        // winnerUid: null,
+        loserUid: user.uid
+      }
+
+      updateDoc(gameRef, newDate)
+        .then(() => {
+          console.log("Поле успешно обновлены!")
+          // if (draw !== 'cancel') setDrawRequest(true) // устанавливаем флаг, что запрос на ничью отправлен (для деактивации кнопки запроса на ничью)
+        })
+        .catch((error) => {
+          setDrawRequest(false)
+          console.error("Ошибка при обновлении полей:", error)
         });
     }
 
@@ -163,12 +186,6 @@ export const fb = {
     console.log('user.uid', user.uid)
     if (user) {
       const gameRef = doc(db, "games", gameId)
-
-
-
-
-      console.log(data.capturedFigure)
-
 
       const newData = data.capturedFigure
         ? {
@@ -183,8 +200,7 @@ export const fb = {
           movesHistory: arrayUnion(data.lastMove)
         }
 
-
-      console.log('newDate = ', newData)
+      // console.log('newDate = ', newData)
 
       updateDoc(gameRef, newData)
         .then(() => {
@@ -192,10 +208,8 @@ export const fb = {
         })
         .catch((error) => {
           console.error("Ошибка при обновлении полей:", error)
-        });
+        })
     }
-
-
   },
 
   getAllGamesId: async () => {
@@ -210,7 +224,6 @@ export const fb = {
       console.error("Ошибка при получении документов: ", error)
       return []
     }
-
   },
 
 
@@ -227,11 +240,10 @@ export const fb = {
   },
 
   getGameInfo: async (gameId) => {
-    const gameRef = doc(db, "games", gameId) // Создаем ссылку на документ
-    const gameSnap = await getDoc(gameRef) // Получаем документ
+    const gameRef = doc(db, "games", gameId)
+    const gameSnap = await getDoc(gameRef)
 
     if (gameSnap.exists()) {
-      // Документ существует, теперь вы можете получить его данные
       const gameData = gameSnap.data()
       const creatorUid = gameData.creatorUid
       const joinerUid = gameData.joinerUid
@@ -240,7 +252,6 @@ export const fb = {
       // console.log("creatorUid из документа:", creatorUid)
       return { creatorUid, whitePlayerUid, joinerUid }
     } else {
-      // Документ не найден
       console.log("Документ игры не найден!")
     }
 

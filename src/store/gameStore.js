@@ -84,31 +84,65 @@ class GameStore {
     // console.log('capturedFigures', this.gameData.capturedFigures)
     // console.log('------------------')
 
+
+
+    // if (authStore.creatorUid) {
+    //   if (authStore.creatorUid === this.gameData.whitePlayerUid) {
+    //     this.setCurrentPlayerColor('w')
+    //     AppStore.setWhiteBottom(true)
+    //   } else if (authStore.creatorUid === this.gameData.blackPlayerUid) {
+    //     this.setCurrentPlayerColor('b')
+    //     AppStore.setWhiteBottom(false)
+    //   }
+    // } else {
+    //   if (authStore.joinerUid === this.gameData.whitePlayerUid) {
+    //     this.setCurrentPlayerColor('w')
+    //     AppStore.setWhiteBottom(true)
+    //   } else if (authStore.joinerUid === this.gameData.blackPlayerUid) {
+    //     this.setCurrentPlayerColor('b')
+    //     AppStore.setWhiteBottom(false)
+    //   }
+    // }
+
+    const currentUserId = authStore.creatorUid || authStore.joinerUid
+
+
     // Определяем цвет текущего игрока
-    if (authStore.creatorUid) {
-      if (authStore.creatorUid === this.gameData.whitePlayerUid) {
-        this.setCurrentPlayerColor('w')
-        AppStore.setWhiteBottom(true)
-      } else if (authStore.creatorUid === this.gameData.blackPlayerUid) {
-        this.setCurrentPlayerColor('b')
-        AppStore.setWhiteBottom(false)
-      }
+    if (currentUserId === this.gameData.whitePlayerUid) {
+      this.setCurrentPlayerColor('w')
+      AppStore.setWhiteBottom(true)
     } else {
-      if (authStore.joinerUid === this.gameData.whitePlayerUid) {
-        this.setCurrentPlayerColor('w')
-        AppStore.setWhiteBottom(true)
-      } else if (authStore.joinerUid === this.gameData.blackPlayerUid) {
-        this.setCurrentPlayerColor('b')
-        AppStore.setWhiteBottom(false)
-      }
+      this.setCurrentPlayerColor('b')
+      AppStore.setWhiteBottom(false)
     }
+
+
+
+    // Если в БД есть данные о id проигравшего и о том, что игра завершилась, завершаем игру и уведомляем игроков
+    if (this.gameData.loserUid && this.gameData.status === 'finished') {
+
+      if (currentUserId !== this.gameData.loserUid) {
+        console.log('Соперник сдался!')
+        AppStore.setStatusMessage('Соперник сдался. Победа!')
+      } else {
+        console.log('Вы сдались!')
+        AppStore.setStatusMessage('Вы проиграли!')
+      }
+
+      AppStore.setGameStatus('finished')
+      this.setIsLoading(false)
+      return
+    }
+
+
+
 
 
     if (this.gameData.drawOffer) { // Если в БД есть запись о ничьи (вопрос или ответ)
       const parts = this.gameData.drawOffer.split('-')
       const userId = parts[0] // id
       const draw = parts[1] // result
-      const currentUserId = authStore.creatorUid || authStore.joinerUid
+
 
       console.log(userId, draw)
       console.log(currentUserId)
@@ -124,6 +158,7 @@ class GameStore {
 
       // если в запросе ничьи не твой id, у тебя просят ничью
       if (currentUserId !== userId) {
+        this.setDrawRequest(false)
         if (draw === 'draw') {
           this.setShowDrawDialog(true) // для показа диалога на подтверждение ничьи
           console.log(draw, ' - Показать диалог')
@@ -142,6 +177,7 @@ class GameStore {
       } else {
         // Если не CANCEL - этот пользователь отправил запрос на ничью. Деактивируем кнопку "Ничья?".
         // Если CANCEL - это тот, кто отказался, кнопку не деактивируем
+
         if (draw === 'cancel') {
           this.setDrawRequest(false)
         } else {
@@ -152,8 +188,9 @@ class GameStore {
     }
 
 
+
     // не подсвечиваем последний сетевой ход, если сейчас локальная игра
-    if (!this.gameData.lastMove || AppStore.gameType === 'local') return
+    // if (!this.gameData.lastMove || AppStore.gameType === 'local') return
 
     const lastMove = this.gameData.lastMove.split('/')[0] // Удаляем id
     const first = lastMove.slice(0, 2)
@@ -167,7 +204,7 @@ class GameStore {
     // console.log(toJS(lastMoveCells))
 
 
-    AppStore.setLastMoveCells(toJS(lastMoveCells))
+    AppStore.setLastMoveCells(lastMoveCells)
   })
 
   // Оставить стерлочную функцию, чтобы не терялся контекст
@@ -237,9 +274,15 @@ class GameStore {
     return await fb.getGameInfo(gameId)
   }
 
-
+  // Предложить ничью
   drawOffer(draw) {
     fb.drawOffer(this.currentGameId, draw, this.setDrawRequest)
+  }
+
+
+  // Сдаться
+  resign() {
+    fb.resign(this.currentGameId)
   }
 
 
