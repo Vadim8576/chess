@@ -7,6 +7,7 @@ import authStore from "../store/authStore"
 
 export const useJoinGame = (gameId) => {
   const [isJoin, setIsJoin] = useState(false)
+  const [gameExists, setGameExists] = useState(true)
   // const [isCreator, setIsCreator] = useState(false)
 
   const joinGame = async () => {
@@ -18,7 +19,14 @@ export const useJoinGame = (gameId) => {
 
 
       let gameInfo = await gameStore.getGameInfo(gameId)
-      // console.log(creatorInfo)
+      console.log(gameInfo)
+
+      if (!gameInfo) { // нет документа с gameId
+        setGameExists(false)
+        return
+      } else {
+        setGameExists(true)
+      }
 
 
       if (gameInfo.creatorUid === user) {
@@ -64,7 +72,7 @@ export const useJoinGame = (gameId) => {
   }
 
   const values = {
-    isJoin, joinGame
+    isJoin, joinGame, gameExists
   }
 
   return useMemo(() => values, [values])

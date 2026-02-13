@@ -126,7 +126,7 @@ class GameStore {
         AppStore.setStatusMessage('Соперник сдался. Победа!')
       } else {
         console.log('Вы сдались!')
-        AppStore.setStatusMessage('Вы проиграли!')
+        AppStore.setStatusMessage('Вы сдались!')
       }
 
       AppStore.setGameStatus('finished')
@@ -191,6 +191,7 @@ class GameStore {
 
     // не подсвечиваем последний сетевой ход, если сейчас локальная игра
     // if (!this.gameData.lastMove || AppStore.gameType === 'local') return
+    if (!this.gameData.lastMove) return
 
     const lastMove = this.gameData.lastMove.split('/')[0] // Удаляем id
     const first = lastMove.slice(0, 2)

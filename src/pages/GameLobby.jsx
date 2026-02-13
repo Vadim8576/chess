@@ -9,6 +9,7 @@ import InviteLink from '../components/UI/InviteLink';
 import { observer } from 'mobx-react-lite';
 import { COLORS } from '../constants/gameInitial';
 import Spinner from '../components/UI/Spinner';
+import GameDoesNotExist from './GameDoesNotExist';
 
 
 
@@ -25,7 +26,7 @@ background-color: ${COLORS.background};
 const GameLobby = observer(() => {
   const { gameId } = useParams() // Из URL: /game/:gameId
 
-  const { isJoin, joinGame } = useJoinGame(gameId)
+  const { isJoin, joinGame, gameExists } = useJoinGame(gameId)
   
 
   // const navigate = useNavigate()
@@ -64,6 +65,7 @@ const GameLobby = observer(() => {
   // if (!authStore.creatorUid && isJoin) show = 'inviteGame'
 
 
+  if(!gameExists) return <GameDoesNotExist />
 
   return (
     <LobbyWrapper>

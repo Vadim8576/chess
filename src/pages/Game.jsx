@@ -103,7 +103,6 @@ overflow: hidden;
 const Game = observer(() => {
 
 	const [dialogType, setDialogType] = useState(null) // null || 'resignation' || 'drawOffer'
-	const [showDialog, setShowDialog] = useState(null)
 	const [cellSize, setCellSize] = useState(null)
 
 	const { width, height } = useWindowResizeThrottle(300)
@@ -189,8 +188,8 @@ const Game = observer(() => {
 
 
 
-	console.log(gameStore.status)
-	console.log('showDialog = ', showDialog)
+	// console.log(gameStore.status)
+	// console.log('showDialog = ', showDialog)
 
 
 

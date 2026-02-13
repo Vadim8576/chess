@@ -21,32 +21,38 @@ const FastOnlineGamePage = observer(() => {
 	}, [])
 
 	useEffect(() => {
-		let unsubscribe
-		if (gameId && authStore.creatorUid || authStore.joinerUid) {
-			gameStore.setCurrentGameId(gameId)
-			unsubscribe = gameStore.gameSubscribe(gameId)
+
+	let unsubscribe
+	if (gameId && authStore.creatorUid || authStore.joinerUid) {
+		console.log('ПОДПИСКА------------------')
+		gameStore.setCurrentGameId(gameId)
+		unsubscribe = gameStore.gameSubscribe(gameId)
+	}
+
+	return () => {
+		if (unsubscribe) {
+			unsubscribe()
 		}
-
-		return () => {
-			if (unsubscribe) {
-				unsubscribe()
-			}
-		};
-	}, [gameId, authStore.creatorUid, authStore.joinerUid])
+	};
+}, [gameId, authStore.creatorUid, authStore.joinerUid])
 
 
-	const status = gameStore?.gameData?.status
-	console.log(status)
+const status = gameStore?.gameData?.status
+console.log(status)
 
-	return (
-		<>
-			{
-				(status !== undefined && status !== 'waiting' )
-					? <Game />
-					: <GameLobby />
-			}
-		</>
-	)
+
+
+
+
+return (
+	<>
+		{
+			(status !== undefined && status !== null && status !== 'waiting')
+				? <Game />
+				: <GameLobby />
+		}
+	</>
+)
 })
 
 export default FastOnlineGamePage
