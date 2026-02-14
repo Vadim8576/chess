@@ -2,9 +2,8 @@ import styled from 'styled-components';
 import AppStore from '../../store/AppStore';
 import { observer } from 'mobx-react-lite';
 import { COLORS } from '../../constants/gameInitial';
-import closeIcon from "../../assets/icons/close-x.svg"
-import Button from './Button';
 import { useEffect, useState } from 'react';
+import CloseIcon from './icons/CloseIcon';
 
 
 const DialogContainer = styled.div`
@@ -44,35 +43,66 @@ box-shadow: 5px 5px 10px rgba(0, 0, 0, .5);
 padding: 10px;
 `
 
-const IconWripper = styled.div`
+const Header = styled.div`
 flex: 1; 
 display: flex;
 justify-content: flex-end;
-align-items: center;
+align-items: flex-start;
 `
 
-const Icon = styled.img`
-width: ${props => props.width}px;
-height: ${props => props.height}px;
-cursor: pointer;
+const IconWripper = styled.div`
+display: flex;
+justify-content: flex-end;
+align-items: center;
+height: 100%;
+aspect-ratio: 1 / 1;
 &:hover {
-  background-color: ${COLORS.secondary};
+  background-color: ${COLORS.neutral};
+  color: #fff;
 }
 `
 
 const Row = styled.div`
-flex: 2; 
+flex: 3; 
 display: flex;
 justify-content: center;
 align-items: center;
-padding-right: 10px;
+// padding-right: 10px;
 `
 
 const Message = styled.div`
-font-size: 1.8vmin;
+font-size: 1.6vmin;
 padding: 0 0 10px 0;
-font-weight: bold;
+font-weight: normal;
 margin-left: 10px;
+`
+
+const ButtonWrapper = styled.div`
+display: flex;
+justify-content: space-between;
+align-items: center;
+width: 50%;
+`
+
+const Button = styled.button`
+display: flex;
+justify-content: center;
+align-items: center;
+width: 48%;
+padding: .6rem .1rem;
+// padding: 10px 20px;
+border: 1px ${COLORS.neutral} solid;
+background-color: #fff;
+color: ${COLORS.primary};
+// text-transform: uppercase;
+cursor: pointer;
+font-weight: normal;
+font-size: 1.3vmin;
+overflow: hidden;
+&:hover {
+  background-color: ${COLORS.neutral};
+  color: #fff;
+}
 `
 
 
@@ -96,7 +126,7 @@ const Dialog = observer(({ dialog = null }) => {
 
   return (
     <DialogContainer
-      // onClick={cancelButtonHandler}
+    // onClick={cancelButtonHandler}
     >
       <DialogShadow
 
@@ -106,36 +136,24 @@ const Dialog = observer(({ dialog = null }) => {
         $height={cellSize * 8}
       >
         <Wrapper
-          $top={cellSize * 2.5}
+          $top={cellSize * 3}
           $left={cellSize * 1}
           $width={cellSize * 6}
-          $height={cellSize * 3}
+          $height={cellSize * 2}
         >
-          <IconWripper>
-            <Icon
-              width={cellSize / 2}
-              height={cellSize / 2}
-              src={closeIcon}
-              alt='close'
-              onClick={cancelButtonHandler}
-            />
-          </IconWripper>
+          <Header>
+            <IconWripper onClick={cancelButtonHandler}>
+              <CloseIcon />
+            </IconWripper>
+          </Header>
           <Row>
             <Message>{dialog.text}</Message>
           </Row>
           <Row>
-            <Button
-              text={'Да'}
-              color={COLORS.background}
-              backgroundColor={COLORS.secondary}
-              onClick={okButtonHandler}
-            />
-            <Button
-              text={'Отмена'}
-              color={COLORS.background}
-              backgroundColor={COLORS.errorCell}
-              onClick={cancelButtonHandler}
-            />
+            <ButtonWrapper>
+              <Button onClick={okButtonHandler}>Да</Button>
+              <Button onClick={cancelButtonHandler}>Отмена</Button>
+            </ButtonWrapper>
           </Row>
         </Wrapper >
       </DialogShadow>
@@ -145,3 +163,4 @@ const Dialog = observer(({ dialog = null }) => {
 
 
 export default Dialog
+

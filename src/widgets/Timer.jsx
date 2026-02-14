@@ -1,5 +1,22 @@
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
+import styled from "styled-components";
+import { COLORS } from "../constants/gameInitial";
+
+
+
+const TimerWrapper = styled.div`
+display: flex;
+justify-content: flex-start;
+align-items: center;
+height: 100%;
+font-size: 3vmin;
+font-weight: bold;
+color: ${COLORS.neutral};
+// color: activePlayer === 'white' ? 'red' : '#666';
+transition: color 0.3s;
+height: 100%;
+`
 
 const Timer = observer(({ maxTime }) => {
   const [time, setTime] = useState(0)
@@ -19,20 +36,9 @@ const Timer = observer(({ maxTime }) => {
 
 
   return (
-    <div style={{ textAlign: 'left', maxHeight: '100%' }}>
-      {/* <div style={{ fontSize: '16px', color: '#555' }}>Белые</div> */}
-      <div
-        style={{
-          margin: '0 0 0 10px',
-          fontSize: '4.1vmin',
-          fontWeight: 'bold',
-          color: activePlayer === 'white' ? 'red' : '#666',
-          transition: 'color 0.3s'
-        }}
-      >
-        {formatTime(time)}
-      </div>
-    </div>
+    <TimerWrapper>
+      {formatTime(time)}
+    </TimerWrapper>
   )
 })
 

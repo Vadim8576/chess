@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import AppStore from '../../store/AppStore';
 import { COLORS, figure } from '../../constants/gameInitial';
 import CapturedFigure from '../boardElements/CapturedFigure';
-import closeIcon from "../../assets/icons/close-x.svg"
+import CloseIcon from './icons/CloseIcon';
 
 const PromotionContainer = styled.div`
 position: absolute;
@@ -98,11 +98,7 @@ const PawnPromotion = observer(() => {
     >
       <PromotionWrapper>
         <Message>Выберите фигуру</Message>
-        <Icon
-          src={closeIcon}
-          alt='close'
-          onPointerDown={close}
-        />
+        <CloseIcon onClick={close} />
       </PromotionWrapper>
       <PromotionWrapper>
         {promotionList.map((item, i) => (

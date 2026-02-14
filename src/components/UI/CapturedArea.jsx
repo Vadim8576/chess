@@ -1,13 +1,13 @@
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
-import AppStore from "../store/AppStore";
-import CapturedFigure from "../components/boardElements/CapturedFigure";
-import { figure, COLORS } from "../constants/gameInitial";
+import AppStore from "../../store/AppStore";
+import CapturedFigure from "../boardElements/CapturedFigure";
+import { figure, COLORS } from "../../constants/gameInitial";
 import { toJS } from 'mobx';
-import gameStore from "../store/gameStore";
+import gameStore from "../../store/gameStore";
 import { useEffect } from "react";
 import { useState } from "react";
-import { useCapturedFiguresFilter } from "../hooks/useCapturedFiguresFilter";
+import { useCapturedFiguresFilter } from "../../hooks/useCapturedFiguresFilter";
 
 
 // const Wrapper = styled.div`

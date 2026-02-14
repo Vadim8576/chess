@@ -55,38 +55,22 @@ const Header = observer(() => {
       >
         <h1 style={{ color: '#fff' }}>Chess</h1>
       </NavLink>
-      {AppStore.currentPage && <span style={{ color: '#fff', fontSize: '3vmin' }}>{`Page: "${AppStore.currentPage}"`}</span>}
+      {AppStore.currentPage && <span style={{ color: '#fff', fontSize: '2vmin' }}>{`Page: "${AppStore.currentPage}"`}</span>}
 
 
       <div>
         <NavLink to='/gamelist'
           style={{
             color: 'red',
-            fontSize: '3vmin'
+            fontSize: '2vmin'
           }}
         >
           Game List
         </NavLink>
 
-        {
-          AppStore.currentPage === 'local' && (
-            // <RestartButton
-            //   color={'green'}
-            //   onMouseDown={restartGame}
-            // >
-            //   New game
-            // </RestartButton>
-            <Button
-              text={'New game'}
-              color={'white'}
-              backgroundColor={'green'}
-              onClick={restartGame}
-            />
+  
 
-          )
-        }
-
-        {
+        {/* {
           (AppStore.currentPage === 'local' || AppStore.currentPage === 'fastgame') && (
             <Button
               text={'Rotate'}
@@ -95,7 +79,7 @@ const Header = observer(() => {
               onClick={rotateBoard}
             />
           )
-        }
+        } */}
 
       </div>
 

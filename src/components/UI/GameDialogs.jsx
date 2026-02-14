@@ -1,17 +1,52 @@
 import { observer } from "mobx-react-lite";
-import gameStore from "../store/gameStore";
-import Dialog from "./UI/Dialog";
+import AppStore from "../../store/AppStore";
+import gameStore from "../../store/gameStore";
+import Dialog from "./Dialog";
+import RightSideMenu from "../../widgets/RightSideMenu";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
-const GameDialogs = observer(({ dialogType, setDialogType }) => {
 
+
+const GameDialogs = observer(() => {
+
+  const [dialogType, setDialogType] = useState(null) // null || 'resignation' || 'drawOffer'
 
   // dialogType - если нажал кнопку "Ничья" или "Сдаться"
   //'drawOfferAnswer' - если вопрос пришел с сервера (Хотите согласиться?)
-  const type = dialogType || 'drawOfferAnswer' 
+  const type = dialogType || 'drawOfferAnswer'
+
+
+  const navigate = useNavigate()
 
 
   const dialog = {
+    'home': {
+      text: 'Вернуться на главную?',
+      onOk: () => {
+        setDialogType(null)
+        gameStore.setShowDrawDialog(false)
+        navigate('/')
+      },
+      onCancel: () => {
+        setDialogType(null)
+        gameStore.setShowDrawDialog(false)
+      }
+    },
+
+    'restart': {
+      text: 'Новая игра?',
+      onOk: () => {
+        setDialogType(null)
+        gameStore.setShowDrawDialog(false)
+        AppStore.restartGame()
+      },
+      onCancel: () => {
+        setDialogType(null)
+        gameStore.setShowDrawDialog(false)
+      }
+    },
+
     'resignation': {
       text: 'Хотите сдаться?',
       onOk: () => {
@@ -61,13 +96,10 @@ const GameDialogs = observer(({ dialogType, setDialogType }) => {
 
   return (
     <>
-      {
-        {
-          'resignation': <Dialog dialog={dialog[type]} />,
-          'drawOffer': <Dialog dialog={dialog[type]} />,
-          'drawOfferAnswer': <Dialog dialog={dialog[type]} />
-        }[type]
-      }
+      {gameStore.showDrawDialog && <Dialog dialog={dialog[type]} />}
+      {/* <Dialog dialog={dialog[type]} /> */}
+
+      <RightSideMenu setDialogType={setDialogType} />
     </>
   )
 })

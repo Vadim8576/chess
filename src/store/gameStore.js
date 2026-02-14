@@ -21,7 +21,7 @@ class GameStore {
   isLoading = true
 
   showDrawDialog = false
-  drawRequest = false
+  isShowDrawButton = false
 
 
   constructor() {
@@ -35,8 +35,8 @@ class GameStore {
   }
 
 
-  setDrawRequest = action((bool) => {
-    this.drawRequest = bool
+  setIsShowDrawButton = action((bool) => {
+    this.isShowDrawButton = bool
   })
 
 
@@ -158,7 +158,7 @@ class GameStore {
 
       // если в запросе ничьи не твой id, у тебя просят ничью
       if (currentUserId !== userId) {
-        this.setDrawRequest(false)
+        this.setIsShowDrawButton(false)
         if (draw === 'draw') {
           this.setShowDrawDialog(true) // для показа диалога на подтверждение ничьи
           console.log(draw, ' - Показать диалог')
@@ -172,16 +172,16 @@ class GameStore {
 
         if (draw === 'cancel') { // Соперник отказался от ничьи
           console.log('Соперник отказался от ничьи') // ЭТИ СООБЩЕНИЯ БУДУТ ОТОБРАЖАТЬСЯ В ЧАТЕ
-          this.setDrawRequest(false) // Активируем кнопку "Ничья?"
+          this.setIsShowDrawButton(false) // Активируем кнопку "Ничья?"
         }
       } else {
         // Если не CANCEL - этот пользователь отправил запрос на ничью. Деактивируем кнопку "Ничья?".
         // Если CANCEL - это тот, кто отказался, кнопку не деактивируем
 
         if (draw === 'cancel') {
-          this.setDrawRequest(false)
+          this.setIsShowDrawButton(false)
         } else {
-          this.setDrawRequest(true)
+          this.setIsShowDrawButton(true)
         }
       }
       return
@@ -277,7 +277,7 @@ class GameStore {
 
   // Предложить ничью
   drawOffer(draw) {
-    fb.drawOffer(this.currentGameId, draw, this.setDrawRequest)
+    fb.drawOffer(this.currentGameId, draw, this.setIsShowDrawButton)
   }
 
 

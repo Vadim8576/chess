@@ -86,11 +86,16 @@ const Figure = memo(observer(({
  
 
 
+	const cursor = AppStore.gameType === 'local'
+	? 'grab'
+	: AppStore.gameStatus === 'playing' && 'grab'
+
+
 	return (
 		<ImgWrapper
-			$pointerEvents={AppStore.gameStatus === 'playing' ? pointerEvents : 'none'}
+			$pointerEvents={pointerEvents}
 			onPointerDown={onPointerDown}
-			$cursor={AppStore.gameStatus === 'playing' && 'grab'}
+			$cursor={cursor}
 			$width={cellSize}
 			$height={cellSize}
 			$top={top}
