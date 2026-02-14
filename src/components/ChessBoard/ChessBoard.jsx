@@ -57,10 +57,11 @@ const ChessBoard = observer(() => {
 
 
 
+
   useEffect(() => {
 
     // gameStatus(AppStore)
-    
+
     AppStore.updateKingCheckHighlight()
 
     if (AppStore.gameType !== 'local') {

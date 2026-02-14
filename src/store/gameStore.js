@@ -277,7 +277,7 @@ class GameStore {
 
   // Предложить ничью
   drawOffer(draw) {
-    fb.drawOffer(this.currentGameId, draw, this.setIsShowDrawButton)
+    fb.drawOffer(this.currentGameId, draw)
   }
 
 

@@ -65,7 +65,7 @@ const Button = observer(({
       $cellSize={cellSize * 2 / 3}
       
     >
-      {inert && (
+      {/* {inert && (
         <>
           <Spinner scale={.3} />
           <div style={{
@@ -73,7 +73,7 @@ const Button = observer(({
             width: '5px'
           }}
           />
-        </>)}
+        </>)} */}
       {icon && <Icon>{icon}</Icon>}
       {/* {text} */}
     </CustomButton>

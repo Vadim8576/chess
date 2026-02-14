@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 import useWindowResizeThrottle from '../hooks/useWindowResizeThrottle';
 import { COLORS, FOOTER_HEIGHT, HEADER_HEIGHT } from '../constants/gameInitial';
@@ -7,19 +8,14 @@ import CapturedArea from '../components/UI/CapturedArea';
 import ChessBoardContainer from './ChessBoardContainer';
 import Widget from '../widgets/Widget';
 import GameStatus from '../widgets/GameStatus';
-import { observer } from 'mobx-react-lite';
 import PawnPromotion from '../components/UI/PawnPromotion';
-import Dialog from '../components/UI/Dialog';
-import Menu from '../components/UI/Menu';
 import ChessClock from '../components/boardElements/ChessClock';
-import Timer from '../widgets/Timer';
-import Button from '../components/UI/Button';
-import gameStore from '../store/gameStore';
 import GameDialogs from '../components/UI/GameDialogs';
-import RightSideMenu from '../widgets/RightSideMenu';
+import GameController from '../components/ChessBoard/GameController';
 
 
 const PageContainer = styled.div`
+position: relative;
 width: 100%;
 height: 100%;
 background-color: ${COLORS.background};
@@ -96,70 +92,9 @@ const Game = observer(() => {
 
 
 
-
-
-
-	// const dialog = {
-	// 	'resignation': {
-	// 		text: 'Хотите сдаться?',
-	// 		onOk: () => {
-	// 			console.log('Сдался')
-	// 			setShowDialog(false)
-
-	// 		},
-	// 		onCancel: () => {
-	// 			console.log('Отмена')
-	// 			setShowDialog(false)
-	// 		}
-	// 	},
-
-	// 	'drawOffer': {
-	// 		text: 'Предложить ничью?',
-	// 		onOk: () => {
-	// 			console.log('Предложил ничью')
-	// 			setShowDialog(false)
-	// 			gameStore.drawOffer('draw')
-	// 		},
-	// 		onCancel: () => {
-	// 			console.log('Отмена')
-	// 			setShowDialog(false)
-	// 		}
-	// 	},
-
-	// 	'drawOfferAnswer': {
-	// 		text: 'Соперник предлагает ничью. Хотите согласиться?',
-	// 		onOk: () => {
-	// 			console.log('Согласился')
-	// 			setShowDialog(false)
-	// 			gameStore.drawOffer('ok')
-	// 		},
-	// 		onCancel: () => {
-	// 			console.log('Не согласился')
-	// 			setShowDialog(false)
-	// 			gameStore.drawOffer('cancel')
-	// 		}
-	// 	}
-	// }
-
-
-
-	// useEffect(() => {
-	// 	if(!gameStore?.gameData?.drawOffer) return
-	// 	if (gameStore.gameData.drawOffer.split('-')[1] === 'draw') {
-	// 		setDialogType('drawOfferAnswer')
-	// 	}
-
-	// }, [gameStore.showDrawDialog])
-
-
-
-	// console.log(gameStore.status)
-	// console.log('showDialog = ', showDialog)
-
-
-
 	return (
 		<PageContainer>
+			<GameController />
 			<PageContentWrapper>
 				{cellSize && <Grid $size={cellSize * 12}>
 					<CapturedAreaUp>
@@ -181,10 +116,6 @@ const Game = observer(() => {
 
 
 
-
-
-
-
 					{/* <Widget
 						gridColumn={'9 / 13'}
 						gridRow={'6 / 7'}
@@ -198,9 +129,6 @@ const Game = observer(() => {
 					>
 						<Timer maxTime={AppStore.whiteBottom ? 600 : 300} />
 					</Widget> */}
-
-
-
 
 
 

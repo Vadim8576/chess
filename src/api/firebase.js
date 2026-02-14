@@ -120,7 +120,7 @@ export const fb = {
 
 
   // Предложить ничью
-  drawOffer: (gameId, draw, setIsShowDrawButton) => {
+  drawOffer: (gameId, draw) => {
     const user = auth.currentUser
     if (user) {
       const gameRef = doc(db, "games", gameId)
@@ -145,7 +145,6 @@ export const fb = {
           // if (draw !== 'cancel') setIsShowDrawButton(true) // устанавливаем флаг, что запрос на ничью отправлен (для деактивации кнопки запроса на ничью)
         })
         .catch((error) => {
-          setIsShowDrawButton(false)
           console.error("Ошибка при обновлении полей:", error)
         });
     }
@@ -154,7 +153,7 @@ export const fb = {
 
 
   // Сдаться
-  resign: (gameId) => {
+  resign: (gameId, setIsShowDrawButton) => {
     const user = auth.currentUser
     if (user) {
       const gameRef = doc(db, "games", gameId)
@@ -169,10 +168,11 @@ export const fb = {
       updateDoc(gameRef, newDate)
         .then(() => {
           console.log("Поле успешно обновлены!")
+
           // if (draw !== 'cancel') setIsShowDrawButton(true) // устанавливаем флаг, что запрос на ничью отправлен (для деактивации кнопки запроса на ничью)
         })
         .catch((error) => {
-          setIsShowDrawButton(false)
+          // setIsShowDrawButton(false)
           console.error("Ошибка при обновлении полей:", error)
         });
     }
