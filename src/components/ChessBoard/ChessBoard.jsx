@@ -38,8 +38,11 @@ const ChessBoard = observer(() => {
   const size = AppStore.board.cellSize * 8
   const [draggedFigure, setDraggedFigure] = useState(null)
   const [isMoving, setIsMoving] = useState(false)
+  const [pressCounter, setPressCounter] = useState(0)
   const [x, setX] = useState(0)
   const [y, setY] = useState(0)
+  const [gamePadCursor, setGamePadCursor] = useState(null)
+  
 
   const { gamepadState, isConnected, isButtonPressed } = useGamepad()
 
@@ -61,16 +64,10 @@ const ChessBoard = observer(() => {
   )
 
 
-
-
-
-
   useEffect(() => {
     AppStore.updateKingCheckHighlight()
 
-    if (AppStore.gameType !== 'local') {
-      return
-    }
+    if (AppStore.gameType !== 'local') return
 
     handlePointerCancel()
     AppStore.loadGameFromLocalStorage()
@@ -79,11 +76,6 @@ const ChessBoard = observer(() => {
     AppStore.setSettingFromLocalStorage()
 
   }, [AppStore.gameType])
-
-
-
-
-
 
 
   useEffect(() => {
@@ -111,8 +103,6 @@ const ChessBoard = observer(() => {
 
 
 
-
-
   useEffect(() => {
     if (isButtonPressed(15)) {
       setX(prevX => prevX + 1)
@@ -130,18 +120,22 @@ const ChessBoard = observer(() => {
       setY(prevY => prevY + 1)
     }
 
+    if(gamepadState?.buttons) {
+      // setGamePadCursor({col: x})
+    }
 
     if (isButtonPressed(0)) {
-      const square = getSquare(AppStore.whiteBottom, x, y)
-      firstPress(y, x, square)
-
-      // На второе нажатие:
-      // const startCell = { ...grabCell }
-      // const finishCell = { col, row }
-      // console.log(startCell, finishCell)
-      // fugureMove(startCell, finishCell, 'doubleClick')
-
-
+      // setPressCounter(prev => prev + 1)
+      if (grabCell === null) {
+        const square = getSquare(AppStore.whiteBottom, x, y)
+        firstPress(y, x, square)
+      } else {
+        // На второе нажатие:
+        const startCell = { ...grabCell }
+        const finishCell = { col: x, row: y }
+        console.log(startCell, finishCell)
+        fugureMove(startCell, finishCell, 'doubleClick')
+      }
     }
 
 

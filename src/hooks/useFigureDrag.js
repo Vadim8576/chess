@@ -239,8 +239,9 @@ export const useFigureDrag = (
     ])
 
     AppStore.setPossibleMoves([])
+    setGrabCell(null)
 
-    const moveSquares = `${startSquare}${finishSquare}`
+    // const moveSquares = `${startSquare}${finishSquare}`
     let capturedFigure = AppStore.chess.board()[row][col] // фигура на клетке
 
 
@@ -279,7 +280,7 @@ export const useFigureDrag = (
 
     // gameStore.updateBoard() // обновить доску в Firebase
 
-  }, [AppStore, grabCell])
+  }, [AppStore])
 
 
 
