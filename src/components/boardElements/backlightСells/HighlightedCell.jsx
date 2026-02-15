@@ -28,7 +28,7 @@ const HighlightedCell = observer(({ highlightedCell }) => {
 
 	// console.log(highlightedCell)
 	
-	if (!highlightedCell.visible) return null
+	if (!highlightedCell?.visible) return null
 
 	const colTemp = highlightedCell.cell.col
 	const rowTemp = highlightedCell.cell.row

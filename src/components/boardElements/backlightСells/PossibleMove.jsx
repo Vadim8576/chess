@@ -26,7 +26,7 @@ height: 100%;
 cursor: pointer;
 `;
 
-const PossibleMove = observer(({ cell, fugureMove, grabCell, setSecondClick, secondClick }) => {
+const PossibleMove = observer(({ cell, fugureMove, grabCell }) => {
   
   const ref = useRef(null)
   const colTemp = cell.col
@@ -50,7 +50,7 @@ const PossibleMove = observer(({ cell, fugureMove, grabCell, setSecondClick, sec
 
 
 
-  const handleDocumentClick = (event) => {
+  // const handleDocumentClick = (event) => {
 
     // setSecondClick(true)
     // console.log('secondClick ', secondClick)
@@ -69,15 +69,15 @@ const PossibleMove = observer(({ cell, fugureMove, grabCell, setSecondClick, sec
     // console.log('!!!!!!!!!!!!!!!!!!! FALSE')
 
 
-  }
+  // }
 
 
-  useEffect(() => {
-    document.addEventListener('pointerdown', handleDocumentClick)
-    return () => {
-      document.removeEventListener('pointerdown', handleDocumentClick)
-    }
-  }, [])
+  // useEffect(() => {
+  //   document.addEventListener('pointerdown', handleDocumentClick)
+  //   return () => {
+  //     document.removeEventListener('pointerdown', handleDocumentClick)
+  //   }
+  // }, [])
 
 
 

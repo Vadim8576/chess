@@ -1,15 +1,17 @@
+import { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
-import FiguresContainer from '../boardElements/FiguresContainer';
 import AppStore from '../../store/AppStore';
 import Board from './Board';
-import { useFigureDrag } from '../../hooks/useFigureDrag';
-import { useCallback, useEffect, useState } from 'react';
+import FiguresContainer from '../boardElements/FiguresContainer';
 import DraggableFigure from '../boardElements/DraggableFigure';
 import HighlightedCell from '../boardElements/backlightСells/HighlightedCell';
 import BacklightСells from '../boardElements/backlightСells/BacklightСells';
-import gameStore from '../../store/gameStore';
-import Spinner from '../UI/Spinner';
+import { useFigureDrag } from '../../hooks/useFigureDrag';
+import { useGamepad } from '../../hooks/useGamepad';
+import GameController from './GameController';
+import { COLORS } from '../../constants/gameInitial';
+import { getSquare } from '../../utils/getSquare';
 
 
 const BoardWrapper = styled.div`
@@ -18,16 +20,16 @@ const BoardWrapper = styled.div`
   height: ${props => props.$size}px;
 `;
 
-const FullSizeWrapper = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+// const FullSizeWrapper = styled.div`
+//   position: absolute;
+//   width: 100%;
+//   height: 100%;
+//   top: 0;
+//   left: 0;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// `;
 
 
 const ChessBoard = observer(() => {
@@ -36,6 +38,10 @@ const ChessBoard = observer(() => {
   const size = AppStore.board.cellSize * 8
   const [draggedFigure, setDraggedFigure] = useState(null)
   const [isMoving, setIsMoving] = useState(false)
+  const [x, setX] = useState(0)
+  const [y, setY] = useState(0)
+
+  const { gamepadState, isConnected, isButtonPressed } = useGamepad()
 
   const {
     isDragging,
@@ -43,6 +49,7 @@ const ChessBoard = observer(() => {
     grabCell,
     highlightedCell,
     fugureMove,
+    firstPress,
     handlePointerDown,
     handlePointerMove,
     handlePointerUp,
@@ -59,9 +66,6 @@ const ChessBoard = observer(() => {
 
 
   useEffect(() => {
-
-    // gameStatus(AppStore)
-
     AppStore.updateKingCheckHighlight()
 
     if (AppStore.gameType !== 'local') {
@@ -84,7 +88,6 @@ const ChessBoard = observer(() => {
 
   useEffect(() => {
     if (isDragging) {
-
       document.addEventListener('pointermove', handlePointerMove)
       document.addEventListener('pointerup', handlePointerUp)
       document.addEventListener('pointercancel', handlePointerCancel)
@@ -108,28 +111,49 @@ const ChessBoard = observer(() => {
 
 
 
-  // const ShowSpinner = observer(() => {
-  //   if (AppStore.gameType === 'local') return null
-
-  //   console.log('isLoading = ', gameStore.isLoading)
-
-  //   if (gameStore.isLoading) {
-  //     return (
-  //       <FullSizeWrapper>
-  //         <Spinner />
-  //       </FullSizeWrapper>
-  //     )
-  //   } else {
-  //     return null
-  //   }
-  // })
 
 
-  // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', AppStore.gameType)
+  useEffect(() => {
+    if (isButtonPressed(15)) {
+      setX(prevX => prevX + 1)
+    }
+
+    if (isButtonPressed(14)) {
+      setX(prevX => prevX - 1)
+    }
+
+    if (isButtonPressed(12)) {
+      setY(prevY => prevY - 1)
+    }
+
+    if (isButtonPressed(13)) {
+      setY(prevY => prevY + 1)
+    }
+
+
+    if (isButtonPressed(0)) {
+      const square = getSquare(AppStore.whiteBottom, x, y)
+      firstPress(y, x, square)
+
+      // На второе нажатие:
+      // const startCell = { ...grabCell }
+      // const finishCell = { col, row }
+      // console.log(startCell, finishCell)
+      // fugureMove(startCell, finishCell, 'doubleClick')
+
+
+    }
+
+
+  }, [isButtonPressed])
+
+
+
 
 
   return (
     <BoardWrapper $size={size}>
+      <GameController isShow={false} />
       <Board />
 
       <BacklightСells
@@ -148,11 +172,13 @@ const ChessBoard = observer(() => {
           highlightedCell={AppStore.cellInCheck}
         />
       )}
-      {/* {(AppStore.gameType !== 'local' && gameStore.isLoading) && (
-        <FullSizeWrapper>
-          <Spinner />
-        </FullSizeWrapper>)
-      } */}
+
+      {/* Курсор геймпада */}
+      <HighlightedCell
+        highlightedCell={{ cell: { col: x, row: y }, color: COLORS.primary, visible: true }}
+      />
+
+
       <FiguresContainer
         handlePointerDown={handlePointerDownMemo}
         setDraggedFigure={setDraggedFigure}
@@ -166,6 +192,7 @@ const ChessBoard = observer(() => {
           position={position}
         />
       )}
+
 
     </BoardWrapper>
   )

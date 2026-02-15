@@ -1,11 +1,8 @@
 import { useCallback, useState } from 'react'
 import { getCellPosition } from '../utils/getCellPosition'
 import { getSquare } from '../utils/getSquare'
-import { squareToIndices } from '../utils/squareToIndices'
 import { COLORS } from '../constants/gameInitial'
-import { gameStatus } from '../utils/gameStatus'
 import { getPossibleMoves } from '../utils/getPossibleMoves'
-import gameStore from '../store/gameStore'
 
 
 
@@ -31,15 +28,65 @@ export const useFigureDrag = (
     const x = e.clientX - startX
     const y = e.clientY - startY
     const [col, row] = getCellPosition(x, y, AppStore)
+
+    firstPress(row, col, currentFigureSquare)
+
+
+    // const grabFigure = AppStore.chess.board()[row][col]
+
+    // AppStore.setPromotion(null)
+
+    // if (!grabFigure) return
+
+    // const isCurrentPlayer = grabFigure.color === AppStore.chess.turn()
+
+    // if (currentFigureSquare !== grabFigure.square) {
+    //   console.log('Взял одну фигуру, а по расчетам другая')
+    //   setDraggedFigure(null)
+    //   return
+    // }
+
+    // if (isCurrentPlayer) {
+    //   AppStore.setLastMoveCells([])
+    //   console.log('Взял другую свою фигуру')
+    // }
+
+    // const pm = getPossibleMoves(AppStore, grabFigure.square)
+    // AppStore.setPossibleMoves([...pm])
+
+    // setGrabCell({ col, row })
+
+    // AppStore.setLastMoveCells([
+    //   {
+    //     col: col,
+    //     row: row
+    //   }
+    // ])
+
+    // setHighlightedCell({
+    //   cell: {
+    //     col,
+    //     row,
+    //   },
+    //   visible: true,
+    //   color: COLORS.accessibleСell
+    // })
+    // setIsDragging(true)
+  }, [AppStore])
+
+
+
+
+
+
+
+  const firstPress = useCallback((row, col, currentFigureSquare) => {
+
     const grabFigure = AppStore.chess.board()[row][col]
 
     AppStore.setPromotion(null)
 
     if (!grabFigure) return
-
-
-
-    // console.log('!!!!!', 'физически ', currentFigureSquare, 'по расчету ', grabFigure.square)
 
     const isCurrentPlayer = grabFigure.color === AppStore.chess.turn()
 
@@ -54,19 +101,8 @@ export const useFigureDrag = (
       console.log('Взял другую свою фигуру')
     }
 
-
-    // const attack = AppStore.chess.attackers(grabFigure.square)
-    // console.log(`Атака `, attack)
-
-
-    // if (AppStore.possibleMoves.length > 0) {
-    //   AppStore.setPossibleMoves([])
-    //   return
-    // } else {
     const pm = getPossibleMoves(AppStore, grabFigure.square)
-    // console.log(pm)
     AppStore.setPossibleMoves([...pm])
-    // }
 
     setGrabCell({ col, row })
 
@@ -87,12 +123,15 @@ export const useFigureDrag = (
     })
     setIsDragging(true)
   }, [
-    AppStore,
     setGrabCell,
     setHighlightedCell,
     setIsDragging,
     setDraggedFigure
   ])
+
+
+
+
 
 
 
@@ -263,6 +302,7 @@ export const useFigureDrag = (
     grabCell,
     highlightedCell,
     fugureMove,
+    firstPress,
     handlePointerDown,
     handlePointerMove,
     handlePointerUp,
