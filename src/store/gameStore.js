@@ -10,7 +10,7 @@ class GameStore {
 
   currentGameId = null
   fastOnlineGameId = null
-  fastGameList = []
+  fastGameList = null
   // fastOnlineGameId = null
   // fastOnlineGameId = '65NH7uPgvKw44ft4euD4'
 
@@ -256,8 +256,8 @@ class GameStore {
     fb.updateBoard(this.currentGameId, { ...data, newBoardState })
   }
 
-  removeGame(id) {
-    fb.removeGame(id)
+  async removeGame(id) {
+    await fb.removeGame(id)
   }
 
   setFastGameList = action((list) => {

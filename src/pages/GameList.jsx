@@ -4,16 +4,8 @@ import styled from "styled-components";
 import gameStore from "../store/gameStore";
 import { useAuth } from "../hooks/useAuth";
 import AppStore from "../store/AppStore";
+import PageWrapper from "./PageWrapper";
 
-
-
-const ListPagecontainer = styled.div`
-display: flex;
-width: 100%;
-height: 100%;
-justify-content: center;
-align-items: center;
-`
 
 const ListWrapper = styled.ul`
 width: 50%;
@@ -25,8 +17,6 @@ const Item = styled.ul`
 width: 100%;
 padding: 10px;
 `
-
-
 
 
 // const fastGameList = ['HEiDBwFx3chFKQK82Ej1', '4eiDBwFx3chFKQK82E33']
@@ -54,7 +44,7 @@ const GameList = observer(() => {
 
 
   return (
-    <ListPagecontainer>
+    <PageWrapper>
       <ListWrapper>
         {
           gameStore.fastGameList.length> 0
@@ -67,7 +57,7 @@ const GameList = observer(() => {
             : <Item>Нет игр</Item>
         }
       </ListWrapper>
-    </ListPagecontainer>
+    </PageWrapper>
   )
 })
 

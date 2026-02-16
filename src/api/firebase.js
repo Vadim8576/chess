@@ -227,16 +227,15 @@ export const fb = {
   },
 
 
-  removeGame: (id) => {
+  removeGame: async (id) => {
 
     const docRef = doc(db, 'games', id)
-    deleteDoc(docRef)
-      .then(() => {
-        console.log("Документ успешно удален!")
-      })
-      .catch((error) => {
-        console.error("Ошибка при удалении документа: ", error)
-      })
+    try {
+      await deleteDoc(docRef)
+      console.log("Документ успешно удален!")
+    } catch (error) {
+      console.error("Ошибка при удалении документа: ", error)
+    }
   },
 
   getGameInfo: async (gameId) => {

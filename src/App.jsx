@@ -8,6 +8,8 @@ import RateGamePage from "./pages/RateGamePage/RateGamePage";
 import GameLobby from "./pages/GameLobby";
 import GameList from "./pages/GameList";
 import { COLORS } from "./constants/gameInitial";
+import CreateOnlineGamePage from "./pages/CreateOnlineGamePage";
+
 
 
 
@@ -39,6 +41,7 @@ const App = () => {
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
+            <Route path="/create-game" element={<CreateOnlineGamePage />} />
             <Route path="/local" element={<LocalGamePage />} />
             <Route path="/gamelist" element={<GameList />} />
             <Route path="/fastgame/:gameId" element={<FastOnlineGamePage />} />

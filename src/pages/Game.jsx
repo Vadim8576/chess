@@ -12,22 +12,8 @@ import PawnPromotion from '../components/UI/PawnPromotion';
 import ChessClock from '../components/boardElements/ChessClock';
 import GameDialogs from '../components/UI/GameDialogs';
 import GameController from '../components/ChessBoard/GameController';
+import PageWrapper from './PageWrapper';
 
-
-const PageContainer = styled.div`
-position: relative;
-width: 100%;
-height: 100%;
-background-color: ${COLORS.background};
-`;
-
-const PageContentWrapper = styled.div`
-display: flex;
-justify-content: center;
-align-items: center;
-width: 100%;
-height: 100%;
-`
 
 const Grid = styled.div`
 position: relative;
@@ -93,30 +79,29 @@ const Game = observer(() => {
 
 
 	return (
-		<PageContainer>
+		<PageWrapper>
 			<GameController />
-			<PageContentWrapper>
-				{cellSize && <Grid $size={cellSize * 12}>
-					<CapturedAreaUp>
-						<CapturedArea player={AppStore.whiteBottom ? 'w' : 'b'} />
-					</CapturedAreaUp>
-					<CapturedAreaDown>
-						<CapturedArea player={AppStore.whiteBottom ? 'b' : 'w'} />
-					</CapturedAreaDown>
+			{cellSize && <Grid $size={cellSize * 12}>
+				<CapturedAreaUp>
+					<CapturedArea player={AppStore.whiteBottom ? 'w' : 'b'} />
+				</CapturedAreaUp>
+				<CapturedAreaDown>
+					<CapturedArea player={AppStore.whiteBottom ? 'b' : 'w'} />
+				</CapturedAreaDown>
 
-					<ChessBoardContainer windowSize={{ width, height }} />
-
-
-					<Widget
-						gridColumn={'9 / 13'}
-						gridRow={'3 / 5'}
-					>
-						<GameStatus />
-					</Widget>
+				<ChessBoardContainer windowSize={{ width, height }} />
 
 
+				<Widget
+					gridColumn={'9 / 13'}
+					gridRow={'3 / 5'}
+				>
+					<GameStatus />
+				</Widget>
 
-					{/* <Widget
+
+
+				{/* <Widget
 						gridColumn={'9 / 13'}
 						gridRow={'6 / 7'}
 					>
@@ -133,8 +118,8 @@ const Game = observer(() => {
 
 
 
-					{/* <ChessClock /> */}
-					{/* <History>
+				{/* <ChessClock /> */}
+				{/* <History>
 						<Widget title={{
 							title: 'История',
 							color: '#fff',
@@ -145,21 +130,20 @@ const Game = observer(() => {
 						</Widget>
 					</History> */}
 
-					{AppStore.promotion !== null && <PawnPromotion />}
+				{AppStore.promotion !== null && <PawnPromotion />}
 
-					{/* {showDialog && <Dialog dialog={dialog[dialogType]} />} */}
-
-
-					<GameDialogs />
+				{/* {showDialog && <Dialog dialog={dialog[dialogType]} />} */}
 
 
-					{/* <PawnPromotion /> */}
-				</Grid>}
+				<GameDialogs />
 
-				{/* <Menu /> */}
 
-			</PageContentWrapper>
-		</PageContainer >
+				{/* <PawnPromotion /> */}
+			</Grid>}
+
+			{/* <Menu /> */}
+
+		</PageWrapper>
 	)
 })
 

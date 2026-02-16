@@ -10,17 +10,8 @@ import { observer } from 'mobx-react-lite';
 import { COLORS } from '../constants/gameInitial';
 import Spinner from '../components/UI/Spinner';
 import GameDoesNotExist from './GameDoesNotExist';
+import PageWrapper from './PageWrapper';
 
-
-
-const LobbyWrapper = styled.div`
-display: flex;
-justify-content: center;
-align-items: center;
-width: 100%;
-height: 100%;
-background-color: ${COLORS.background};
-`
 
 
 const GameLobby = observer(() => {
@@ -68,14 +59,14 @@ const GameLobby = observer(() => {
   if(!gameExists) return <GameDoesNotExist />
 
   return (
-    <LobbyWrapper>
+    <PageWrapper>
       {{
         'invitationLink': <InviteLink />,
         'loading': <Spinner scale={1.5} />,
         // 'loading': <div>...LOADING</div>,
         // 'inviteGame': <button onClick={inviteGame}>В игру</button>
       }[show]}
-    </LobbyWrapper>
+    </PageWrapper>
   )
 
 })

@@ -10,15 +10,9 @@ import AppStore from '../../store/AppStore';
 import InviteLink from '../../components/UI/InviteLink';
 import Spinner from '../../components/UI/Spinner';
 import { COLORS } from '../../constants/gameInitial';
+import PageWrapper from '../PageWrapper';
 
 
-const HomeWrapper = styled.div`
-display: flex;
-width: 100%;
-height: 100%;
-justify-content: center;
-align-items: center;
-`
 
 const MenuWrapper = styled.div`
 display: flex;
@@ -61,29 +55,29 @@ font-weight: bold;
 
 const Home = observer(() => {
   // const [inviteLink, setInviteUrl] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [creatorColor, setCreatorColor] = useState('w')
+  // const [isLoading, setIsLoading] = useState(false)
+  // const [creatorColor, setCreatorColor] = useState('w')
 
   const navigate = useNavigate()
 
-  const { isAuth, startAuth } = useAuth()
+  // const { isAuth, startAuth } = useAuth()
 
 
   useEffect(() => {
     AppStore.setCurrentPage('home')
   }, [])
 
-  useEffect(() => {
-    if (!isAuth) return
-    gameStore.createFastOnlineGame(creatorColor)
-  }, [isAuth])
+  // useEffect(() => {
+  //   if (!isAuth) return
+  //   gameStore.createFastOnlineGame(creatorColor)
+  // }, [isAuth])
 
 
 
-  useEffect(() => {
-    if (!gameStore.inviteLink) return
-    setIsLoading(false)
-  }, [gameStore.inviteLink])
+  // useEffect(() => {
+  //   if (!gameStore.inviteLink) return
+  //   setIsLoading(false)
+  // }, [gameStore.inviteLink])
 
 
 
@@ -93,53 +87,59 @@ const Home = observer(() => {
     navigate('/local')
   }
 
-  const inviteGame = async () => {
-    // setInviteUrl(null)
-    // navigate(`/fastgame/${gameStore.fastOnlineGameId}`)
-    navigate(`/fastgame/${gameStore.fastOnlineGameId}`)
-  }
+  // const inviteGame = async () => {
+  //   // setInviteUrl(null)
+  //   // navigate(`/fastgame/${gameStore.fastOnlineGameId}`)
+  //   navigate(`/fastgame/${gameStore.fastOnlineGameId}`)
+  // }
 
   const createFastGame = () => {
-    console.log('createFastGame')
-    setIsLoading(true)
-    gameStore.setInviteUrl(null)
-    startAuth()
+    // console.log('createFastGame')
+    // setIsLoading(true)
+    // gameStore.setInviteUrl(null)
+    // startAuth()
+    navigate('/create-game')
   }
 
   const RateGame = () => navigate('/rate')
 
 
-  const CreateButtonInside = observer(({ isLoading }) => {
+  // const CreateButtonInside = observer(({ isLoading }) => {
 
-    if (isLoading && !gameStore.inviteLink) return <Spinner scale={1} />
-    if (!isLoading && gameStore.inviteLink) return 'В игру'
-    return <>Быстрая игра по сети</>
-  })
+  //   if (isLoading && !gameStore.inviteLink) return <Spinner scale={1} />
+  //   if (!isLoading && gameStore.inviteLink) return 'В игру'
+  //   return <>Быстрая игра по сети</>
+  // })
 
 
   return (
-    <HomeWrapper>
+    <PageWrapper>
       <MenuWrapper>
         <MenuButton onClick={localGame}>
           Локальная игра
         </MenuButton>
-        <MenuButton
+
+
+        {/* <MenuButton
           onClick={
             (!isLoading && gameStore.inviteLink)
               ? () => inviteGame()
               : () => createFastGame()
           }
         >
-          {/* {(isLoading !== null && !inviteLink) && isLoading ? <Spinner scale={1} /> : 'Быстрая игра по сети'} */}
           <CreateButtonInside isLoading={isLoading} />
-        </MenuButton>
+        </MenuButton> */}
+
+        <MenuButton onClick={createFastGame}>Быстрая игра по сети</MenuButton>
+
+
         {/* {inviteLink && <InviteLink inviteLink={inviteLink} />} */}
 
         <MenuButton onClick={RateGame}>
           Рейтинговая игра по сети
         </MenuButton>
       </MenuWrapper>
-    </HomeWrapper >
+    </PageWrapper >
   )
 })
 
