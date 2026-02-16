@@ -82,10 +82,9 @@ export const useFigureDrag = (
 
   const firstPress = useCallback((row, col, currentFigureSquare) => {
 
-    const grabFigure = AppStore.chess.board()[row][col]
-
     AppStore.setPromotion(null)
 
+    const grabFigure = AppStore.chess.board()[row][col]
     if (!grabFigure) return
 
     const isCurrentPlayer = grabFigure.color === AppStore.chess.turn()
@@ -99,9 +98,16 @@ export const useFigureDrag = (
     if (isCurrentPlayer) {
       AppStore.setLastMoveCells([])
       console.log('Взял другую свою фигуру')
+    } else {
+      console.log('Чужая фигура')
+      setGrabCell(null)
+      return
     }
 
     const pm = getPossibleMoves(AppStore, grabFigure.square)
+
+    console.log(pm)
+
     AppStore.setPossibleMoves([...pm])
 
     setGrabCell({ col, row })
@@ -199,11 +205,14 @@ export const useFigureDrag = (
 
 
   // type - drop, если фигура поставлена перетаскиванием
-  // type - doubleClick, если фигура перемещается сначало выбором фигуры, потом клетки, куда ее поставить
+  // type - secondClick, если фигура перемещается сначало выбором фигуры, потом клетки, куда ее поставить
 
   const fugureMove = useCallback((startCell, finishCell, type) => {
 
     // console.log(startCell, finishCell)
+    console.log(type)
+
+
 
     const col = finishCell.col
     const row = finishCell.row
@@ -212,18 +221,43 @@ export const useFigureDrag = (
 
     if (startSquare === finishSquare) {
       console.log('Поставил туда же, где взял!')
+      setGrabCell(null)
+      AppStore.setLastMoveCells([])
+      AppStore.setPossibleMoves([])
       return
     }
 
+    const condition = AppStore.possibleMoves.filter((m, i) => m.id === `${finishSquare}_${i}`).length === 0 // true, если ход не доступен в клетку square
+
     if (type === 'drop') {
-      const condition = AppStore.possibleMoves.filter((m, i) => m.id === `${finishSquare}_${i}`).length === 0 // true, если ход не доступен в клетку square
-      if (col < 0 || col > 7 || row < 0 || row > 7 || condition) {
-        console.log('Фигура вне доски или недопустимый ход')
-        AppStore.setPossibleMoves([])
-        AppStore.setLastMoveCells([])
+      if (col < 0 || col > 7 || row < 0 || row > 7) {
+        console.log('Фигура вне доски')
+        // AppStore.setPossibleMoves([])
+        // AppStore.setLastMoveCells([])
+        // setGrabCell(null)
+        resetMove()
         return
       }
+
+      if (condition) {
+        console.log('Недопустимый ход')
+        // AppStore.setPossibleMoves([])
+        // AppStore.setLastMoveCells([])
+        // setGrabCell(null)
+        resetMove()
+        return
+      }
+
+    } else if (type === 'secondClick' && condition) {
+      console.log('Недопустимый ход secondClick')
+      AppStore.setPossibleMoves([])
+      AppStore.setLastMoveCells([])
+      resetMove()
+      setGrabCell(null)
+      return
     }
+
+
 
 
     // Успешный ход------------------------------------------------------
@@ -239,7 +273,7 @@ export const useFigureDrag = (
     ])
 
     AppStore.setPossibleMoves([])
-    setGrabCell(null)
+
 
     // const moveSquares = `${startSquare}${finishSquare}`
     let capturedFigure = AppStore.chess.board()[row][col] // фигура на клетке
@@ -251,6 +285,8 @@ export const useFigureDrag = (
 
 
     AppStore.checkingMove(capturedFigure, { startSquare, finishSquare }) // Сделать ход
+
+    setGrabCell(null)
 
     // // если присутствует flags 'e', произошло взятие на проходе
     // if (move && move.flags.includes('e')) {
@@ -280,7 +316,7 @@ export const useFigureDrag = (
 
     // gameStore.updateBoard() // обновить доску в Firebase
 
-  }, [AppStore])
+  }, [AppStore, setGrabCell, resetMove])
 
 
 
@@ -294,6 +330,7 @@ export const useFigureDrag = (
       visible: false
     }))
     setPosition(null)
+    // setGrabCell(null)
   }
 
 

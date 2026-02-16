@@ -43,11 +43,13 @@ const GameList = observer(() => {
   }
 
 
+
+
   return (
     <PageWrapper>
       <ListWrapper>
         {
-          gameStore.fastGameList.length> 0
+          gameStore?.fastGameList?.length > 0
             ? gameStore.fastGameList.map((item) => (
               <Item key={item.id}>
                 {item.id}

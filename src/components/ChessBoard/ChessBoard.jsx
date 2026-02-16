@@ -12,6 +12,7 @@ import { useGamepad } from '../../hooks/useGamepad';
 import GameController from './GameController';
 import { COLORS } from '../../constants/gameInitial';
 import { getSquare } from '../../utils/getSquare';
+import { useGamePadCursor } from '../../hooks/useGamePadCursor';
 
 
 const BoardWrapper = styled.div`
@@ -39,11 +40,6 @@ const ChessBoard = observer(() => {
   const [draggedFigure, setDraggedFigure] = useState(null)
   const [isMoving, setIsMoving] = useState(false)
   const [pressCounter, setPressCounter] = useState(0)
-  const [x, setX] = useState(0)
-  const [y, setY] = useState(0)
-  const [gamePadCursor, setGamePadCursor] = useState(null)
-  
-
   const { gamepadState, isConnected, isButtonPressed } = useGamepad()
 
   const {
@@ -62,6 +58,35 @@ const ChessBoard = observer(() => {
     setDraggedFigure,
     setIsMoving,
   )
+
+  const handlePointerDownMemo = useCallback((e, square) => {
+    handlePointerDown(e, square)
+  }, [handlePointerDown])
+
+  const fugureMoveMemo = useCallback((startCell, finishCell, type) => {
+    fugureMove(startCell, finishCell, type)
+  }, [fugureMove])
+
+
+  const { gamePadCursor } = useGamePadCursor(
+    isButtonPressed,
+    isConnected,
+    grabCell,
+    fugureMoveMemo,
+    firstPress
+  )
+
+
+  useEffect(() => {
+
+  }, [gamePadCursor])
+
+
+
+
+  // console.log(gamePadCursor)
+
+
 
 
   useEffect(() => {
@@ -92,54 +117,12 @@ const ChessBoard = observer(() => {
     }
   }, [isDragging])
 
-  const handlePointerDownMemo = useCallback((e, square) => {
-    handlePointerDown(e, square)
-  }, [handlePointerDown])
-
-  const fugureMoveMemo = useCallback((startCell, finishCell) => {
-    fugureMove(startCell, finishCell)
-  }, [handlePointerDown])
 
 
 
 
-  useEffect(() => {
-    if (isButtonPressed(15)) {
-      setX(prevX => prevX + 1)
-    }
-
-    if (isButtonPressed(14)) {
-      setX(prevX => prevX - 1)
-    }
-
-    if (isButtonPressed(12)) {
-      setY(prevY => prevY - 1)
-    }
-
-    if (isButtonPressed(13)) {
-      setY(prevY => prevY + 1)
-    }
-
-    if(gamepadState?.buttons) {
-      // setGamePadCursor({col: x})
-    }
-
-    if (isButtonPressed(0)) {
-      // setPressCounter(prev => prev + 1)
-      if (grabCell === null) {
-        const square = getSquare(AppStore.whiteBottom, x, y)
-        firstPress(y, x, square)
-      } else {
-        // На второе нажатие:
-        const startCell = { ...grabCell }
-        const finishCell = { col: x, row: y }
-        console.log(startCell, finishCell)
-        fugureMove(startCell, finishCell, 'doubleClick')
-      }
-    }
 
 
-  }, [isButtonPressed])
 
 
 
@@ -155,12 +138,13 @@ const ChessBoard = observer(() => {
         grabCell={grabCell}
       />
 
-      {highlightedCell.visible && (
+      {highlightedCell.visible && !isConnected && (
         <HighlightedCell
           highlightedCell={highlightedCell}
         />
       )}
 
+        {/* Клетка шаха */}
       {AppStore.cellInCheck.visible && (
         <HighlightedCell
           highlightedCell={AppStore.cellInCheck}
@@ -169,7 +153,8 @@ const ChessBoard = observer(() => {
 
       {/* Курсор геймпада */}
       <HighlightedCell
-        highlightedCell={{ cell: { col: x, row: y }, color: COLORS.primary, visible: true }}
+        highlightedCell={gamePadCursor}
+        type={'gamePadCursor'}
       />
 
 

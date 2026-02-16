@@ -3,16 +3,17 @@ import PageWrapper from "./PageWrapper";
 import { useEffect, useState } from "react";
 import AppStore from "../store/AppStore";
 import { useAuth } from "../hooks/useAuth";
-import gameStore from "../store/gameStore";
+// import gameStore from "../store/gameStore";
 import Spinner from "../components/UI/Spinner";
 import { COLORS } from "../constants/gameInitial";
 import { useNavigate } from "react-router";
 
 import styled from "styled-components";
+import gameStore from "../store/gameStore";
 
 const TableContainer = styled.div`
 width: 100%;
-max-width: 700px;
+max-width: 1000px;
 max-height: 40%;
 margin: 20px 0 40px;
 padding: 0 20px;
@@ -24,34 +25,37 @@ width: 100%;
 border-collapse: collapse;
 box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 overflow: hidden;
-font-size: 2vmin;
-table-layout: fixed;
+font-size: 1.6vmin;
+table-layout: auto;
+
 `
 
 const Thead = styled.thead`
 background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
-color: #999;
-position: sticky;
+color: #666;
+font-size: 1.4vmin;
 `
 
 const Th = styled.th`
 padding: 12px 15px;
 text-align: left;
 border-bottom: 1px solid #ddd;
-color: #999;
+// color: #999;
+white-space: normal;
 `
 const Td = styled.td`
 padding: 12px 15px;
 text-align: left;
 border-bottom: 1px solid #ddd;
-color: #666;
+// color: #666;
 overflow: hidden;
+white-space: normal;
 `
 
 const Tr = styled.tr`
 background-color: #f8f9fa;
 border-bottom: none;
-color: #999;
+color: #666;
 `
 
 
@@ -81,12 +85,12 @@ const MenuButton = styled.button`
 display: flex;
 justify-content: center;
 align-items: center;
-width: 200px;
+width: 100%;
 height: min-content;
 border: none;
 margin: 0;
 padding: 20px;
-font-size: 2.2vmin;
+font-size: 1.6vmin;
 cursor: pointer;
 opacity: ${props => props.$opacity ? .5 : 1};
 color: ${COLORS.background};
@@ -116,8 +120,7 @@ const CreateOnlineGamePage = observer(() => {
 
   useEffect(() => {
     if (!isAuth) return
-    gameStore.getAllGamesId()
-
+    // gameStore.getAllGamesId()
 
     let isCancelled = false
 
@@ -132,7 +135,6 @@ const CreateOnlineGamePage = observer(() => {
     return () => {
       isCancelled = true
     }
-
   }, [isAuth])
 
 
@@ -168,11 +170,8 @@ const CreateOnlineGamePage = observer(() => {
   }
 
   const inviteGame = async () => {
-    // setInviteUrl(null)
-    // navigate(`/fastgame/${gameStore.fastOnlineGameId}`)
     navigate(`/fastgame/${gameStore.fastOnlineGameId}`)
   }
-
 
 
   const CreateButtonInside = observer(({ isCreating }) => {
@@ -181,6 +180,7 @@ const CreateOnlineGamePage = observer(() => {
     if (!isCreating && gameStore.inviteLink) return 'В игру'
     return <>Быстрая игра по сети</>
   })
+
 
 
   return (
@@ -200,13 +200,13 @@ const CreateOnlineGamePage = observer(() => {
           <Tbody>
             {
               !isGameIdLoading
-                ? gameStore.fastGameList.lengtn > 0
+                ? gameStore.fastGameList.length > 0
                   ? gameStore.fastGameList.map((game) => (
                     <Tr key={game.id}>
                       <Td>{game.id}</Td>
-                      <Td>Создатель Id</Td>
+                      <Td>Вы</Td>
                       <Td>00:00:00</Td>
-                      <Td>Закончена</Td>
+                      <Td>Ожидание соперника</Td>
                       <Td>В игру</Td>
                       <Td>
                         {(removingId === game.id)

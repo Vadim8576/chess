@@ -43,7 +43,7 @@ const PossibleMove = observer(({ cell, fugureMove, grabCell }) => {
     const startCell = { ...grabCell }
     const finishCell = { col, row }
     console.log(startCell, finishCell)
-    fugureMove(startCell, finishCell, 'doubleClick')
+    fugureMove(startCell, finishCell, 'secondClick')
 
   }
 
