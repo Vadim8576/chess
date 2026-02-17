@@ -4,15 +4,23 @@ import { getSquare } from "../utils/getSquare"
 import AppStore from "../store/AppStore"
 
 
-export const useGamePadCursor = (isButtonPressed, isConnected, grabCell, fugureMove, firstPress) => {
+export const useGamePadCursor = (
+  isButtonPressed,
+  isConnected,
+  grabCell,
+  fugureMove,
+  firstPress,
+  setGamePadCursor,
+  gamePadCursor
+) => {
 
   const [x, setX] = useState(0)
   const [y, setY] = useState(0)
-  const [gamePadCursor, setGamePadCursor] = useState({
-    cell: { col: 4, row: 4 },
-    color: COLORS.primary,
-    visible: false
-  })
+  // const [gamePadCursor, setGamePadCursor] = useState({
+  //   cell: { col: 4, row: 4 },
+  //   color: COLORS.primary,
+  //   visible: false
+  // })
 
   // let x = 0
   // let y = 0
@@ -105,7 +113,7 @@ export const useGamePadCursor = (isButtonPressed, isConnected, grabCell, fugureM
       visible: isConnected
     }))
 
-    console.log('gamePadCursor')
+    // console.log('gamePadCursor')
 
   }, [isButtonPressed])
 
@@ -117,11 +125,11 @@ export const useGamePadCursor = (isButtonPressed, isConnected, grabCell, fugureM
 
 
 
-  const values = {
-    gamePadCursor
-  }
+  // const values = {
+  //   gamePadCursor
+  // }
 
 
-  return useMemo(() => values, [values])
+  // return useMemo(() => values, [values])
 
 }

@@ -224,8 +224,8 @@ class AppStore {
   })
 
   setPossibleMoves = action((cells) => {
-    this.possibleMoves = cells
-    // console.log(toJS(this.possibleMoves))
+    this.possibleMoves = [...cells]
+    console.log(toJS(this.possibleMoves))
   })
 
   setCellInCheck = action((cell) => {

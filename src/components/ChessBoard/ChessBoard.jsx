@@ -39,8 +39,12 @@ const ChessBoard = observer(() => {
   const size = AppStore.board.cellSize * 8
   const [draggedFigure, setDraggedFigure] = useState(null)
   const [isMoving, setIsMoving] = useState(false)
-  const [pressCounter, setPressCounter] = useState(0)
   const { gamepadState, isConnected, isButtonPressed } = useGamepad()
+  const [gamePadCursor, setGamePadCursor] = useState({
+    cell: { col: 4, row: 4 },
+    color: COLORS.primary,
+    visible: false
+  })
 
   const {
     isDragging,
@@ -57,6 +61,7 @@ const ChessBoard = observer(() => {
     AppStore,
     setDraggedFigure,
     setIsMoving,
+    setGamePadCursor
   )
 
   const handlePointerDownMemo = useCallback((e, square) => {
@@ -68,23 +73,19 @@ const ChessBoard = observer(() => {
   }, [fugureMove])
 
 
-  const { gamePadCursor } = useGamePadCursor(
+  useGamePadCursor(
     isButtonPressed,
     isConnected,
     grabCell,
     fugureMoveMemo,
-    firstPress
+    firstPress,
+    setGamePadCursor,
+    gamePadCursor
   )
 
 
-  useEffect(() => {
 
-  }, [gamePadCursor])
-
-
-
-
-  // console.log(gamePadCursor)
+  // console.log('ChessBoard')
 
 
 
@@ -101,6 +102,8 @@ const ChessBoard = observer(() => {
     AppStore.setSettingFromLocalStorage()
 
   }, [AppStore.gameType])
+
+
 
 
   useEffect(() => {
@@ -121,16 +124,9 @@ const ChessBoard = observer(() => {
 
 
 
-
-
-
-
-
-
-
   return (
     <BoardWrapper $size={size}>
-      <GameController isShow={false} />
+      {/* <GameController isShow={false} /> */}
       <Board />
 
       <BacklightСells
@@ -138,7 +134,7 @@ const ChessBoard = observer(() => {
         grabCell={grabCell}
       />
 
-      {highlightedCell.visible && !isConnected && (
+      {highlightedCell.visible && (
         <HighlightedCell
           highlightedCell={highlightedCell}
         />

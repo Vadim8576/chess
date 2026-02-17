@@ -9,15 +9,22 @@ import { getPossibleMoves } from '../utils/getPossibleMoves'
 export const useFigureDrag = (
   AppStore,
   setDraggedFigure,
-  setIsMoving
+  setIsMoving,
+  setGamePadCursor
 ) => {
 
   const [isDragging, setIsDragging] = useState(false)
   const [grabCell, setGrabCell] = useState(null)
   const [position, setPosition] = useState(null)
   const [highlightedCell, setHighlightedCell] = useState({})
+  
 
   const handlePointerDown = useCallback((e, currentFigureSquare) => {
+
+    setGamePadCursor(prev => ({
+      ...prev,
+      visible: prev.visible === true ? false : prev.visible
+    }))
 
     console.log(AppStore.gameStatus)
 
@@ -83,6 +90,7 @@ export const useFigureDrag = (
   const firstPress = useCallback((row, col, currentFigureSquare) => {
 
     AppStore.setPromotion(null)
+    setGrabCell(null)
 
     const grabFigure = AppStore.chess.board()[row][col]
     if (!grabFigure) return
@@ -100,7 +108,7 @@ export const useFigureDrag = (
       console.log('Взял другую свою фигуру')
     } else {
       console.log('Чужая фигура')
-      setGrabCell(null)
+
       return
     }
 
@@ -108,7 +116,12 @@ export const useFigureDrag = (
 
     console.log(pm)
 
-    AppStore.setPossibleMoves([...pm])
+    if(pm.length < 2) {
+      AppStore.setPossibleMoves([])
+      return
+    }
+
+    AppStore.setPossibleMoves(pm)
 
     setGrabCell({ col, row })
 
@@ -124,7 +137,7 @@ export const useFigureDrag = (
         col,
         row,
       },
-      visible: true,
+      visible: false,
       color: COLORS.accessibleСell
     })
     setIsDragging(true)
@@ -142,6 +155,7 @@ export const useFigureDrag = (
 
 
   const handlePointerMove = (e) => {
+
     if (!isDragging) return
     const startX = AppStore.board.x
     const startY = AppStore.board.y
@@ -221,9 +235,9 @@ export const useFigureDrag = (
 
     if (startSquare === finishSquare) {
       console.log('Поставил туда же, где взял!')
-      setGrabCell(null)
-      AppStore.setLastMoveCells([])
-      AppStore.setPossibleMoves([])
+      // setGrabCell(null)
+      // AppStore.setLastMoveCells([])
+      // AppStore.setPossibleMoves([])
       return
     }
 
@@ -283,6 +297,11 @@ export const useFigureDrag = (
 
 
 
+    setHighlightedCell(prev => ({
+      ...prev,
+      visible: false
+    }))
+
 
     AppStore.checkingMove(capturedFigure, { startSquare, finishSquare }) // Сделать ход
 
@@ -316,7 +335,7 @@ export const useFigureDrag = (
 
     // gameStore.updateBoard() // обновить доску в Firebase
 
-  }, [AppStore, setGrabCell, resetMove])
+  }, [AppStore, setGrabCell, resetMove, setHighlightedCell])
 
 
 
