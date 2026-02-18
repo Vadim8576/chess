@@ -34,7 +34,7 @@ const GameList = observer(() => {
 
   useEffect(() => {
     if (!isAuth) return
-    gameStore.getAllGamesId()
+    gameStore.getAllGamesInfo()
   }, [isAuth])
 
   const removeItem = (id) => {

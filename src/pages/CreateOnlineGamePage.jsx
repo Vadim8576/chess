@@ -1,69 +1,25 @@
 import { observer } from "mobx-react-lite";
 import PageWrapper from "./PageWrapper";
 import { useEffect, useState } from "react";
-import AppStore from "../store/AppStore";
-import { useAuth } from "../hooks/useAuth";
-// import gameStore from "../store/gameStore";
-import Spinner from "../components/UI/Spinner";
-import { COLORS } from "../constants/gameInitial";
-import { useNavigate } from "react-router";
-
+import { COLORS, figure } from "../constants/gameInitial";
 import styled from "styled-components";
 import gameStore from "../store/gameStore";
+import CapturedFigure from "../components/boardElements/CapturedFigure";
+import OnlineGameTable from "../components/UI/OnlineGameTable";
 
-const TableContainer = styled.div`
-width: 100%;
-max-width: 1000px;
-max-height: 40%;
-margin: 20px 0 40px;
-padding: 0 20px;
-overflow-x: auto;
+
+const Container = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1000px;
+  height: 50%;
+  padding: 30px 40px;
+  // margin: 30px 0 0;
+  overflow-x: auto;
 `
-
-const Table = styled.table`
-width: 100%;
-border-collapse: collapse;
-box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-overflow: hidden;
-font-size: 1.6vmin;
-table-layout: auto;
-
-`
-
-const Thead = styled.thead`
-background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
-color: #666;
-font-size: 1.4vmin;
-`
-
-const Th = styled.th`
-padding: 12px 15px;
-text-align: left;
-border-bottom: 1px solid #ddd;
-// color: #999;
-white-space: normal;
-`
-const Td = styled.td`
-padding: 12px 15px;
-text-align: left;
-border-bottom: 1px solid #ddd;
-// color: #666;
-overflow: hidden;
-white-space: normal;
-`
-
-const Tr = styled.tr`
-background-color: #f8f9fa;
-border-bottom: none;
-color: #666;
-`
-
-
-const Tbody = styled.tbody`
-background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
-color: white;
-`
-
 
 const CreateOnlineGameWrapper = styled.div`
 display: flex;
@@ -71,25 +27,26 @@ justify-content: center;
 align-items: center;
 flex-direction: column;
 width: 50%;
-max-width: 400px;
+max-width: 300px;
+min-width: 200px;
 // max-height: 70%;
 // min-height: 300px;
 justify-content: flex-start;
-// border: 1px #666 solid;
+border: 1px #666 solid;
+padding: 10px;
+opacity: ${props => props.inert ? .6 : 1}
 `
-
-
 
 
 const MenuButton = styled.button`
 display: flex;
 justify-content: center;
 align-items: center;
-width: 100%;
+width: 50%;
 height: min-content;
 border: none;
 margin: 0;
-padding: 20px;
+padding: 10px;
 font-size: 1.6vmin;
 cursor: pointer;
 opacity: ${props => props.$opacity ? .5 : 1};
@@ -100,49 +57,65 @@ background-color: ${COLORS.secondary};
 }
 `
 
+const PlayerColorWrapper = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 15px;
+width: 80%;
+// min-width: 200px;
+margin-bottom: 20px;
+`
 
+const PlayerColor = styled.div`
+position: relative;
+display: flex;
+justify-content: center;
+align-items: center;
+flex: ${props => props.$flex};
+min-width: 0;
+aspect-ratio: 1 / 1;
+border: 1px #999 solid;
+overflow: hidden;
+cursor: pointer;
+background-color: ${props => props.$checked ? COLORS.secondary : 'none'};
+  &:hover {
+    background-color: ${props => props.$checked ? 'none' : COLORS.neutral};
+    color: #fff;
+  }
+`
+
+const PlayerRandomColor = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+position: absolute;
+top: 0;
+pointer-events: none;
+width: 100%;
+height: 100%;
+// border: 1px #999 solid;
+overflow: hidden;
+`
+
+const Figure = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+position: absolute;
+top: 0;
+width: 100%;
+height: 100%;
+overflow: hidden;
+pointer-events: none;
+`
 
 
 const CreateOnlineGamePage = observer(() => {
   const [creatorColor, setCreatorColor] = useState('w')
   const [isGameIdLoading, setIsGameIdLoading] = useState(true)
-  const [isCreating, setIsCreating] = useState(true)
+  const [isCreating, setIsCreating] = useState(false)
   const [removingId, setRemovingId] = useState(null)
-  const { isAuth, startAuth } = useAuth()
-
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    AppStore.setCurrentPage('gamelist')
-    startAuth()
-  }, [])
-
-
-  useEffect(() => {
-    if (!isAuth) return
-    // gameStore.getAllGamesId()
-
-    let isCancelled = false
-
-    const loadGamesIds = async () => {
-      if (isCancelled) return
-      await gameStore.getAllGamesId()
-      setIsGameIdLoading(false)
-    }
-
-    loadGamesIds()
-
-    return () => {
-      isCancelled = true
-    }
-  }, [isAuth])
-
-
-  // useEffect(() => {
-  //   if (!isAuth) return
-  //   gameStore.createFastOnlineGame(creatorColor)
-  // }, [isAuth])
-
 
   useEffect(() => {
     if (!gameStore.inviteLink) return
@@ -150,13 +123,6 @@ const CreateOnlineGamePage = observer(() => {
   }, [gameStore.inviteLink])
 
 
-  const removeItem = async (id) => {
-    setRemovingId(id)
-    await gameStore.removeGame(id)
-    await gameStore.getAllGamesId()
-    setRemovingId(null)
-    console.log('Удалить ', id)
-  }
 
   const createFastGame = async () => {
     console.log('createFastGame')
@@ -164,82 +130,76 @@ const CreateOnlineGamePage = observer(() => {
     gameStore.setInviteUrl(null)
     // startAuth()
     await gameStore.createFastOnlineGame(creatorColor)
+    setIsCreating(false)
     setIsGameIdLoading(true)
-    await gameStore.getAllGamesId()
+    await gameStore.getAllGamesInfo()
     setIsGameIdLoading(false)
   }
 
-  const inviteGame = async () => {
-    navigate(`/fastgame/${gameStore.fastOnlineGameId}`)
-  }
-
-
   const CreateButtonInside = observer(({ isCreating }) => {
-
-    // if (isCreating && !gameStore.inviteLink) return <Spinner scale={1} />
-    if (!isCreating && gameStore.inviteLink) return 'В игру'
-    return <>Быстрая игра по сети</>
+    if (isCreating) return '...Создание игры'
+    return <>Создать игру</>
   })
 
 
 
   return (
     <PageWrapper>
-      <TableContainer>
-        <Table>
-          <Thead>
-            <Tr>
-              <Td>Game Id</Td>
-              <Td>Creator</Td>
-              <Td>CreatedAt</Td>
-              <Td>Статус</Td>
-              <Td></Td>
-              <Td></Td>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {
-              !isGameIdLoading
-                ? gameStore.fastGameList.length > 0
-                  ? gameStore.fastGameList.map((game) => (
-                    <Tr key={game.id}>
-                      <Td>{game.id}</Td>
-                      <Td>Вы</Td>
-                      <Td>00:00:00</Td>
-                      <Td>Ожидание соперника</Td>
-                      <Td>В игру</Td>
-                      <Td>
-                        {(removingId === game.id)
-                          ? <Spinner scale={.5} />
-                          : <button style={{ padding: '2px 5px' }} onMouseDown={() => removeItem(game.id)}>X</button>
-                        }
-                      </Td>
-                    </Tr>
-                  ))
-                  : <Tr><Td colSpan="6" style={{textAlign: 'center'}}>Игры не найдены</Td></Tr>
-                : (
-                  <Tr><Td colSpan="6" style={{textAlign: 'center'}}><Spinner scale={.5} /></Td></Tr>    
-                )
-            }
-          </Tbody>
-        </Table>
-      </TableContainer>
+      <Container>
+        <OnlineGameTable
+          setIsGameIdLoading={setIsGameIdLoading}
+          isGameIdLoading={isGameIdLoading}
+          setRemovingId={setRemovingId}
+          removingId={removingId}
+        />
+      </Container>
 
-      <CreateOnlineGameWrapper>
-        <MenuButton
-          inert={gameStore?.fastGameList === null}
-          $opacity={gameStore?.fastGameList === null}
-          onClick={
-            (!isCreating && gameStore.inviteLink)
-              ? () => inviteGame()
-              : () => createFastGame()
-          }
-        >
-          <CreateButtonInside isCreating={isCreating} />
-        </MenuButton>
-      </CreateOnlineGameWrapper>
-
-    </PageWrapper>
+      <Container>
+        <CreateOnlineGameWrapper inert={gameStore?.fastGameList === null || isCreating}>
+          <PlayerColorWrapper>
+            <PlayerColor $flex={1}
+              $checked={creatorColor === 'w'}
+              onClick={() => setCreatorColor('w')}
+            >
+              <CapturedFigure src={figure['kw']} />
+            </PlayerColor>
+            <PlayerColor $flex={1.2}
+              $checked={creatorColor === 'wb'}
+              onClick={() => setCreatorColor('wb')}
+            >
+              <PlayerRandomColor style={{ left: '-50%' }}>
+                <Figure style={{ left: '50%' }}>
+                  <CapturedFigure src={figure['kw']} />
+                </Figure>
+              </PlayerRandomColor>
+              <PlayerRandomColor style={{ left: '50%', borderLeft: '1px #999 solid' }}>
+                <Figure style={{ left: '-50%' }}>
+                  <CapturedFigure src={figure['kb']} />
+                </Figure>
+              </PlayerRandomColor>
+            </PlayerColor>
+            <PlayerColor $flex={1}
+              $checked={creatorColor === 'b'}
+              onClick={() => setCreatorColor('b')}
+            >
+              <CapturedFigure src={figure['kb']} />
+            </PlayerColor>
+          </PlayerColorWrapper>
+          <MenuButton
+            // inert={gameStore?.fastGameList === null || isCreating}
+            $opacity={gameStore?.fastGameList === null}
+            // onClick={
+            //   (!isCreating && gameStore.inviteLink)
+            //     ? () => inviteGame()
+            //     : () => createFastGame()
+            // }
+            onClick={createFastGame}
+          >
+            <CreateButtonInside isCreating={isCreating} />
+          </MenuButton>
+        </CreateOnlineGameWrapper>
+      </Container>
+    </PageWrapper >
   )
 })
 

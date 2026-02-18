@@ -111,8 +111,8 @@ const InviteLink = observer(() => {
   }
 
   const cancelGame = () => {
-    gameStore.removeGame(gameId)
-    navigate('/')
+    // gameStore.removeGame(gameId)
+    navigate('/create-game')
   }
 
 

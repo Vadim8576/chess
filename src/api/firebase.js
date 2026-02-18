@@ -153,7 +153,7 @@ export const fb = {
 
 
   // Сдаться
-  resign: (gameId, setIsShowDrawButton) => {
+  resign: (gameId) => {
     const user = auth.currentUser
     if (user) {
       const gameRef = doc(db, "games", gameId)
@@ -168,11 +168,9 @@ export const fb = {
       updateDoc(gameRef, newDate)
         .then(() => {
           console.log("Поле успешно обновлены!")
-
-          // if (draw !== 'cancel') setIsShowDrawButton(true) // устанавливаем флаг, что запрос на ничью отправлен (для деактивации кнопки запроса на ничью)
         })
         .catch((error) => {
-          // setIsShowDrawButton(false)
+
           console.error("Ошибка при обновлении полей:", error)
         });
     }
@@ -212,19 +210,74 @@ export const fb = {
     }
   },
 
-  getAllGamesId: async () => {
-    try {
-      const games = collection(db, 'games')
-      const gamesSnapshot = await getDocs(games)
-      const gamesIds = gamesSnapshot.docs.map(doc => ({ id: doc.id }))
-      console.log("Документы успешно получены!")
-      console.log(gamesIds)
-      return gamesIds
-    } catch (error) {
-      console.error("Ошибка при получении документов: ", error)
-      return []
+  // getAllGamesInfo: async () => {
+  //   try {
+  //     const games = collection(db, 'games')
+  //     const gameRef = await getDocs(games)
+  //     const gamesIds = gameRef.docs.map(doc => ({ id: doc.id }))
+  //     console.log("Документы успешно получены!")
+  //     console.log(gamesIds)
+  //     return gamesIds
+  //   } catch (error) {
+  //     console.error("Ошибка при получении документов: ", error)
+  //     return []
+  //   }
+  // },
+
+  getAllGamesInfo: async () => {
+    const user = auth.currentUser
+
+    console.log('user.uid', user.uid)
+    if (user) {
+      const gamesCollection = collection(db, 'games');
+
+      // Запрос для документов, где текущий пользователь является creatorUid
+      const creatorQuery = query(gamesCollection, where('creatorUid', '==', user.uid));
+      const creatorSnapshot = await getDocs(creatorQuery);
+      const creatorGames = creatorSnapshot.docs.map(doc => ({
+        id: doc.id,
+        creatorUid: doc.data().creatorUid,
+        joinerUid: doc.data().joinerUid,
+        createdAt: doc.data().createdAt,
+        status: doc.data().status
+      }));
+
+      console.log(creatorGames)
+
+      // Запрос для документов, где текущий пользователь является joinerUid
+      const joinerQuery = query(gamesCollection, where('joinerUid', '==', user.uid));
+      const joinerSnapshot = await getDocs(joinerQuery);
+      const joinerGames = joinerSnapshot.docs.map(doc => ({
+        id: doc.id,
+        creatorUid: doc.data().creatorUid,
+        joinerUid: doc.data().joinerUid,
+        createdAt: doc.data().createdAt,
+        status: doc.data().status
+      }));
+
+      console.log(joinerGames)
+      // Объединение и удаление дубликатов (если документ может быть одновременно и creatorUid, и joinerUid, хотя в вашей схеме это, вероятно, не так)
+      // const allUserGamesMap = new Map();
+      // creatorGames.forEach(game => allUserGamesMap.set(game.id, game));
+      // joinerGames.forEach(game => allUserGamesMap.set(game.id, game));
+
+      // return Array.from(allUserGamesMap.values());
+      return [...creatorGames, ...joinerGames]
     }
   },
+
+
+  // const your_uid = "ВАШ_ID_ПОЛЬЗОВАТЕЛЯ"; // Замените на фактический ID текущего пользователя
+
+  // async function getUserRelatedGames() {
+
+  // // Пример использования
+  // getUserRelatedGames().then(games => {
+  //   console.log("Все игры, связанные с пользователем:", games);
+  // }).catch(error => {
+  //   console.error("Ошибка при получении игр:", error);
+  // })
+
 
 
   removeGame: async (id) => {
@@ -238,7 +291,7 @@ export const fb = {
     }
   },
 
-  getGameInfo: async (gameId) => {
+  getGameInfoById: async (gameId) => {
     const gameRef = doc(db, "games", gameId)
     const gameSnap = await getDoc(gameRef)
 

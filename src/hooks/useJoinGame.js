@@ -18,7 +18,7 @@ export const useJoinGame = (gameId) => {
       // console.log('Id игры = ', gameId)
 
 
-      let gameInfo = await gameStore.getGameInfo(gameId)
+      let gameInfo = await gameStore.getGameInfoById(gameId)
       console.log(gameInfo)
 
       if (!gameInfo) { // нет документа с gameId

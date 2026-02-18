@@ -215,8 +215,9 @@ class GameStore {
   })
 
   createFastOnlineGame = action(async (creatorColor) => {
-    // const chess = AppStore.createNewChess()
-    // const fen = chess.fen()
+
+    const creator = creatorColor === 'wb' ? (Math.random() < 0.5 ? 'w' : 'b') : creatorColor
+
     const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
     const gameId = await fb.createFastOnlineGame(fen, creatorColor)
     this.setCurrentGameId(gameId)
@@ -265,14 +266,14 @@ class GameStore {
     console.log(this.fastGameList)
   })
 
-  getAllGamesId = action(async () => {
-    const list = await fb.getAllGamesId()
+  getAllGamesInfo = action(async () => {
+    const list = await fb.getAllGamesInfo()
     this.setFastGameList(list)
   })
 
 
-  async getGameInfo(gameId) {
-    return await fb.getGameInfo(gameId)
+  async getGameInfoById(gameId) {
+    return await fb.getGameInfoById(gameId)
   }
 
   // Предложить ничью

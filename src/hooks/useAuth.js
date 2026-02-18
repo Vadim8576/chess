@@ -6,6 +6,7 @@ import authStore from "../store/authStore"
 export const useAuth = () => {
   const [isAuth, setIsAuth] = useState(false)
   const [isAuthLoading, setAuthLoading] = useState(false)
+  const [userId, setUserId] = useState(null)
 
 
 
@@ -16,6 +17,7 @@ export const useAuth = () => {
       if (user) {
         // Пользователь вошел в систему (анонимно или иным способом)
         authStore.setCreatorUid(user.uid)
+        setUserId(user.uid)
         setIsAuth(true)
         console.log("Пользователь вошел в систему:", user.uid)
       } else {
@@ -45,7 +47,7 @@ export const useAuth = () => {
   }
 
   const values = {
-    isAuth, startAuth
+    isAuth, startAuth, userId
   }
 
 
