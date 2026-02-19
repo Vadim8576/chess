@@ -11,6 +11,7 @@ const Container = styled.div`
   grid-row: 3 / 11;
 	width: ${props => props.$size}px;
 	height: ${props => props.$size}px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 `;
 
 

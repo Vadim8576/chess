@@ -56,12 +56,12 @@ const FiguresContainer = memo(observer(({
           id: `${file}_${rank}`,
           top: AppStore.board.cellSize * y,
           left: AppStore.board.cellSize * x,
-          pointerEvents: AppStore.gameType === 'local'
-            ? (currentFigure.color !== turn ? 'none' : 'auto')
+          inert: AppStore.gameType === 'local'
+            ? (currentFigure.color !== turn ? true : false)
             : (
               (currentFigure.color !== turn || (gameStore.currentPlayerColor !== turn) || AppStore.gameStatus !== 'playing')
-                ? 'none'
-                : 'auto'
+                ? false
+                : true
             )
         }
         figure.push(state)
@@ -91,7 +91,7 @@ const FiguresContainer = memo(observer(({
                 id={figure.id}
                 handlePointerDown={handlePointerDown}
                 setDraggedFigure={setDraggedFigure}
-                pointerEvents={figure.pointerEvents}
+                inert={figure.inert}
               />
             )
           }

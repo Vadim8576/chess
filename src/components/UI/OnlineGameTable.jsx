@@ -7,6 +7,7 @@ import { useAuth } from "../../hooks/useAuth";
 import Spinner from "./Spinner";
 import AppStore from "../../store/AppStore";
 import { formatTimestamp } from "../../utils/formatTimestamp";
+import Button from "./Button";
 
 
 const TableContainer = styled.div`
@@ -147,23 +148,23 @@ const OnlineGameTable = observer(({ setIsGameIdLoading, isGameIdLoading, setRemo
                   <Td>{formatTimestamp(game.createdAt.seconds)}</Td>
                   <Td>{game.status}</Td>
                   <Td>
-                    <button
+                    <Button
                       onClick={() => inviteGame(game.id)}
                       style={{ fontSize: '1.6vmin', padding: '5px 7px' }}
                     >
                       В игру
-                    </button>
+                    </Button>
                   </Td>
                   <Td>
                     {removingId === game.id ? (
                       <Spinner scale={0.5} />
                     ) : (
-                      <button
+                      <Button
                         style={{ padding: '2px 5px' }}
                         onMouseDown={() => removeItem(game.id)}
                       >
                         X
-                      </button>
+                      </Button>
                     )}
                   </Td>
                 </Tr>

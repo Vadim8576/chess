@@ -332,15 +332,16 @@ class AppStore {
 
   loadStatusFromLocalStorage = action(() => {
 
-    const gameStatus = localStorage.getItem('LocalGameStatus')
+    let gameStatus = localStorage.getItem('LocalGameStatus')
 
+    if(gameStatus) gameStatus = JSON.parse(gameStatus)
     console.log('Статус из локал стораж ', gameStatus)
 
-    if (gameStatus === 'finished') {
+    if (gameStatus == 'finished') {
       this.setGameStatus('finished')
       this.setStatusMessage('Игра завершена!')
+      console.log('Игра завершена!!!')
     }
-
   })
 
 

@@ -6,20 +6,23 @@ import { observer } from "mobx-react-lite";
 import { useState } from "react";
 
 
-const Button = styled.button`
+const CustomButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-
-  padding: 5px 10px;
-  min-width: 30px;
-  min-height: 30px;
+  // width: 87.5%;
+  // width: 87.5%;
+  width: ${props => props.$cellSize - 2}px;
+  height: ${props => props.$cellSize - 2}px;
+  // flex-grow: 1;
+  // margin-bottom: 1px;
+  padding: 5px;
   border: 1px ${COLORS.neutral} solid;
   // border: none;
   // border-radius: 5px;
   // background-color: ${props => props.$backgroundColor};
   background-color: #fff;
-  color: ${props => props.inert ? COLORS.neutral : COLORS.primary};
+  color: ${props => props.inert ? COLORS.neutral : COLORS.neutral};
   text-transform: uppercase;
   cursor: pointer;
   font-weight: normal;
@@ -27,7 +30,7 @@ const Button = styled.button`
   overflow: hidden;
   &:hover {
     background-color: ${COLORS.neutral};
-    // color: #fff;
+    color: #fff;
   }
 `
 
@@ -43,8 +46,7 @@ const SquareButton = observer(({
   color,
   backgroundColor,
   onClick,
-  inert = false,
-  ...children
+  inert = false
 }) => {
 
   const cellSize = AppStore.board.cellSize
@@ -72,9 +74,9 @@ const SquareButton = observer(({
           />
         </>)} */}
       {icon && <Icon>{icon}</Icon>}
-      {children}
+      {text && text}
     </CustomButton>
   )
 })
 
-export default Button
+export default SquareButton

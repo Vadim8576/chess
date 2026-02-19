@@ -6,6 +6,7 @@ import styled from "styled-components";
 import gameStore from "../store/gameStore";
 import CapturedFigure from "../components/boardElements/CapturedFigure";
 import OnlineGameTable from "../components/UI/OnlineGameTable";
+import Button from "../components/UI/Button";
 
 
 const Container = styled.div`
@@ -32,30 +33,33 @@ min-width: 200px;
 // max-height: 70%;
 // min-height: 300px;
 justify-content: flex-start;
-border: 1px #666 solid;
+border: 1px ${COLORS.neutral} solid;
 padding: 10px;
 opacity: ${props => props.inert ? .6 : 1}
 `
 
 
-const MenuButton = styled.button`
-display: flex;
-justify-content: center;
-align-items: center;
-width: 50%;
-height: min-content;
-border: none;
-margin: 0;
-padding: 10px;
-font-size: 1.6vmin;
-cursor: pointer;
-opacity: ${props => props.$opacity ? .5 : 1};
-color: ${COLORS.background};
-background-color: ${COLORS.secondary};
-&:hover {
-  background-color: ${COLORS.primary};
-}
-`
+// const MenuButton = styled.button`
+// display: flex;
+// justify-content: center;
+// align-items: center;
+// // width: 50%;
+// height: min-content;
+// border: none;
+// margin: 0;
+// // padding: 10px;
+// min-height: 30px;
+// min-width: 30px;
+// padding: 4px 8px;
+// font-size: 1.6vmin;
+// cursor: pointer;
+// opacity: ${props => props.$opacity ? .5 : 1};
+// color: ${COLORS.background};
+// background-color: ${COLORS.secondary};
+// &:hover {
+//   background-color: ${COLORS.primary};
+// }
+// `
 
 const PlayerColorWrapper = styled.div`
 display: flex;
@@ -75,10 +79,10 @@ align-items: center;
 flex: ${props => props.$flex};
 min-width: 0;
 aspect-ratio: 1 / 1;
-border: 1px #999 solid;
+border: 1px ${COLORS.neutral} solid;
 overflow: hidden;
 cursor: pointer;
-background-color: ${props => props.$checked ? COLORS.secondary : 'none'};
+background-color: ${props => props.$checked ? COLORS.lastCell : 'none'};
   &:hover {
     background-color: ${props => props.$checked ? 'none' : COLORS.neutral};
     color: #fff;
@@ -172,33 +176,30 @@ const CreateOnlineGamePage = observer(() => {
                   <CapturedFigure src={figure['kw']} />
                 </Figure>
               </PlayerRandomColor>
-              <PlayerRandomColor style={{ left: '50%', borderLeft: '1px #999 solid' }}>
+              <PlayerRandomColor style={{ left: '50%' }} >
                 <Figure style={{ left: '-50%' }}>
                   <CapturedFigure src={figure['kb']} />
                 </Figure>
               </PlayerRandomColor>
-            </PlayerColor>
-            <PlayerColor $flex={1}
-              $checked={creatorColor === 'b'}
-              onClick={() => setCreatorColor('b')}
-            >
-              <CapturedFigure src={figure['kb']} />
-            </PlayerColor>
-          </PlayerColorWrapper>
-          <MenuButton
-            // inert={gameStore?.fastGameList === null || isCreating}
-            $opacity={gameStore?.fastGameList === null}
-            // onClick={
-            //   (!isCreating && gameStore.inviteLink)
-            //     ? () => inviteGame()
-            //     : () => createFastGame()
-            // }
-            onClick={createFastGame}
+          </PlayerColor>
+          <PlayerColor $flex={1}
+            $checked={creatorColor === 'b'}
+            onClick={() => setCreatorColor('b')}
           >
-            <CreateButtonInside isCreating={isCreating} />
-          </MenuButton>
-        </CreateOnlineGameWrapper>
-      </Container>
+            <CapturedFigure src={figure['kb']} />
+          </PlayerColor>
+        </PlayerColorWrapper>
+        {/* <MenuButton
+            $opacity={gameStore?.fastGameList === null}
+            onClick={createFastGame}
+          > */}
+        <Button onClick={createFastGame}>
+          <CreateButtonInside isCreating={isCreating} />
+        </Button>
+        {/* <CreateButtonInside isCreating={isCreating} /> */}
+        {/* </MenuButton> */}
+      </CreateOnlineGameWrapper>
+    </Container>
     </PageWrapper >
   )
 })

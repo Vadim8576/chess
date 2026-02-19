@@ -2,7 +2,7 @@ export const gameStatus = (AppStore) => {
   if(!AppStore.chess) return
   const player = AppStore.chess.turn()
   // console.log('gameStatus!!!!!!!!!!!!!!!!', player)
-  AppStore.setStatusMessage(`Ход ${player === 'w' ? 'белых' : 'чёрных'}!`)
+  AppStore.setStatusMessage(`Ход ${player === 'w' ? 'белых' : 'чёрных'}`)
 
   if (AppStore.chess.inCheck()) {
     AppStore.setStatusMessage(`Шах ${player === 'w' ? 'белым' : 'чёрным'}!`)
@@ -21,7 +21,7 @@ export const gameStatus = (AppStore) => {
 
   if (AppStore.chess.isThreefoldRepetition()) {
     // const status = 'Троекратное повторение. Ничья!'
-    const status = 'Троекратное повторение. Ничья!'
+    const status = 'Ничья! Троекратное повторение'
     AppStore.setStatusMessage(status)
     AppStore.setGameStatus('finished')
   }

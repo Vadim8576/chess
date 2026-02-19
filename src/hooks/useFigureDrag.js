@@ -26,9 +26,7 @@ export const useFigureDrag = (
       visible: prev.visible === true ? false : prev.visible
     }))
 
-    console.log(AppStore.gameStatus)
-
-    if (AppStore.gameStatus === 'finished') return
+    
 
     const startX = AppStore.board.x
     const startY = AppStore.board.y
@@ -88,6 +86,8 @@ export const useFigureDrag = (
 
 
   const firstPress = useCallback((row, col, currentFigureSquare) => {
+    console.log(AppStore.gameStatus)
+    if (AppStore.gameStatus === 'finished') return
 
     AppStore.setPromotion(null)
     setGrabCell(null)
@@ -142,6 +142,7 @@ export const useFigureDrag = (
     })
     setIsDragging(true)
   }, [
+    AppStore,
     setGrabCell,
     setHighlightedCell,
     setIsDragging,

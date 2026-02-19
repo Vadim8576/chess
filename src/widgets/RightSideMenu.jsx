@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import gameStore from '../store/gameStore';
 import Widget from './Widget';
-import Button from '../components/UI/Button';
+import SquareButton from '../components/UI/SquareButton';
 import HandshakeIcon from '../components/UI/icons/HandshakeIcon';
 import FlagIcon from '../components/UI/icons/FlagIcon';
 import AppStore from '../store/AppStore';
@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router';
 
 const Menu = styled.div`
 display: flex;
-justify-content: flex-end;
+justify-content: space-between;
 align-items: flex-start;
 flex-direction: column;
 width: 100%;
@@ -45,17 +45,17 @@ const RightSideMenu = observer(({ setDialogType }) => {
               gridRow={'9 / 11'}
             >
               <Menu>
-                <Button
+                <SquareButton
                   icon={<HomeIcon />}
-                  text={'Домой'}
+                  // text={'Домой'}
                   onClick={() => {
                     setDialogType('home')
                     gameStore.setShowDrawDialog(true)
                   }}
                 />
-                < Button
+                < SquareButton
                   icon={<RestartIcon />}
-                  text={'Новая игра'}
+                  // text={'Новая игра'}
                   onClick={() => {
                     setDialogType('restart')
                     gameStore.setShowDrawDialog(true)
@@ -67,29 +67,29 @@ const RightSideMenu = observer(({ setDialogType }) => {
           : (
             <Widget
               gridColumn={'9 / 13'}
-              gridRow={'9 / 11'}
+              gridRow={'8 / 11'}
             >
               <Menu>
-                <Button
+                <SquareButton
                   icon={<HomeIcon />}
-                  text={'Домой'}
+                  // text={'Домой'}
                   onClick={() => {
                     setDialogType('home')
                     gameStore.setShowDrawDialog(true)
                   }}
                 />
-                <Button
+                <SquareButton
                   icon={<HandshakeIcon />}
-                  text={'Ничья?'}
+                  // text={'Ничья?'}
                   onClick={() => {
                     setDialogType('drawOffer')
                     gameStore.setShowDrawDialog(true)
                   }}
                   inert={gameStore.isShowDrawButton}
                 />
-                <Button
+                <SquareButton
                   icon={<FlagIcon />}
-                  text={'Сдаться'}
+                  // text={'Сдаться'}
                   onClick={() => {
                     setDialogType('resignation')
                     gameStore.setShowDrawDialog(true)

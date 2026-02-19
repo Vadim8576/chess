@@ -2,8 +2,9 @@ import styled from 'styled-components';
 import AppStore from '../../store/AppStore';
 import { observer } from 'mobx-react-lite';
 import { COLORS } from '../../constants/gameInitial';
-import { useEffect, useState } from 'react';
 import CloseIcon from './icons/CloseIcon';
+import Button from './Button';
+
 
 
 const DialogContainer = styled.div`
@@ -34,6 +35,7 @@ left: ${props => props.$left}px;
 width: ${props => props.$width}px;
 height: ${props => props.$height}px;
 display: flex;
+justify-content: center;
 flex-direction: column;
 border: 1px ${COLORS.neutral} solid;
 // box-shadow: 0 0 0 1px rgba(17,20,24,.1),0 1px 1px rgba(17,20,24,.2);
@@ -48,6 +50,7 @@ flex: 1;
 display: flex;
 justify-content: flex-end;
 align-items: flex-start;
+min-width: 0;
 `
 
 const IconWripper = styled.div`
@@ -64,6 +67,7 @@ aspect-ratio: 1 / 1;
 
 const Row = styled.div`
 flex: 3; 
+min-width: 0;
 display: flex;
 justify-content: center;
 align-items: center;
@@ -84,26 +88,26 @@ align-items: center;
 width: 50%;
 `
 
-const Button = styled.button`
-display: flex;
-justify-content: center;
-align-items: center;
-width: 48%;
-padding: .6rem .1rem;
-// padding: 10px 20px;
-border: 1px ${COLORS.neutral} solid;
-background-color: #fff;
-color: ${COLORS.primary};
-// text-transform: uppercase;
-cursor: pointer;
-font-weight: normal;
-font-size: 1.3vmin;
-overflow: hidden;
-&:hover {
-  background-color: ${COLORS.neutral};
-  color: #fff;
-}
-`
+// const Button = styled.button`
+// display: flex;
+// justify-content: center;
+// align-items: center;
+// width: 48%;
+// padding: .6rem .1rem;
+// // padding: 10px 20px;
+// border: 1px ${COLORS.neutral} solid;
+// background-color: #fff;
+// color: ${COLORS.primary};
+// // text-transform: uppercase;
+// cursor: pointer;
+// font-weight: normal;
+// font-size: 1.3vmin;
+// overflow: hidden;
+// &:hover {
+//   background-color: ${COLORS.neutral};
+//   color: #fff;
+// }
+// `
 
 
 const Dialog = observer(({ dialog = null }) => {
@@ -136,10 +140,10 @@ const Dialog = observer(({ dialog = null }) => {
         $height={cellSize * 8}
       >
         <Wrapper
-          $top={cellSize * 3}
+          $top={cellSize * 2.5}
           $left={cellSize * 1}
           $width={cellSize * 6}
-          $height={cellSize * 2}
+          $height={cellSize * 3}
         >
           <Header>
             <IconWripper onClick={cancelButtonHandler}>

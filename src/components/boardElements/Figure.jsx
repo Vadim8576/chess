@@ -15,7 +15,7 @@ const ImgWrapper = styled.div.attrs(props => ({
 		height: `${props.$height}px`,
 		cursor: props.$cursor,
 		zIndex: props.$zIndex,
-		pointerEvents: `${props.$pointerEvents}`
+		// pointerEvents: `${props.$pointerEvents}`
 	},
 }))`
   position: absolute;
@@ -53,7 +53,7 @@ const Figure = memo(observer(({
 	id,
 	handlePointerDown,
 	setDraggedFigure,
-	pointerEvents
+	inert
 }) => {
 
 
@@ -86,14 +86,18 @@ const Figure = memo(observer(({
  
 
 
-	const cursor = AppStore.gameType === 'local'
+	const cursor = AppStore.gameType === 'local' && AppStore.gameStatus !== 'finished' 
 	? 'grab'
-	: AppStore.gameStatus === 'playing' && 'grab'
+	: 'default'
 
+
+	console.log(cursor)
+	console.log(AppStore.gameType, AppStore.gameStatus)
 
 	return (
 		<ImgWrapper
-			$pointerEvents={pointerEvents}
+			inert={inert}
+			// $pointerEvents={pointerEvents}
 			onPointerDown={onPointerDown}
 			$cursor={cursor}
 			$width={cellSize}

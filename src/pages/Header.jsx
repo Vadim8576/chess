@@ -6,7 +6,7 @@ import AppStore from "../store/AppStore";
 import { gameStatus } from "../utils/gameStatus";
 import { NavLink, useNavigate } from "react-router";
 import gameStore from "../store/gameStore";
-import Button from "../components/UI/Button";
+import SquareButton from "../components/UI/SquareButton";
 
 
 const HeaderLine = styled.div`
