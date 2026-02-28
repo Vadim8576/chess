@@ -36,7 +36,7 @@ const CustomButton = styled.button`
 
 const Icon = styled.span`
 aspect-ratio: 1 / 1;
-height: 90%;
+height: 70%;
 // padding-right: 10px;
 `
 

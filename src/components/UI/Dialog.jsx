@@ -110,13 +110,26 @@ width: 50%;
 // `
 
 
-const Dialog = observer(({ dialog = null }) => {
+const AButton = styled.span`
+color: green;
+margin-right: 7px;
+font-weight: bold;
+`
+const BButton = styled.span`
+color: red;
+margin-right: 7px;
+font-weight: bold;
+`
+
+const Dialog = observer(({ dialog = null, isConnected }) => {
 
   // console.log(dialog)
 
   if (!dialog) return null
 
   const cellSize = AppStore?.board?.cellSize
+
+
 
   const okButtonHandler = (e) => {
     e.stopPropagation()
@@ -155,8 +168,18 @@ const Dialog = observer(({ dialog = null }) => {
           </Row>
           <Row>
             <ButtonWrapper>
-              <Button onClick={okButtonHandler}>Да</Button>
-              <Button onClick={cancelButtonHandler}>Отмена</Button>
+              <Button
+                onClick={okButtonHandler}
+                $isConnected={isConnected}
+              >
+                <AButton>A</AButton> Да
+              </Button>
+              <Button
+                onClick={cancelButtonHandler}
+                $isConnected={isConnected}
+              >
+                <BButton>B</BButton> Отмена
+              </Button>
             </ButtonWrapper>
           </Row>
         </Wrapper >

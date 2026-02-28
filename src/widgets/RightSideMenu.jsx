@@ -30,10 +30,10 @@ const RightSideMenu = observer(({ setDialogType }) => {
 
  
 
-  const restartGame = () => {
-    console.log('Restart')
-    AppStore.restartGame()
-  }
+  // const restartGame = () => {
+  //   console.log('Restart')
+  //   AppStore.restartGame()
+  // }
 
   return (
     <>

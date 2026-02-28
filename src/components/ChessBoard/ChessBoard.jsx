@@ -39,7 +39,7 @@ const ChessBoard = observer(() => {
   const size = AppStore.board.cellSize * 8
   const [draggedFigure, setDraggedFigure] = useState(null)
   const [isMoving, setIsMoving] = useState(false)
-  const { gamepadState, isConnected, isButtonPressed } = useGamepad()
+  const { isConnected, isButtonPressed } = useGamepad()
   const [gamePadCursor, setGamePadCursor] = useState({
     cell: { col: 4, row: 4 },
     color: COLORS.primary,

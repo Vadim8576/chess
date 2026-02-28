@@ -91,8 +91,8 @@ const Figure = memo(observer(({
 	: 'default'
 
 
-	console.log(cursor)
-	console.log(AppStore.gameType, AppStore.gameStatus)
+	// console.log(cursor)
+	// console.log(AppStore.gameType, AppStore.gameStatus)
 
 	return (
 		<ImgWrapper

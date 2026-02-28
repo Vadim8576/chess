@@ -3,12 +3,13 @@ import AppStore from "../../store/AppStore";
 import gameStore from "../../store/gameStore";
 import Dialog from "./Dialog";
 import RightSideMenu from "../../widgets/RightSideMenu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 
 
-const GameDialogs = observer(() => {
+const GameDialogs = observer(({ isConnected, isButtonPressed }) => {
+  const navigate = useNavigate()
 
   const [dialogType, setDialogType] = useState(null) // null || 'resignation' || 'drawOffer'
 
@@ -17,7 +18,29 @@ const GameDialogs = observer(() => {
   const type = dialogType || 'drawOfferAnswer'
 
 
-  const navigate = useNavigate()
+
+
+
+
+  
+  // Опрос кнопок домой и рестарт
+  useEffect(() => {
+    if (isButtonPressed(8)) {
+      setDialogType('home')
+      gameStore.setShowDrawDialog(true)
+      console.log('Домой')
+    }
+
+    if (isButtonPressed(9)) {
+      setDialogType('restart')
+      gameStore.setShowDrawDialog(true)
+      console.log('Рестарт')
+    }
+
+  }, [isButtonPressed])
+
+
+
 
 
   const dialog = {
@@ -96,9 +119,13 @@ const GameDialogs = observer(() => {
 
   return (
     <>
-      {gameStore.showDrawDialog && <Dialog dialog={dialog[type]} />}
+      {gameStore.showDrawDialog && <Dialog dialog={dialog[type]} isConnected={isConnected} />}
       {/* <Dialog dialog={dialog[type]} /> */}
 
+
+
+
+      {/* Вынести отсюда */}
       <RightSideMenu setDialogType={setDialogType} />
     </>
   )

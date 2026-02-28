@@ -13,6 +13,7 @@ import ChessClock from '../components/boardElements/ChessClock';
 import GameDialogs from '../components/UI/GameDialogs';
 import GameController from '../components/ChessBoard/GameController';
 import PageWrapper from './PageWrapper';
+import { useGamepad } from '../hooks/useGamepad';
 
 
 const Grid = styled.div`
@@ -53,6 +54,8 @@ const Game = observer(() => {
 	const [cellSize, setCellSize] = useState(null)
 
 	const { width, height } = useWindowResizeThrottle(300)
+	const { isConnected, isButtonPressed } = useGamepad()
+
 
 	useEffect(() => {
 
@@ -75,6 +78,11 @@ const Game = observer(() => {
 			width: cellSize * 8
 		})
 	}, [width, height])
+
+
+
+
+
 
 
 
@@ -135,7 +143,7 @@ const Game = observer(() => {
 				{/* {showDialog && <Dialog dialog={dialog[dialogType]} />} */}
 
 
-				<GameDialogs />
+				<GameDialogs isConnected={isConnected} isButtonPressed={isButtonPressed} />
 
 
 				{/* <PawnPromotion /> */}

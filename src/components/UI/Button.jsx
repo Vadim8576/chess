@@ -37,13 +37,16 @@ height: 90%;
 // padding-right: 10px;
 `
 
+
+
 const SquareButton = observer(({
   icon = null,
   text = null,
-  color,
-  backgroundColor,
-  onClick,
+  color = '#666',
+  backgroundColor = '#fff',
   inert = false,
+  onClick,
+  isConnected,
   ...children
 }) => {
 
@@ -57,7 +60,7 @@ const SquareButton = observer(({
   return (
     <CustomButton
       // $backgroundColor={backgroundColor}
-      color={color}
+      // color={color}
       onClick={onClick}
       inert={inert}
       $cellSize={cellSize}    
